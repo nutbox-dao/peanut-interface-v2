@@ -1,26 +1,50 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
+import Wallet from '../components/Wallet/Wallet'
+import SteemWallet from '../components/Wallet/SteemWallet'
+import TronWallet from '../components/Wallet/TronWallet'
+import Swap from '../components/Wallet/Swap'
+import Stake from '../components/Stake/Stake'
 
 Vue.use(VueRouter)
 
 const routes = [
   {
     path: '/',
-    name: 'Home',
-    component: Home
+    name: 'index',
+    redirect: '/wallet'
   },
   {
-    path: '/about',
-    name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
+    path: '/wallet',
+    name: 'wallet',
+    component: Wallet,
+    children: [
+      {
+        path: '/',
+        name: 'steem',
+        component: SteemWallet
+      },
+      {
+        path: '/wallet/tron',
+        name: 'tron',
+        component: TronWallet
+      },
+      {
+        path: '/wallet/swap',
+        name: 'swap',
+        component: Swap
+      }
+    ]
+  },
+  {
+    path: '/stake',
+    name: 'stake',
+    component: Stake
   }
 ]
 
 const router = new VueRouter({
+  linkActiveClass: 'active',
   routes
 })
 
