@@ -11,7 +11,7 @@
                     v-model="steemAccount"
                     ></b-input>
                 </div>
-                <b-button variant="outline-primary" @click="login" :disabled="isLoging"> 
+                <b-button variant="outline-primary" @click="login" :disabled="isLoging">
                     <b-spinner small type="grow" v-show="isLoging" variant="primary"></b-spinner>
                     {{ this.loginBtnText }}
                 </b-button>
@@ -21,43 +21,41 @@
 </template>
 
 <script>
-import Card from  './ToolsComponents/Card'
-    export default {
-        name:"Login",
-        data() {
-            return {
-                loginBtnText: "",
-                isLoging:false,
-                steemAccount:''
-            }
-        },
-        components: {
-            Card,
-        },
-        methods: {
-            login() {
-                const message = `nutbox_login-${Math.floor(
-                                100000000 + Math.random() * 900000000
-                                )}`;
-                this.isLoging = true
-                steem_keychain.requestSignBuffer(this.steemAccount, message, 'Active', function (res){
-                    console.log(res);
-                    if (res.success === true){
-                        this.loginBtnText = this.$t('message.loging')
-                        this.$store.commit('saveSteemAccount', res.data.username)
-                    }else{
-
-                    }
-                    this.isLoging = false
-                })
-                
-            }
-        },
-        mounted () {
-            this.loginBtnText = this.$t('message.login');
-            ;
-        },
+import Card from './ToolsComponents/Card'
+export default {
+  name: 'Login',
+  data () {
+    return {
+      loginBtnText: '',
+      isLoging: false,
+      steemAccount: ''
     }
+  },
+  components: {
+    Card
+  },
+  methods: {
+    login () {
+      const message = `nutbox_login-${Math.floor(
+                                100000000 + Math.random() * 900000000
+                                )}`
+      this.isLoging = true
+      steem_keychain.requestSignBuffer(this.steemAccount, message, 'Active', function (res) {
+        console.log(res)
+        if (res.success === true) {
+          this.loginBtnText = this.$t('message.loging')
+          this.$store.commit('saveSteemAccount', res.data.username)
+        } else {
+
+        }
+        this.isLoging = false
+      })
+    }
+  },
+  mounted () {
+    this.loginBtnText = this.$t('message.login')
+  }
+}
 </script>
 
 <style lang="less" scoped>

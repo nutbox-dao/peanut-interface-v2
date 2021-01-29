@@ -29,12 +29,12 @@ export default {
     }
   },
   components: {
-      Login
+    Login
   },
   mounted () {
-      if (window.steem_keychain){
+    if (window.steem_keychain) {
 
-      }
+    }
     this.$store.commit('saveSteemAccount', 'terry3t')
   }
 }
