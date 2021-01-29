@@ -1,6 +1,6 @@
 <template>
     <div class="steem-wallet">
-        <div class="steem-wallet" v-if="steemAccount && steemAccount.trim().length >= 0">
+        <div class="steem-wallet" v-if="steemAccount && steemAccount.trim().length > 0">
             <!-- 用户名 -->
             <b-dropdown :text="steemAccount" size="lg" lazy block variant="outline-primary" menu-class="w-100">
                 <b-dropdown-item-btn @click="logout" size='lg' variant="primary">{{ $t('message.logout') }}</b-dropdown-item-btn>
@@ -51,7 +51,7 @@ export default {
       this.tipMessage = link
       this.showMessage = true
     }else{
-        if(this.steemAccount && this.steemAccount.trim().length >= 0){
+        if(this.steemAccount && this.steemAccount.trim().length > 0){
             this.$store.dispatch('initializeSteemAccount',this.steemAccount)
         }
     }

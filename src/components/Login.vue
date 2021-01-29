@@ -25,7 +25,6 @@
 <script>
 import Card from './ToolsComponents/Card'
 import TipMessage from './ToolsComponents/TipMessage'
-import { getKeychain } from '../utils/chain/steem'
 
 export default {
   name: 'Login',

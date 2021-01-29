@@ -33,7 +33,7 @@ export default {
     },
     canDiss: {
       type: Boolean,
-      default: 'true'
+      default: true
     }
   }
 }

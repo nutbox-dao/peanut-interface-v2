@@ -1,26 +1,87 @@
 <template>
-    <div>
-        tron
+    <div class="tron">
+        <p>tron:{{ tronBalance | amountForm }}</p> <br/>
+        <p>tsteem:{{ tsteemBalance | amountForm }}</p> <br/>
+        <p>tsp:{{ tspBalance | amountForm }}</p> <br/>
+        <p>tsbd:{{ tsbdBalance | amountForm }}</p> <br/>
+        <p>tsplp:{{ tspLpBalance | amountForm }}</p> <br/>
+        <p>pnut:{{ pnutBalance | amountForm }}</p>
+
+        <TipMessage :showMessage='tipMessage' :title="tipTitle" v-if="showMessage" @hideMask="showMessage=false"/>
     </div>
 </template>
 
 <script>
+import Card from '../ToolsComponents/Card'
+import TipMessage from '../ToolsComponents/TipMessage'
+import { mapActions, mapState, mapGetters} from 'vuex'
+import { getTronLink, getTronLinkAddr } from '../../utils/chain/tron'
+import { TRON_LINK_ADDR_NOT_FOUND } from '../../config'
+
 export default {
   name: 'TronWallet',
+
   data () {
     return {
-
+      tipMessage:'',
+      tipTitle:'',
+      showMessage:false,
     }
   },
-  methods: {
 
+  computed: {
+    ...mapState(['tronAddress']),
+    ...mapGetters(['tronBalance','pnutBalance','tsteemBalance','tspBalance', 'tsbdBalance','tspLpBalance'])
   },
-  mounted () {
-    ;
+
+  components: {
+    Card,
+    TipMessage
+  },
+
+  methods: {
+    ...mapActions(['initializeTronAccount'])
+  },
+
+  async mounted () {
+    if (!(await getTronLink())){
+      this.tipTitle = this.$t('error.needtronlink')
+      this.tipMessage = "Chrome: https://chrome.google.com/webstore/detail/steem-keychain/lkcjlnjfpbikmcmbachjpdbijejflpcm\n\n" +
+            "Firefox: https://addons.mozilla.org/en-US/firefox/addon/steem-keychain";
+      this.showMessage = true
+      return
+    }
+    if (this.tronAddress && this.tronAddress.trim().length > 0) {
+      console.log('begin');
+      this.initializeTronAccount(this.tronAddress);
+    }else{
+      const address = await getTronLinkAddr()
+      if (address && address === TRON_LINK_ADDR_NOT_FOUND.noTronLink){
+        this.tipTitle = this.$t('error.needtronlink')
+        this.tipMessage = "Chrome: https://chrome.google.com/webstore/detail/steem-keychain/lkcjlnjfpbikmcmbachjpdbijejflpcm\n\n" +
+              "Firefox: https://addons.mozilla.org/en-US/firefox/addon/steem-keychain";
+        this.showMessage = true
+      }else if (address && address === TRON_LINK_ADDR_NOT_FOUND.walletLocked){
+        this.tipTitle = this.$t('error.error')
+        this.tipMessage = this.$t('error.unlockWallet');
+        this.showMessage = true
+      }else if (address){
+        this.initializeTronAccount(address)
+      }
+    }
+    
   }
 }
 </script>
 
 <style lang="less" scoped>
-
+.tron{
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+  >p{
+    width:200px;
+  }
+}
 </style>
