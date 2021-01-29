@@ -40,6 +40,14 @@
   </div>
 </template>
 
+<script>
+export default {
+  mounted () {
+    this.$store.dispatch('setVestsToSteem');
+  },
+}
+</script>
+
 <style lang="scss">
 $blue: #f4a921;
 :root{

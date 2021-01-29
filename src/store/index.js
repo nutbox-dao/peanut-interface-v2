@@ -20,7 +20,7 @@ export default new Vuex.Store({
     delegatedVestsInt: 0,
     depositedTspInt: 0,
     depositedTspLpInt: 0,
-    vestsToSteem: 0,
+    vestsToSteem: 0
   },
   mutations: {
     saveSteemAccount: function (state, steemAccount) {
@@ -40,13 +40,13 @@ export default new Vuex.Store({
     saveTronBalanceInt: function (state, tronBalanceInt) {
       state.tronBalanceInt = tronBalanceInt
     },
-    saveTsteemBalanceInt: function (state, tsteemBalanceInt){
+    saveTsteemBalanceInt: function (state, tsteemBalanceInt) {
       state.tsteemBalanceInt = tsteemBalanceInt
     },
-    saveTspBalanceInt: function (state, tspBalanceInt){
+    saveTspBalanceInt: function (state, tspBalanceInt) {
       state.tspBalanceInt = tspBalanceInt
     },
-    saveTspLpBalanceInt: function (state, tspLpBalanceInt){
+    saveTspLpBalanceInt: function (state, tspLpBalanceInt) {
       state.tspLpBalanceInt = tspLpBalanceInt
     },
     saveSbdBalance: function (state, sbdBalance) {
@@ -63,6 +63,10 @@ export default new Vuex.Store({
     },
     saveVestsToSteem: function (state, vestsToSteem) {
       state.vestsToSteem = vestsToSteem
+    },
+    clearSteemAccount(state){
+      state.steemAccount = null
+      Cookie.remove('steemAccount')
     }
   },
   getters: {
@@ -81,14 +85,14 @@ export default new Vuex.Store({
     tspLpBalance: state => {
       return intToAmount(state.tspLpBalanceInt)
     },
-    delegatedVests: state =>{
+    delegatedVests: state => {
       return intToAmount(state.delegatedVestsInt)
     },
     delegatedSp: state => {
       const delegatedVest = intToAmount(state.delegatedVestsInt)
       return delegatedVest * state.vestsToSteem
     },
-    depositedTsp: state =>{
+    depositedTsp: state => {
       return intToAmount(state.depositedTspInt)
     },
     depositedTspLp: state => {
@@ -99,26 +103,26 @@ export default new Vuex.Store({
   actions: {
     setVestsToSteem ({ commit }) {
       vestsToSteem(1).then((res) => {
-        commit('saveVestsToSteem',res)
+        commit('saveVestsToSteem', res)
       })
     },
 
-    async getSteem({ commit, state }) {
+    async getSteem ({ commit, state }) {
       const steem = await getSteemBalance(state.steemAccount)
       commit('saveSteemBalance', steem)
     },
 
-    async getSbd({ commit,state }) {
+    async getSbd ({ commit, state }) {
       const sbd = await getSbdBalance(state.steemAccount)
       commit('saveSbdBalance', sbd)
     },
 
-    async getVests({ commit,state }) {
+    async getVests ({ commit, state }) {
       const vests = await getVestingShares(state.steemAccount)
       commit('saveVestsBalance', vests)
     },
 
-    async initializeSteemAccount({ commit }, steemAccount) {
+    async initializeSteemAccount ({ commit }, steemAccount) {
       try {
         const account = await getAccountInfo(steemAccount)
         const steem = parseFloat(account.balance)
@@ -129,13 +133,13 @@ export default new Vuex.Store({
         commit('saveVestsBalance', vests)
         commit('saveSteemAccount', steemAccount)
         return true
-      }catch(err){
-        console.error(`initializeSteemAccount Fail:`, err.message);
+      } catch (err) {
+        console.error('initializeSteemAccount Fail:', err.message)
         return false
       }
     },
-    
-    async initializeTronAccount(context, tronAddress) {
+
+    async initializeTronAccount (context, tronAddress) {
 
     }
   },

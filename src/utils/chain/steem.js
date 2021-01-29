@@ -1,6 +1,8 @@
 import steem from 'steem'
 import axios from 'axios'
 import { STEEM_API_URLS, STEEM_CONF_KEY } from '../../config.js'
+import { sleep } from '../helper'
+
 const steemConf = window.localStorage.getItem(STEEM_CONF_KEY) || STEEM_API_URLS[0]
 window.localStorage.setItem(STEEM_CONF_KEY, steemConf)
 steem.api.setOptions({ url: steemConf })
@@ -185,4 +187,12 @@ export const getSteemPrice = async function () {
       return parseFloat(arr[i].last)
     }
   }
+}
+
+export const getKeychain = async () => {
+  if (window.steem_keychain){
+    return window.steem_keychain
+  }
+  await sleep(2)
+  return window.steem_keychain
 }

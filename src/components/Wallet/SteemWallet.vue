@@ -1,11 +1,13 @@
 <template>
     <div class="steem-wallet">
-        <div class="steem-wallet" v-if="!$store.state.steemAccount">
+        <div class="steem-wallet" v-if="steemAccount && steemAccount.trim().length >= 0">
             <!-- 用户名 -->
-            <b-dropdown :text="$store.state.steemAccount" size="lg" lazy block variant="outline-primary" menu-class="w-100">
-                <b-dropdown-item-btn @click="changeAccout('nice')" size='lg' variant="primary">Action</b-dropdown-item-btn>
+            <b-dropdown :text="steemAccount" size="lg" lazy block variant="outline-primary" menu-class="w-100">
+                <b-dropdown-item-btn @click="logout" size='lg' variant="primary">{{ $t('message.logout') }}</b-dropdown-item-btn>
             </b-dropdown>
-
+            {{ steemBalance | amountForm }}
+            {{ sbdBalance | amountForm }}
+            {{ spBalance | amountForm }}
         </div>
 
         <login v-else/>
@@ -14,6 +16,8 @@
 
 <script>
 import Login from '../Login'
+import { mapState, mapGetters } from 'vuex'
+import { getKeychain } from '../../utils/chain/steem'
 
 export default {
   name: 'SteemWallet',
@@ -22,20 +26,35 @@ export default {
 
     }
   },
+  computed: {
+      ...mapState(['steemAccount', 'steemBalance', 'sbdBalance']),
+      ...mapGetters(['spBalance'])
+  },
   methods: {
-    async changeAccout (account) {
+    async changeAccount (account) {
       this.$store.commit('saveSteemAccount', account)
       console.log(account)
+    },
+    logout(){
+        this.$store.commit('clearSteemAccount')
     }
   },
   components: {
     Login
   },
-  mounted () {
-    if (window.steem_keychain) {
-
+  async mounted () {
+    if (!(await getKeychain())){
+      const link = 
+            "Chrome: https://chrome.google.com/webstore/detail/steem-keychain/lkcjlnjfpbikmcmbachjpdbijejflpcm\n\n" +
+            "Firefox: https://addons.mozilla.org/en-US/firefox/addon/steem-keychain";
+      this.tipTitle = this.$t('error.needkeychain')
+      this.tipMessage = link
+      this.showMessage = true
+    }else{
+        if(this.steemAccount && this.steemAccount.trim().length >= 0){
+            this.$store.dispatch('initializeSteemAccount',this.steemAccount)
+        }
     }
-    this.$store.commit('saveSteemAccount', 'terry3t')
   }
 }
 </script>

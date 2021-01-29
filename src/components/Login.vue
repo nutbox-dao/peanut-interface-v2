@@ -17,42 +17,69 @@
                 </b-button>
             </Card>
         </div>
+        <TipMessage :showMessage='tipMessage' :title="tipTitle" v-if="showMessage" @hideMask="showMessage=false" :canDiss="canDismissTip"/>
+
     </div>
 </template>
 
 <script>
 import Card from './ToolsComponents/Card'
+import TipMessage from './ToolsComponents/TipMessage'
+import { getKeychain } from '../utils/chain/steem'
+
 export default {
   name: 'Login',
   data () {
     return {
       loginBtnText: '',
       isLoging: false,
-      steemAccount: ''
+      showNeedKeyChain: false,
+      steemAccount: '',
+      tipTitle:'',
+      tipMessage: '',
+      showMessage: false,
+      canDismissTip: true
     }
   },
   components: {
-    Card
+    Card,
+    TipMessage
   },
   methods: {
+    showKeyChainNeeded () {
+
+    },
     login () {
       const message = `nutbox_login-${Math.floor(
                                 100000000 + Math.random() * 900000000
                                 )}`
       this.isLoging = true
-      steem_keychain.requestSignBuffer(this.steemAccount, message, 'Active', function (res) {
+      const that = this
+      steem_keychain.requestSignBuffer(this.steemAccount, message, 'Active', async function (res) {
         console.log(res)
         if (res.success === true) {
-          this.loginBtnText = this.$t('message.loging')
-          this.$store.commit('saveSteemAccount', res.data.username)
+          const ress = await that.$store.dispatch('initializeSteemAccount', res.data.username)
+          if (!ress){
+            that.tipTitle = that.$t('error.error')
+            that.tipMessage = that.$t('error.steemLoginFail')
+            that.showMessage = true
+          }
         } else {
-
+          if (res.error === 'user_cancel'){
+            that.tipTitle = that.$t('error.error')
+            that.tipMessage = that.$t('error.unlockKeychain')
+            that.showMessage = true
+          }else{
+            that.tipTitle = that.$t('error.error')
+            that.tipMessage = that.$t('error.steemLoginFail')
+            that.showMessage = true
+          }
         }
-        this.isLoging = false
+        that.isLoging = false
       })
     }
   },
-  mounted () {
+  async mounted () {
     this.loginBtnText = this.$t('message.login')
   }
 }

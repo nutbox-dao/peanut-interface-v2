@@ -170,7 +170,7 @@ async function wa (callback) {
       return
     }
     const originalAddr = localStorage.getItem('tronLinkAddress')
-    if (addr && originalAddr && callback && addr != originalAddr) {
+    if (addr && originalAddr && callback && addr !== originalAddr) {
       callback(addr)
     }
     if (addr !== TRON_LINK_ADDR_NOT_FOUND.walletLocked && addr !== TRON_LINK_ADDR_NOT_FOUND.noTronLink) {
