@@ -34,6 +34,7 @@
         </div>
       </b-nav>
     </div>
+    <TipMessage :showMessage='tipMessage' :title="tipTitle" v-if="showMessage" @hideMask="showMessage=false"/>
     <div class="right">
       <router-view></router-view>
     </div>
@@ -42,14 +43,35 @@
 
 <script>
 import { watchWallet } from './utils/chain/tron'
+import { TRON_LINK_ADDR_NOT_FOUND } from './config'
+import TipMessage from './components/ToolsComponents/TipMessage'
 
 export default {
+  data() {
+    return {
+      tipMessage: '',
+      tipTitle: '',
+      showMessage: false
+    }
+  },
+  components: {
+    TipMessage,
+  },
   mounted () {
     this.$store.dispatch('setVestsToSteem');
     var store = this.$store
-    watchWallet((addr) => {
-      console.log('new addr',addr);
-      store.dispatch('initializeTronAccount', addr)
+    watchWallet((address) => {
+      if (address && address === TRON_LINK_ADDR_NOT_FOUND.noTronLink){
+        this.tipTitle = this.$t('error.needtronlink')
+        this.tipMessage = "TronLink: https://www.tronlink.org";
+        this.showMessage = true
+      }else if (address && address === TRON_LINK_ADDR_NOT_FOUND.walletLocked){
+        this.tipTitle = this.$t('error.error')
+        this.tipMessage = this.$t('error.unlockWallet');
+        this.showMessage = true
+      }else if (address){
+        store.dispatch('initializeTronAccount', address)
+      }
     })
   },
 }

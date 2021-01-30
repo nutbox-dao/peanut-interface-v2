@@ -171,12 +171,10 @@ async function wa (callback) {
     }
     const originalAddr = localStorage.getItem('tronLinkAddress')
     if (addr && originalAddr && callback && addr !== originalAddr) {
+      console.log(addr);
       callback(addr)
     }
-    if (addr !== TRON_LINK_ADDR_NOT_FOUND.walletLocked && addr !== TRON_LINK_ADDR_NOT_FOUND.noTronLink) {
-      localStorage.setItem('tronLinkAddress', addr)
-      return
-    }
+    localStorage.setItem('tronLinkAddress', addr)
   } catch (e) {
     console.log('watch wallet fail:', e)
   } finally {
