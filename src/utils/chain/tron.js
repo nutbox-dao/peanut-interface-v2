@@ -171,7 +171,6 @@ async function wa (callback) {
     }
     const originalAddr = localStorage.getItem('tronLinkAddress')
     if (addr && originalAddr && callback && addr !== originalAddr) {
-      console.log(addr);
       callback(addr)
     }
     localStorage.setItem('tronLinkAddress', addr)

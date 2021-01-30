@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 import Cookie from 'vue-cookies'
 import { intToAmount, getTron as getTronweb, getBalanceOfToken } from '../utils/chain/tron'
 import { getContract } from '../utils/chain/contract'
+import { retryMethod } from '../utils/helper'
 import { vestsToSteem, getAccountInfo, getSteemBalance, getSbdBalance, getVestingShares } from '../utils/chain/steem'
 import { TSP_LP_TOKEN_ADDRESS } from '../config'
 
@@ -170,63 +171,82 @@ export default new Vuex.Store({
 
     // tron
     async getTron(context) {
-      try{
-        const tronweb = getTronweb()
-        const tron = await tronweb.trx.getBalance(context.state.tronAddress)
-        context.commit('saveTronBalanceInt', tron)
-      }catch(e){
-        console.error('Get Tron Fail:', e.message);
+      const func = async () => {
+        try{
+          const tronweb = getTronweb()
+          const tron = await tronweb.trx.getBalance(context.state.tronAddress)
+          context.commit('saveTronBalanceInt', tron)
+        }catch(e){
+          console.error('Get Tron Fail:', e.message);
+          throw e
+        }
       }
+      retryMethod(func)
     },
 
     async getTsteem(context) {
-      try{
-        const contract = await getContract('TSTEEM')
-        const tsteem = await contract.balanceOf(context.state.tronAddress).call()
-        context.commit('saveTsteemBalanceInt', tsteem)
-      }catch(e){
-        console.error('Get Tsteem Fail:', e.message);
-      }
+      retryMethod(async () => {
+        try{
+          const contract = await getContract('TSTEEM')
+          const tsteem = await contract.balanceOf(context.state.tronAddress).call()
+          context.commit('saveTsteemBalanceInt', tsteem)
+        }catch(e){
+          console.error('Get Tsteem Fail:', e.message);
+          throw e
+        }
+      })
     },
 
     async getTsp(context) {
-      try{
-        const contract = await getContract('TSP')
-        const tsp = await contract.balanceOf(context.state.tronAddress).call()
-        context.commit('saveTspBalanceInt', tsp)
-      }catch(e){
-        console.error('Get Tsp Fail:', e.message);
-      }
+      retryMethod(async () => {
+        try{
+          const contract = await getContract('TSP')
+          const tsp = await contract.balanceOf(context.state.tronAddress).call()
+          context.commit('saveTspBalanceInt', tsp)
+        }catch(e){
+          console.error('Get Tsp Fail:', e.message);
+          throw e
+        }
+      })
     },
 
     async getTsbd(context) {
-      try{
-        const contract = await getContract('TSBD')
-        const tsbd = await contract.balanceOf(context.state.tronAddress).call()
-        context.commit('saveTsbdBalanceInt', tsbd)
-      }catch(e){
-        console.error('Get Tsbd Fail:', e.message);
-      }
+      retryMethod(async () => {
+        try{
+          const contract = await getContract('TSBD')
+          const tsbd = await contract.balanceOf(context.state.tronAddress).call()
+          context.commit('saveTsbdBalanceInt', tsbd)
+        }catch(e){
+          console.error('Get Tsbd Fail:', e.message);
+          throw e
+        }
+      })
     },
 
     async getPnut(context) {
-      try{
-        const contract = await getContract('PNUT')
-        const pnut = await contract.balanceOf(context.state.tronAddress).call()
-        context.commit('savePnutBalanceInt', pnut)
-      }catch(e){
-        console.error('Get Pnut Fail:', e.message);
-      }
+      retryMethod(async () => {
+        try{
+          const contract = await getContract('PNUT')
+          const pnut = await contract.balanceOf(context.state.tronAddress).call()
+          context.commit('savePnutBalanceInt', pnut)
+        }catch(e){
+          console.error('Get Pnut Fail:', e.message);
+          throw e
+        }
+      })
     },
 
     async getTspLp(context) {
-      try{
-        const tspAddr = TSP_LP_TOKEN_ADDRESS;
-        const tsplpBalance = await getBalanceOfToken(tspAddr, context.state.tronAddress);
-        context.commit('saveTspLpBalanceInt',tsplpBalance)
-      }catch(e){
-        console.error('Get Tsp_Lp Fail:', e.message);
-      }
+      retryMethod(async () => {
+        try{
+          const tspAddr = TSP_LP_TOKEN_ADDRESS;
+          const tsplpBalance = await getBalanceOfToken(tspAddr, context.state.tronAddress);
+          context.commit('saveTspLpBalanceInt',tsplpBalance)
+        }catch(e){
+          console.error('Get Tsp_Lp Fail:', e.message);
+          throw e
+        }
+      })
     },
 
     async initializeTronAccount ({ commit, dispatch}, tronAddress) {

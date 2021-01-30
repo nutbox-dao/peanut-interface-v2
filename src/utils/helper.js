@@ -14,3 +14,24 @@ export const sleep = async function (interval = 6) {
     setTimeout(resolve, interval * 1000) // 6秒
   })
 }
+
+export const retryMethod = async function(func, retries=2, interval=1){
+  return new Promise(async (resolve, reject) => {
+    const exc = async (retries) => {
+      try {
+        await func() 
+        resolve()
+      }catch(e) {
+        setTimeout(async () => {
+          if (retries > 0){
+            console.log('retry method', retries);
+            await exc(retries - 1)
+          }else{
+            reject(e)
+          }
+        }, interval * 1000)
+      }
+    }
+    exc(retries)
+  })
+}
