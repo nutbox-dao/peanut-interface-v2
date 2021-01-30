@@ -20,17 +20,17 @@ const routes = [
     component: Wallet,
     children: [
       {
-        path: '/',
+        path: '',
         name: 'steem',
         component: SteemWallet
       },
       {
-        path: '/wallet/tron',
+        path: 'tron',
         name: 'tron',
         component: TronWallet
       },
       {
-        path: '/wallet/swap',
+        path: 'swap',
         name: 'swap',
         component: Swap
       }

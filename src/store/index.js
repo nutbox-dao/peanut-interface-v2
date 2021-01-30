@@ -17,7 +17,7 @@ export default new Vuex.Store({
     sbdBalance: 0,
     vestsToSteem: 0,
     // tron
-    tronAddres: Cookie.get('tronAddress'),
+    tronAddress: Cookie.get('tronAddress'),
     tronBalanceInt: 0,
     pnutBalanceInt: 0,
     tsteemBalanceInt: 0,
@@ -172,7 +172,7 @@ export default new Vuex.Store({
     async getTron(context) {
       try{
         const tronweb = getTronweb()
-        const tron = await tronweb.trx.getBalance(context.state.tronAddres)
+        const tron = await tronweb.trx.getBalance(context.state.tronAddress)
         context.commit('saveTronBalanceInt', tron)
       }catch(e){
         console.error('Get Tron Fail:', e.message);
@@ -231,7 +231,6 @@ export default new Vuex.Store({
 
     async initializeTronAccount ({ commit, dispatch}, tronAddress) {
       commit('saveTronAddress', tronAddress)
-      console.log('ddddd');
       dispatch('getTron')
       dispatch('getTsteem')
       dispatch('getTsp')

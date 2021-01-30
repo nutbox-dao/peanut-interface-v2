@@ -161,7 +161,7 @@ function runOnce (fn, context) { // 控制让函数只触发一次
 }
 
 // whatch the tronlink address every 5sec，if changed callback the new address
-export const whatchWallet = runOnce(wa)
+export const watchWallet = runOnce(wa)
 
 async function wa (callback) {
   try {

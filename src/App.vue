@@ -5,15 +5,15 @@
       <b-nav pills vertical align="center">
         <b-nav-item to="/wallet">
           <b-icon icon="nut"></b-icon>
-          Wallet
+          {{$t('wallet.wallet')}}
         </b-nav-item>
         <b-nav-item to="/stake">
           <b-icon icon="nut"></b-icon>
-          Stake
+          {{ $t('stake.stake') }}
         </b-nav-item>
         <b-nav-item to="/farm">
           <b-icon icon="nut"></b-icon>
-          Farm
+          {{ $t('farm.farm') }}
         </b-nav-item>
         <div class="bottom">
           <a href="/wallet" target="_blank">
@@ -41,9 +41,16 @@
 </template>
 
 <script>
+import { watchWallet } from './utils/chain/tron'
+
 export default {
   mounted () {
     this.$store.dispatch('setVestsToSteem');
+    var store = this.$store
+    watchWallet((addr) => {
+      console.log('new addr',addr);
+      store.dispatch('initializeTronAccount', addr)
+    })
   },
 }
 </script>

@@ -6,7 +6,7 @@
         <div class="nav">
             <router-link to='/wallet' exact>Steem</router-link>
             <router-link to='/wallet/tron'>Tron</router-link>
-            <router-link to='swap'>{{this.$t('wallet.swap')}}</router-link>
+            <router-link to='/wallet/swap'>{{this.$t('wallet.swap')}}</router-link>
         </div>
         <router-view></router-view>
     </div>

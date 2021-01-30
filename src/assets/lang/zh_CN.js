@@ -76,6 +76,12 @@ module.exports = {
     wallet: '钱包',
     swap: '跨链转账'
   },
+  stake: {
+    stake: "质押"
+  },
+  farm: {
+    farm: "流动性挖矿"
+  },
   error: {
     error: '错误',
     depositFail: '储蓄失败',
