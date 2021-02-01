@@ -5,7 +5,7 @@
       <b-nav pills vertical align="center">
         <b-nav-item to="/wallet">
           <b-icon icon="nut"></b-icon>
-          {{$t('wallet.wallet')}}
+          {{ (tronAddrFromat && tronAddrFromat.length > 0) ? tronAddrFromat : $t('wallet.wallet') }}
         </b-nav-item>
         <b-nav-item to="/stake">
           <b-icon icon="nut"></b-icon>
@@ -42,38 +42,55 @@
 </template>
 
 <script>
-import { watchWallet } from './utils/chain/tron'
+import { watchWallet, getTronLinkAddr } from './utils/chain/tron'
 import { TRON_LINK_ADDR_NOT_FOUND } from './config'
 import TipMessage from './components/ToolsComponents/TipMessage'
+import { mapState, mapGetters } from 'vuex'
 
 export default {
-  data() {
+  data () {
     return {
       tipMessage: '',
       tipTitle: '',
       showMessage: false
     }
   },
-  components: {
-    TipMessage,
+  computed: {
+    ...mapState(['tronAddress']),
+    ...mapGetters(['tronAddrFromat'])
   },
-  mounted () {
-    this.$store.dispatch('setVestsToSteem');
+  components: {
+    TipMessage
+  },
+  async mounted () {
+    this.$store.dispatch('setVestsToSteem')
     var store = this.$store
+    const address = await getTronLinkAddr()
+    if (address && address === TRON_LINK_ADDR_NOT_FOUND.noTronLink) {
+      this.tipTitle = this.$t('error.needtronlink')
+      this.tipMessage = 'TronLink: https://www.tronlink.org'
+      this.showMessage = true
+    } else if (address && address === TRON_LINK_ADDR_NOT_FOUND.walletLocked) {
+      this.tipTitle = this.$t('error.error')
+      this.tipMessage = this.$t('error.unlockWallet')
+      this.showMessage = true
+    } else if (address) {
+      this.$store.dispatch('initializeTronAccount', address)
+    }
     watchWallet((address) => {
-      if (address && address === TRON_LINK_ADDR_NOT_FOUND.noTronLink){
+      if (address && address === TRON_LINK_ADDR_NOT_FOUND.noTronLink) {
         this.tipTitle = this.$t('error.needtronlink')
-        this.tipMessage = "TronLink: https://www.tronlink.org";
+        this.tipMessage = 'TronLink: https://www.tronlink.org'
         this.showMessage = true
-      }else if (address && address === TRON_LINK_ADDR_NOT_FOUND.walletLocked){
+      } else if (address && address === TRON_LINK_ADDR_NOT_FOUND.walletLocked) {
         this.tipTitle = this.$t('error.error')
-        this.tipMessage = this.$t('error.unlockWallet');
+        this.tipMessage = this.$t('error.unlockWallet')
         this.showMessage = true
-      }else if (address){
+      } else if (address) {
         store.dispatch('initializeTronAccount', address)
       }
     })
-  },
+  }
 }
 </script>
 
@@ -84,14 +101,14 @@ $blue: #f4a921;
   --primary: #f4a921;
 }
 
- @import '~bootstrap/scss/bootstrap.scss';
-  @import '~bootstrap-vue/src/index.scss';
+@import '~bootstrap/scss/bootstrap.scss';
+@import '~bootstrap-vue/src/index.scss';
 html, body{
   height:100%;
   margin:0;
 }
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: -apple-system,BlinkMacSystemFont,"Segoe UI","Roboto","Oxygen","Ubuntu","Cantarell","Fira Sans","Droid Sans","Helvetica Neue";
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
@@ -121,7 +138,7 @@ html, body{
   height: 60px;
   font-size: 1.1rem;
   text-align: left;
-  box-sizing: border-box
+  box-sizing: border-box;
 }
 
 .left .nav-item:hover{

@@ -1,16 +1,16 @@
 <template>
-    <transition name="fade">
-        <div class="mask" @click="hideMask">
-            <div class="mask-box">
-                <div class="mask-info">
-                    <h5 v-if="title && title.trim().length > 0">{{ title }}</h5>
-                    <p class="mask-info-text">
-                        {{ showMessage }}
-                    </p>
-                </div>
-            </div>
+  <transition name="fade">
+    <div class="mask" @click="hideMask">
+      <div class="mask-box">
+        <div class="mask-info">
+          <h5 v-if="title && title.trim().length > 0">{{ title }}</h5>
+          <p class="mask-info-text">
+            {{ showMessage }}
+          </p>
         </div>
-    </transition>
+      </div>
+    </div>
+  </transition>
 </template>
 
 <script>
@@ -25,7 +25,7 @@ export default {
   },
   props: {
     title: {
-        type: String,
+      type: String
     },
     showMessage: {
       type: String,
@@ -73,10 +73,10 @@ export default {
 
 .mask-info {
   align-content: center;
-  p{
-      width: 100%;
-      word-wrap: break-word;
-      margin-bottom:0;
+  p {
+    width: 100%;
+    word-wrap: break-word;
+    margin-bottom: 0;
   }
 }
 

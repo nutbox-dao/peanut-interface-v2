@@ -1,45 +1,55 @@
 <template>
-    <div class="wallet-swap">
-      <div class="tab">
-        <div :class="['tab-card', currentTab === 'tsteem' ? 'checked' : '']" @click="change('tsteem')">
-          <img src="../../static/images/tsteem.svg" alt="">
-          <h5>TSTEEM</h5>
+    <div class="wallet-swap" style="margin-top:20px">
+      <template v-if="steemAccount && steemAccount.length > 0">
+        <div class="tab">
+          <div :class="['tab-card', currentTab === 'steem' ? 'checked' : '']" @click="change('steem')">
+            <img src="../../static/images/tsteem.svg" alt="">
+            <h5>TSTEEM</h5>
+          </div>
+          <div :class="['tab-card', currentTab === 'sbd' ? 'checked' : '']" @click="change('sbd')">
+            <img src="../../static/images/tsbd.svg" alt="">
+            <h5>TSBD</h5>
+          </div>
         </div>
-        <div :class="['tab-card', currentTab === 'tsbd' ? 'checked' : '']" @click="change('tsbd')">
-          <img src="../../static/images/tsbd.svg" alt="">
-          <h5>TSBD</h5>
-        </div>
-      </div>
-      <SwapField :tokenType="currentTab"/>
+        <TSteemSwap v-show="currentTab === 'steem'"/>
+        <TSbdSwap v-show="currentTab === 'sbd'"/>
+      </template>
+      <template v-else>
+        <login/>
+      </template>
     </div>
 </template>
 
 <script>
-import Card from '../ToolsComponents/Card'
-import SwapField from './SwapField'
+import Login from '../Login'
+import TSteemSwap from './TSteemSwap'
+import TSbdSwap from './TSbdSwap'
+import { mapState } from 'vuex'
 export default {
   name: 'Swap',
   data () {
     return {
-      currentTab: 'tsteem',
-
+      currentTab: 'steem'
     }
   },
   components: {
-    Card,
-    SwapField
+    Login,
+    TSteemSwap,
+    TSbdSwap,
+  },
+  computed: {
+    ...mapState(['steemAccount'])
   },
   methods: {
-    change (tab){
-      if (tab === 'tsteem'){
-        this.currentTab = 'tsteem'
-      }else if (tab === 'tsbd'){
-        this.currentTab = 'tsbd'
+    change (tab) {
+      if (tab === 'steem') {
+        this.currentTab = 'steem'
+      } else if (tab === 'sbd') {
+        this.currentTab = 'sbd'
       }
     }
   },
   mounted () {
-    ;
   }
 }
 </script>
