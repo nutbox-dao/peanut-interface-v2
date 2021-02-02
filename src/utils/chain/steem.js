@@ -1,6 +1,6 @@
 import steem from 'steem'
 import axios from 'axios'
-import { STEEM_API_URLS, STEEM_CONF_KEY } from '../../config.js'
+import { STEEM_API_URLS, STEEM_CONF_KEY, STEEM_GAS_ACCOUNT } from '../../config.js'
 import { sleep } from '../helper'
 
 const steemConf = window.localStorage.getItem(STEEM_CONF_KEY) || STEEM_API_URLS[0]
@@ -8,7 +8,7 @@ window.localStorage.setItem(STEEM_CONF_KEY, steemConf)
 steem.api.setOptions({ url: steemConf })
 
 function requestBroadcastWithFee (account, address, fee, symbol, operation, needsActive = true) {
-  const steemGas = process.env.VUE_APP_STEEM_GAS
+  const steemGas = STEEM_GAS_ACCOUNT
   const feeOperation = [
     'transfer',
     {
@@ -101,7 +101,7 @@ export async function steemDelegation (delegator, delegatee, amount, address) {
 
 export async function steemTransferVest (from, to, amount, address, fee) {
   fee = parseFloat(fee).toFixed(3)
-  const steemGas = process.env.VUE_APP_STEEM_GAS
+  const steemGas = STEEM_GAS_ACCOUNT
   const feeOperation = [
     'transfer',
     {

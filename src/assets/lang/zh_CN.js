@@ -98,9 +98,11 @@ module.exports = {
     needkeychain: '请安装steem-keychain钱包',
     needtronlink: '请安装tronlink钱包',
     insufficientEnerge: '能量不足',
+    transferFail: '转账失败',
     unlockKeychain: '请解锁Steem Keychain',
     unlockWallet: '请解锁波场钱包',
     steemLoginFail: 'Steem登录失败',
+    illegalTronAddress:"无效的波场地址"
   },
   tsp: {
     tspMine: 'TSP挖矿',

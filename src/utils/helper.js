@@ -35,3 +35,18 @@ export const retryMethod = async function(func, retries=2, interval=1){
     exc(retries)
   })
 }
+
+export const formatBalance = function(value, digit = 3) {
+  if (!value) return "";
+  const str =
+    digit != null && digit >= 0
+      ? Number(value).toFixed(digit).toString()
+      : value.toString();
+  let integer = str;
+  let fraction = "";
+  if (str.includes(".")) {
+    integer = str.split(".")[0];
+    fraction = "." + str.split(".")[1];
+  }
+  return integer.replace(/\B(?=(\d{3})+(?!\d))/g, ",") + fraction;
+}

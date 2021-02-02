@@ -6,25 +6,11 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import i18n from './i18n'
+import { formatBalance } from './utils/helper'
 
 Vue.config.productionTip = false
 
-Vue.filter('amountForm', function (value, digit=3) {
-  if (!value) return ''
-  const str =
-      digit != null && digit >= 0
-          ? Number(value)
-              .toFixed(digit)
-              .toString()
-          : value.toString()
-  let integer = str
-  let fraction = ''
-  if (str.includes('.')) {
-    integer = str.split('.')[0]
-    fraction = '.' + str.split('.')[1]
-  }
-  return integer.replace(/\B(?=(\d{3})+(?!\d))/g, ',') + fraction
-})
+Vue.filter('amountForm', formatBalance)
 
 new Vue({
   router,
