@@ -5,7 +5,7 @@ import { intToAmount, getTron as getTronweb, getBalanceOfToken } from '../utils/
 import { getContract } from '../utils/chain/contract'
 import { retryMethod } from '../utils/helper'
 import { vestsToSteem, getAccountInfo, getSteemBalance, getSbdBalance, getVestingShares } from '../utils/chain/steem'
-import { TSP_LP_TOKEN_ADDRESS } from '../config'
+import { TSP_LP_TOKEN_ADDRESS, TRON_CONTRACT_CALL_PARAMS } from '../config'
 
 Vue.use(Vuex)
 
@@ -89,32 +89,32 @@ export default new Vuex.Store({
   getters: {
     // steem
     spBalance: state => {
-      return state.vestsBalance * state.vestsToSteem
+      return state.vestsBalance * state.vestsToSteem || 0
     },
     delegatedVests: state => {
-      return intToAmount(state.delegatedVestsInt)
+      return intToAmount(state.delegatedVestsInt) || 0
     },
     // tron
     tronAddrFromat: state => {
       return state.tronAddress.substring(0, 6) + '...' + state.tronAddress.substring(30)
     },
     tronBalance: state => {
-      return intToAmount(state.tronBalanceInt)
+      return intToAmount(state.tronBalanceInt) || 0
     },
     tsteemBalance: state => {
-      return intToAmount(state.tsteemBalanceInt)
+      return intToAmount(state.tsteemBalanceInt) || 0
     },
     tspBalance: state => {
-      return intToAmount(state.tspBalanceInt)
+      return intToAmount(state.tspBalanceInt) || 0
     },
     tsbdBalance: state => {
-      return intToAmount(state.tsbdBalanceInt)
+      return intToAmount(state.tsbdBalanceInt) || 0
     },
     tspLpBalance: state => {
-      return intToAmount(state.tspLpBalanceInt)
+      return intToAmount(state.tspLpBalanceInt) || 0
     },
     pnutBalance: state => {
-      return intToAmount(state.pnutBalanceInt)
+      return intToAmount(state.pnutBalanceInt) || 0
     },
     // pool info
     delegatedSp: state => {
@@ -122,10 +122,10 @@ export default new Vuex.Store({
       return delegatedVest * state.vestsToSteem
     },
     depositedTsp: state => {
-      return intToAmount(state.depositedTspInt)
+      return intToAmount(state.depositedTspInt) || 0
     },
     depositedTspLp: state => {
-      return intToAmount(state.depositedTspLpInt)
+      return intToAmount(state.depositedTspLpInt) || 0
     }
 
   },
@@ -205,7 +205,7 @@ export default new Vuex.Store({
         try {
           const contract = await getContract('TSP')
           const tsp = await contract.balanceOf(context.state.tronAddress).call()
-          context.commit('saveTspBalanceInt', tsp)
+          context.commit('saveTspBalanceInt', tsp || 0)
         } catch (e) {
           console.error('Get Tsp Fail:', e.message)
           throw e
@@ -218,7 +218,7 @@ export default new Vuex.Store({
         try {
           const contract = await getContract('TSBD')
           const tsbd = await contract.balanceOf(context.state.tronAddress).call()
-          context.commit('saveTsbdBalanceInt', tsbd)
+          context.commit('saveTsbdBalanceInt', tsbd || 0)
         } catch (e) {
           console.error('Get Tsbd Fail:', e.message)
           throw e
@@ -231,7 +231,7 @@ export default new Vuex.Store({
         try {
           const contract = await getContract('PNUT')
           const pnut = await contract.balanceOf(context.state.tronAddress).call()
-          context.commit('savePnutBalanceInt', pnut)
+          context.commit('savePnutBalanceInt', pnut || 0)
         } catch (e) {
           console.error('Get Pnut Fail:', e.message)
           throw e
@@ -244,10 +244,24 @@ export default new Vuex.Store({
         try {
           const tspAddr = TSP_LP_TOKEN_ADDRESS
           const tsplpBalance = await getBalanceOfToken(tspAddr, context.state.tronAddress)
-          context.commit('saveTspLpBalanceInt', tsplpBalance)
+          context.commit('saveTspLpBalanceInt', tsplpBalance || 0)
         } catch (e) {
           console.error('Get Tsp_Lp Fail:', e.message)
           throw e
+        }
+      })
+    },
+
+    async getDelegatedSp(context) {
+      retryMethod(async () => {
+        try{
+          const contranct = await getContract('PNUT_POOL')
+          let amount = await contranct.delegators(context.state.tronAddress).call(); //balanceOfDelegate
+          amount = amount.amount
+          context.commit('saveDelegatedVestsInt', amount || 0)
+        }catch(e){
+          console.error('Get Delegated SP Fail:', e.message);
+          throw e;
         }
       })
     },
@@ -260,6 +274,7 @@ export default new Vuex.Store({
       dispatch('getTsbd')
       dispatch('getPnut')
       dispatch('getTspLp')
+      dispatch('getDelegatedSp')
     }
   },
   modules: {

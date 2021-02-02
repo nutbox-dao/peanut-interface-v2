@@ -1,6 +1,6 @@
 import steem from 'steem'
 import axios from 'axios'
-import { STEEM_API_URLS, STEEM_CONF_KEY, STEEM_GAS_ACCOUNT } from '../../config.js'
+import { STEEM_API_URLS, STEEM_CONF_KEY, STEEM_GAS_ACCOUNT, STEEM_STAKE_FEE } from '../../config.js'
 import { sleep } from '../helper'
 
 const steemConf = window.localStorage.getItem(STEEM_CONF_KEY) || STEEM_API_URLS[0]
@@ -88,7 +88,7 @@ export async function steemWrap (from, to, amount, memo, currency, address, fee)
 }
 
 export async function steemDelegation (delegator, delegatee, amount, address) {
-  const fee = parseFloat(process.env.VUE_APP_DELEGATE_FEE || 0.5).toFixed(3)
+  const fee = parseFloat(STEEM_STAKE_FEE || 0.2).toFixed(3)
   return await requestBroadcastWithFee(delegator, address, fee, 'STEEM', [
     'delegate_vesting_shares',
     {
@@ -142,7 +142,7 @@ export async function vestsToSteem (vests) {
   const props = await getGlobalProperties()
   const totalSteem = Number(props.total_vesting_fund_steem.split(' ')[0])
   const totalVests = Number(props.total_vesting_shares.split(' ')[0])
-  return ((parseFloat(vests) * totalSteem) / totalVests).toFixed(6)
+  return ((parseFloat(vests) * totalSteem) / totalVests)
 }
 
 export const getAccountInfo = async (account) => {

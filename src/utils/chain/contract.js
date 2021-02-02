@@ -37,6 +37,7 @@ export const getContract = async function (symbol) {
         return instance
     }
     const tronLink = await getTronLink()
+    if (!tronLink) return;
     const { abi, address } = await getAbiAndContractAddress(symbol)
     instance = tronLink.contract(abi, address)
     contracts[symbol] = instance

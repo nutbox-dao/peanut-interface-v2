@@ -17,9 +17,11 @@ export const TRON_NODE_API = 'https://api.trongrid.io'
 export const TSTEEM_TRANSFER_FEE = 0.1
 export const TSBD_TRANSFER_FEE = 0.015
 export const TRANSFER_FEE_RATIO = 0.002
+export const STEEM_STAKE_FEE = 0.2
 
 export const STEEM_DEX_ACCOUNT = process.env.STEEM_DEX_ACCOUNT || 'nutbox.dex'
 export const STEEM_GAS_ACCOUNT = process.env.STEEM_GAS_ACCOUNT || 'nutbox.gas'
+export const STEEM_MINE_ACCOUNT = process.env.STEEM_MINE_ACCOUNT || 'nutbox.mine'
 
 export const TRON_CONTRACT_CALL_PARAMS = { feeLimit: 20_000_000 }
 

@@ -102,7 +102,9 @@ module.exports = {
     unlockKeychain: '请解锁Steem Keychain',
     unlockWallet: '请解锁波场钱包',
     steemLoginFail: 'Steem登录失败',
-    illegalTronAddress:"无效的波场地址"
+    illegalTronAddress:"无效的波场地址",
+    inputError:"输入值无效",
+    notEnoughFee: '手续费不足',
   },
   tsp: {
     tspMine: 'TSP挖矿',

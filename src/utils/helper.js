@@ -37,7 +37,7 @@ export const retryMethod = async function(func, retries=2, interval=1){
 }
 
 export const formatBalance = function(value, digit = 3) {
-  if (!value) return "";
+  if (!value) return "0";
   const str =
     digit != null && digit >= 0
       ? Number(value).toFixed(digit).toString()

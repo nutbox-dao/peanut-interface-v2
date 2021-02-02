@@ -69,7 +69,7 @@ export default {
   justify-content: space-evenly;
   flex-wrap: wrap;
   >p{
-    width:200px;
+    width:90%;
   }
 }
 </style>
