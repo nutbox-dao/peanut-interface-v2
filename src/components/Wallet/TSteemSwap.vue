@@ -175,7 +175,7 @@ export default {
     },
     transFee() {
       if (this.fromSteemToTron) {
-        const f = parseFloat(this.steemBalance) * TRANSFER_FEE_RATIO;
+        const f = parseFloat(this.transValue) * TRANSFER_FEE_RATIO;
         return f > TSTEEM_TRANSFER_FEE ? f : TSTEEM_TRANSFER_FEE;
       }
       return 0;
@@ -214,6 +214,7 @@ export default {
 
     fillMaxTrans() {
       if (this.fromSteemToTron) {
+        this.transValue = this.steemBalance
         this.transValue = parseFloat(this.steemBalance - this.transFee).toFixed(
           3
         );
@@ -255,7 +256,7 @@ export default {
           const tsteemBalance = parseFloat(this.tsteemBalance)
           const steemBalance = parseFloat(this.steemBalance)
           this.saveTsteemBalanceInt(amountToInt(tsteemBalance + parseFloat(amount)))
-          this.saveSteemBalance(steemBalance - parseFloat(amount))
+          this.saveSteemBalance(steemBalance - parseFloat(amount) - parseFloat(this.transFee))
         } else {
           this.tipTitle = this.$t('error.error')
           this.tipMessage = res.message;
@@ -280,8 +281,8 @@ export default {
           .tsteemToSteem(this.steemAccount, amount)
           .send(TRON_CONTRACT_CALL_PARAMS);
         if ( res && (await isTransactionSuccess(res))){
-          this.saveTsteemBalanceInt(amountToInt(parseFloat(this.tsteemBalance) - parseFloat(this.transValue)))
-          this.saveSteemBalance(parseFloat(this.steemBalance) + parseFloat(this.transValue))
+          this.saveTsteemBalanceInt(amountToInt(parseFloat(this.tsteemBalance) - parseFloat(amount)))
+          this.saveSteemBalance(parseFloat(this.steemBalance) + parseFloat(amount))
         }else{
           if (res && (await isInsufficientEnerge(res))){
             this.tipMessage = this.$t('error.insufficientEnerge')

@@ -125,8 +125,17 @@
 <script>
 import Card from "../ToolsComponents/Card";
 import TipMessage from "../ToolsComponents/TipMessage";
-import { mapState, mapGetters, mapActions } from "vuex";
-import { TSBD_TRANSFER_FEE, TRANSFER_FEE_RATIO } from "../../config";
+import { mapState, mapGetters, mapActions, mapMutations } from "vuex";
+import {
+  TSBD_TRANSFER_FEE,
+  TRANSFER_FEE_RATIO,
+  STEEM_DEX_ACCOUNT,
+  TRON_CONTRACT_CALL_PARAMS,
+} from "../../config";
+import { isAddress, amountToInt, isTransactionSuccess, isInsufficientEnerge } from "../../utils/chain/tron";
+import { getContract } from "../../utils/chain/contract"
+import { steemWrap } from "../../utils/chain/steem";
+import { formatBalance } from "../../utils/helper"
 
 export default {
   name: "TSbdSwap",
@@ -148,25 +157,25 @@ export default {
     };
   },
   computed: {
-    ...mapState(["sbdBalance", "steemAccount"]),
+    ...mapState(["sbdBalance", "steemAccount", "tronAddress"]),
     ...mapGetters(["tsbdBalance"]),
     fromTokenBalance() {
       if (this.fromSteemToTron) {
-        return this.formatBalance(this.sbdBalance) + " SBD";
+        return formatBalance(this.sbdBalance) + " SBD";
       } else {
-        return this.formatBalance(this.tsbdBalance) + " TSBD";
+        return formatBalance(this.tsbdBalance) + " TSBD";
       }
     },
     toTokenBalance() {
       if (!this.fromSteemToTron) {
-        return this.formatBalance(this.sbdBalance) + " STBD";
+        return formatBalance(this.sbdBalance) + " SBD";
       } else {
-        return this.formatBalance(this.tsbdBalance) + " TSBD";
+        return formatBalance(this.tsbdBalance) + " TSBD";
       }
     },
     transFee() {
       if (this.fromSteemToTron) {
-        const f = parseFloat(this.stbdBalance) * TRANSFER_FEE_RATIO;
+        const f = parseFloat(this.transValue) * TRANSFER_FEE_RATIO;
         return f > TSBD_TRANSFER_FEE ? f : TSBD_TRANSFER_FEE;
       }
       return 0;
@@ -174,15 +183,16 @@ export default {
   },
   methods: {
     ...mapActions(["getSbd", "getTsbd"]),
+    ...mapMutations(['saveSbdBalance', 'saveTsbdBalanceInt']),
+
     checkTransValue() {
-      this.isLoading = false
+      this.isLoading = false;
       const reg = /^\d+(\.\d+)?$/;
       const res = reg.test(this.transValue);
       let res1 = false;
       if (parseFloat(this.transValue) > 0) {
         res1 = true;
       }
-
       if (this.fromSteemToTron) {
         const res2 =
           parseFloat(this.transValue) <=
@@ -195,27 +205,16 @@ export default {
         this.canTransFlag = res1 && res && res3;
       }
     },
+
     changeTransOrder() {
       this.fromSteemToTron = !this.fromSteemToTron;
       this.transValue = "";
       this.checkTransValue();
     },
-    formatBalance(value, digit = 3) {
-      if (!value) return "";
-      const str =
-        digit != null && digit >= 0
-          ? Number(value).toFixed(digit).toString()
-          : value.toString();
-      let integer = str;
-      let fraction = "";
-      if (str.includes(".")) {
-        integer = str.split(".")[0];
-        fraction = "." + str.split(".")[1];
-      }
-      return integer.replace(/\B(?=(\d{3})+(?!\d))/g, ",") + fraction;
-    },
+
     fillMaxTrans() {
       if (this.fromSteemToTron) {
+        this.transValue = this.sbdBalance
         this.transValue = parseFloat(this.sbdBalance - this.transFee).toFixed(
           3
         );
@@ -226,18 +225,82 @@ export default {
     },
 
     trans() {
+      if (!isAddress(this.tronAddress)) {
+        this.tipTitle = this.$t("error.error");
+        this.tipMessage = this.$t("error.illegalTronAddress");
+        this.showMessage = true;
+        return;
+      }
       this.isLoading = true;
       this.canTransFlag = false;
-      if (this.fromTokenBalance) {
+      if (this.fromSteemToTron) {
         this.sbdToTsbd();
       } else {
         this.tsbdToSbd();
       }
     },
 
-    async sbdToTsbd() {},
+    async sbdToTsbd() {
+      try {
+        const amount = parseFloat(this.transValue).toFixed(3);
+        const res = await steemWrap(
+          this.steemAccount,
+          STEEM_DEX_ACCOUNT,
+          amount,
+          this.tronAddress + " +" + amount + " TSBD",
+          "SBD",
+          this.tronAddress,
+          this.transFee
+        );
+        if (res.success === true) {
+          const tsbdBalance = parseFloat(this.tsbdBalance)
+          const sbdBalance = parseFloat(this.sbdBalance)
+          this.saveTsbdBalanceInt(amountToInt(tsbdBalance + parseFloat(amount)))
+          this.saveSbdBalance(sbdBalance - parseFloat(amount) - parseFloat(this.transFee))
+        } else {
+          this.tipTitle = this.$t('error.error')
+          this.tipMessage = res.message;
+          this.showMessage = true;
+        }
+      } catch (e) {
+        this.tipTitle = this.$t('error.error')
+        this.tipMessage = e.message;
+        this.showMessage = true;
+      } finally {
+        this.transValue = ''
+        this.checkTransValue()
+      }
+    },
 
-    async tsbdToStbd() {},
+    async tsbdToSbd() {
+      try{
+        const contract = await getContract("TSBD")
+        let amount = parseFloat(this.transValue).toFixed(3);
+        amount = amountToInt(amount);
+        const res = await contract
+          .tsbdToSbd(this.steemAccount, amount)
+          .send(TRON_CONTRACT_CALL_PARAMS);
+        if ( res && (await isTransactionSuccess(res))){
+          this.saveTsbdBalanceInt(amountToInt(parseFloat(this.tsbdBalance) - parseFloat(amount)))
+          this.saveSbdBalance(parseFloat(this.sbdBalance) + parseFloat(amount))
+        }else{
+          if (res && (await isInsufficientEnerge(res))){
+            this.tipMessage = this.$t('error.insufficientEnerge')
+          }else{
+            this.tipMessage = this.$t('error.transferFail')
+          }
+          this.tipTitle = this.$t('error.error')
+          this.showMessage = true
+        }
+      }catch(e){
+          this.tipTitle = this.$t('error.error')
+          this.tipMessage = e.message
+          this.showMessage = true
+      }finally{
+        this.transValue = ''
+        this.checkTransValue()
+      }
+    },
   },
   mounted() {
     if (this.steemAccount && this.steemAccount.length > 0) {
@@ -250,4 +313,5 @@ export default {
 
 <style lang="less" scoped>
 @import "../../static/css/swap.less";
+
 </style>
