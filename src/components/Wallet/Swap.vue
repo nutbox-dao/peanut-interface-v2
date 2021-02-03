@@ -1,5 +1,5 @@
 <template>
-    <div class="wallet-swap" style="margin-top:20px">
+    <div class="wallet-swap">
       <template v-if="steemAccount && steemAccount.length > 0">
         <div class="tab">
           <div :class="['tab-card', currentTab === 'steem' ? 'checked' : '']" @click="change('steem')">
@@ -56,40 +56,11 @@ export default {
 
 <style lang="less" scoped>
 .wallet-swap {
+  margin-top: 10px;
   display: flex;
   align-items: center;
   justify-content: space-around;
   flex-wrap: wrap;
-  .tab{
-    width: 100%;
-    display: flex;
-    align-items: left;
-    .tab-card{
-      margin:20px 14px;
-      border-radius: 8px;
-      border: 2px dotted var(--yellow-background);
-      padding: 10px 16px;
-      background-color: white;
-      display: flex;
-      align-items: center;
-      width:160px;
-      box-sizing: border-box;
-      h5{
-        margin-bottom:0;
-        margin-left: 10px;
-      }
-      img{
-        width: 30px;
-        height: 30px;
-      }
-    }
-    .tab-card:hover{
-      cursor: pointer;
-      background-color: var(--yellow-background);
-    }
-    .checked{
-      border: 1px solid var(--primary);
-    }
-  }
+@import "../../static/css/tab.less";
 }
 </style>

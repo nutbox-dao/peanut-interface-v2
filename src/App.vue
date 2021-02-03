@@ -117,6 +117,12 @@ html, body{
   display: flex;
   align-items: left;
 }
+h3{
+    margin-top: 64px;
+    text-align: left;
+    display: block;
+    width: 100%;
+}
 
 .logo {
   margin-bottom:30px

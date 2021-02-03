@@ -23,12 +23,15 @@ export const STEEM_DEX_ACCOUNT = process.env.STEEM_DEX_ACCOUNT || 'nutbox.dex'
 export const STEEM_GAS_ACCOUNT = process.env.STEEM_GAS_ACCOUNT || 'nutbox.gas'
 export const STEEM_MINE_ACCOUNT = process.env.STEEM_MINE_ACCOUNT || 'nutbox.mine'
 
-export const TRON_CONTRACT_CALL_PARAMS = { feeLimit: 20_000_000 }
+export const TRON_CONTRACT_CALL_PARAMS = { feeLimit: 10_000_000 }
 
 // TSP-TRX 交易对地址
 export const TSP_TRX_CONTRACT_ADDRESS = 'TBpTbddofiBrE1AfhQbwU2BhsrBUM2Lnir'
 // TSP-LP token 地址
 export const TSP_LP_TOKEN_ADDRESS = 'TBpTbddofiBrE1AfhQbwU2BhsrBUM2Lnir'
+
+export const TSP_POOL_ADDRESS = 'TF2Qz1byu4b54HPCKKY8FVwFeocKEZKW9D'
+export const TSP_LP_POOL_ADDRESS = 'TTMY4ZkeBxmwj43bmaJUysac8w7ha7Fkhj'
 
 export const TRON_LINK_ADDR_NOT_FOUND = {
   walletLocked: 'walletLocked',

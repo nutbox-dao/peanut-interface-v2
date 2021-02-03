@@ -1,35 +1,39 @@
 <template>
-    <div class="wallet">
+      <div class="farm">
         <h3>
-            {{ this.$t('wallet.wallet') }}
+            {{ this.$t('farm.farm') }}
         </h3>
         <div class="nav">
-            <router-link to='/wallet' exact>Steem</router-link>
-            <router-link to='/wallet/tron'>Tron</router-link>
-            <router-link to='/wallet/swap'>{{this.$t('wallet.swap')}}</router-link>
+            <router-link to='/farm/tsp'>TSP</router-link>
+            <router-link to='/farm/tsplp'>TSP_LP</router-link>
         </div>
+        
         <router-view></router-view>
     </div>
 </template>
 
 <script>
 export default {
-  name: 'Wallet',
-  data () {
-    return {
+  name: "Farm",
+  data() {
+      return {
+          
+      }
+  },
 
-    }
-  },
   methods: {
+      tsp() {
+          
+      },
+      tsplp(){
+
+      }
   },
-  mounted () {
-    ;
-  }
-}
+};
 </script>
 
 <style lang="less" scoped>
-.wallet{
+.farm{
     padding: 0px 40px 64px;
     .nav{
         display:flex;

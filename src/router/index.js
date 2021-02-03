@@ -5,6 +5,9 @@ import SteemWallet from '../components/Wallet/SteemWallet'
 import TronWallet from '../components/Wallet/TronWallet'
 import Swap from '../components/Wallet/Swap'
 import Stake from '../components/Stake/Stake'
+import Farm from '../components/Farm/Farm'
+import TSPPool from '../components/Farm/TSPPool'
+import TSPLPPool from '../components/Farm/TSPLPPool'
 
 Vue.use(VueRouter)
 
@@ -40,6 +43,21 @@ const routes = [
     path: '/stake',
     name: 'stake',
     component: Stake
+  },
+  {
+    path: '/farm',
+    component: Farm,
+    redirect:'/farm/tsp',
+    children: [
+      {
+        path:'tsp',
+        component: TSPPool
+      },
+      {
+        path:'tsplp',
+        component: TSPLPPool
+      }
+    ]
   }
 ]
 

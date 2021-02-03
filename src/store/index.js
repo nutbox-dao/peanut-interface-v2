@@ -1,11 +1,28 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import Cookie from 'vue-cookies'
-import { intToAmount, getTron as getTronweb, getBalanceOfToken } from '../utils/chain/tron'
-import { getContract } from '../utils/chain/contract'
-import { retryMethod } from '../utils/helper'
-import { vestsToSteem, getAccountInfo, getSteemBalance, getSbdBalance, getVestingShares } from '../utils/chain/steem'
-import { TSP_LP_TOKEN_ADDRESS, TRON_CONTRACT_CALL_PARAMS } from '../config'
+import {
+  intToAmount,
+  getTron as getTronweb,
+  getBalanceOfToken
+} from '../utils/chain/tron'
+import {
+  getContract
+} from '../utils/chain/contract'
+import {
+  retryMethod
+} from '../utils/helper'
+import {
+  vestsToSteem,
+  getAccountInfo,
+  getSteemBalance,
+  getSbdBalance,
+  getVestingShares
+} from '../utils/chain/steem'
+import {
+  TSP_LP_TOKEN_ADDRESS,
+  TRON_CONTRACT_CALL_PARAMS
+} from '../config'
 
 Vue.use(Vuex)
 
@@ -48,7 +65,7 @@ export default new Vuex.Store({
     saveVestsToSteem: function (state, vestsToSteem) {
       state.vestsToSteem = vestsToSteem
     },
-    clearSteemAccount (state) {
+    clearSteemAccount(state) {
       state.steemAccount = null
       Cookie.remove('steemAccount')
     },
@@ -131,31 +148,44 @@ export default new Vuex.Store({
   },
   actions: {
     // steem
-    setVestsToSteem ({ commit }) {
+    setVestsToSteem({
+      commit
+    }) {
       vestsToSteem(1).then((res) => {
         commit('saveVestsToSteem', res)
       })
     },
 
-    getSteem ({ commit, state }) {
+    getSteem({
+      commit,
+      state
+    }) {
       getSteemBalance(state.steemAccount).then((steem) => {
         commit('saveSteemBalance', steem)
       })
     },
 
-    getSbd ({ commit, state }) {
+    getSbd({
+      commit,
+      state
+    }) {
       getSbdBalance(state.steemAccount).then((sbd) => {
         commit('saveSbdBalance', sbd)
       })
     },
 
-    getVests ({ commit, state }) {
+    getVests({
+      commit,
+      state
+    }) {
       getVestingShares(state.steemAccount).then((vests) => {
         commit('saveVestsBalance', vests)
       })
     },
 
-    async initializeSteemAccount ({ commit }, steemAccount) {
+    async initializeSteemAccount({
+      commit
+    }, steemAccount) {
       try {
         const account = await getAccountInfo(steemAccount)
         const steem = parseFloat(account.balance)
@@ -173,7 +203,7 @@ export default new Vuex.Store({
     },
 
     // tron
-    async getTron (context) {
+    async getTron(context) {
       const func = async () => {
         try {
           const tronweb = getTronweb()
@@ -187,7 +217,7 @@ export default new Vuex.Store({
       retryMethod(func)
     },
 
-    async getTsteem (context) {
+    async getTsteem(context) {
       retryMethod(async () => {
         try {
           const contract = await getContract('TSTEEM')
@@ -200,7 +230,7 @@ export default new Vuex.Store({
       })
     },
 
-    async getTsp (context) {
+    async getTsp(context) {
       retryMethod(async () => {
         try {
           const contract = await getContract('TSP')
@@ -213,7 +243,7 @@ export default new Vuex.Store({
       })
     },
 
-    async getTsbd (context) {
+    async getTsbd(context) {
       retryMethod(async () => {
         try {
           const contract = await getContract('TSBD')
@@ -226,7 +256,7 @@ export default new Vuex.Store({
       })
     },
 
-    async getPnut (context) {
+    async getPnut(context) {
       retryMethod(async () => {
         try {
           const contract = await getContract('PNUT')
@@ -239,7 +269,7 @@ export default new Vuex.Store({
       })
     },
 
-    async getTspLp (context) {
+    async getTspLp(context) {
       retryMethod(async () => {
         try {
           const tspAddr = TSP_LP_TOKEN_ADDRESS
@@ -254,19 +284,36 @@ export default new Vuex.Store({
 
     async getDelegatedSp(context) {
       retryMethod(async () => {
-        try{
+        try {
           const contranct = await getContract('PNUT_POOL')
           let amount = await contranct.delegators(context.state.tronAddress).call(); //balanceOfDelegate
           amount = amount.amount
           context.commit('saveDelegatedVestsInt', amount || 0)
-        }catch(e){
+        } catch (e) {
           console.error('Get Delegated SP Fail:', e.message);
           throw e;
         }
       })
     },
 
-    async initializeTronAccount ({ commit, dispatch }, tronAddress) {
+    async getDepositedTsp(context) {
+      retryMethod(async () => {
+        try {
+          const contract = await getContract('TSP_POOL')
+          let amount = await contract.delegators(context.state.tronAddress).call();
+          amount = amount.tspAmount
+          context.commit('saveDepositedTspInt', amount || 0)
+        } catch (e) {
+          console.error('Get Deposited TSP Fail:', e.message);
+          throw e
+        }
+      })
+    },
+
+    async initializeTronAccount({
+      commit,
+      dispatch
+    }, tronAddress) {
       commit('saveTronAddress', tronAddress)
       dispatch('getTron')
       dispatch('getTsteem')
@@ -275,8 +322,8 @@ export default new Vuex.Store({
       dispatch('getPnut')
       dispatch('getTspLp')
       dispatch('getDelegatedSp')
+      dispatch('getDepositedTsp')
     }
   },
-  modules: {
-  }
+  modules: {}
 })

@@ -1,5 +1,8 @@
 <template>
-  <div>
+  <div id="stake" style="padding: 0px 40px 64px;">
+    <h3>
+        {{ this.$t('stake.stake') }}
+    </h3>
     <b-row>
       <b-col
         md="10"
@@ -163,7 +166,7 @@ export default {
       tipTitle: "",
       showMessage: false,
       delegatevalue: "",
-      pendingPnut: "",
+      pendingPnut: "0.000000",
       fee: STEEM_STAKE_FEE,
       loading: false,
       delegateLoading: false,
