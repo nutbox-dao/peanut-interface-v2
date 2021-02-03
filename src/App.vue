@@ -15,6 +15,10 @@
           <b-icon icon="nut"></b-icon>
           {{ $t('farm.farm') }}
         </b-nav-item>
+        <b-nav-item to="/liquid-staking">
+          <b-icon icon="nut"></b-icon>
+          {{ $t('liquidStaking.liquidStaking') }}
+        </b-nav-item>
         <div class="bottom">
           <a href="/wallet" target="_blank">
             <b-icon icon="nut"></b-icon>

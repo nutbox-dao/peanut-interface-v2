@@ -8,6 +8,8 @@ import Stake from '../components/Stake/Stake'
 import Farm from '../components/Farm/Farm'
 import TSPPool from '../components/Farm/TSPPool'
 import TSPLPPool from '../components/Farm/TSPLPPool'
+import LiquidStaking from '../components/LiquidStaking/LiquidStaking'
+import TSP from '../components/LiquidStaking/TSP'
 
 Vue.use(VueRouter)
 
@@ -56,6 +58,17 @@ const routes = [
       {
         path:'tsplp',
         component: TSPLPPool
+      }
+    ]
+  },
+  {
+    path:'/liquid-staking',
+    component: LiquidStaking,
+    redirect: '/liquid-staking/tsp',
+    children: [
+      {
+        path:'tsp',
+        component: TSP
       }
     ]
   }

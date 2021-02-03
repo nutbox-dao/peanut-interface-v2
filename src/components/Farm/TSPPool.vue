@@ -121,7 +121,6 @@ import { mapState, mapActions, mapGetters, mapMutations } from "vuex";
 import { TSP_POOL_ADDRESS, TRON_CONTRACT_CALL_PARAMS } from "../../config";
 import {
   intToAmount,
-  getTronLink,
   amountToInt,
   isTransactionSuccess,
   isInsufficientEnerge,
@@ -195,12 +194,12 @@ export default {
         } else {
           if (approeResult && (await isInsufficientEnerge(approveResult))) {
             this.showTip(
-              this.$t("error.error.error"),
+              this.$t("error.error"),
               this.$t("error.insufficientEnerge")
             );
           } else {
             this.showTip(
-              this.$t("error.error.error"),
+              this.$t("error.error"),
               this.$t("error.approveFail")
             );
           }
@@ -236,18 +235,18 @@ export default {
         } else {
           if (res && (await isInsufficientEnerge(res))) {
             this.showTip(
-              this.$t("error.error.error"),
+              this.$t("error.error"),
               this.$t("error.insufficientEnerge")
             );
           } else {
             this.showTip(
-              this.$t("error.error.error"),
+              this.$t("error.error"),
               this.$t("error.depositFail")
             );
           }
         }
       } catch (err) {
-        this.showTip(this.$t("error.error.error"), err);
+        this.showTip(this.$t("error.error"), err);
       } finally {
         this.loading = false;
         this.depositeLoading = false;

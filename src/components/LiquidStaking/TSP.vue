@@ -1,0 +1,321 @@
+<template>
+  <div class="swap-field">
+    <Card>
+      <div class="box">
+        <div class="round-box">
+          <div class="box-title-container">
+            <span>from</span>
+            <span>{{ $t("message.balance") + ": " + fromTokenBalance }} </span>
+          </div>
+          <div class="box-content-container">
+            <input
+              class="mb-2 mr-sm-2 mb-sm-0 user input"
+              :class="canTransFlag ? 'isok' : 'isfalse'"
+              placeholder="0.0"
+              v-model="transValue"
+              @keyup="checkTransValue"
+              inputmode="decimal"
+              pattern="^[0-9]*[.,]?[0-9]*$"
+              spellcheck="false"
+              value
+            />
+            <div style="display: flex; align-content: center">
+              <button class="maxBtn" @click="fillMaxTrans">Max</button>
+              <img
+                class="coin-icon"
+                src="../../static/images/steem.svg"
+                alt=""
+                v-if="fromSteemToTron"
+              />
+              <img
+                class="coin-icon"
+                src="../../static/images/tsteem.svg"
+                alt=""
+                v-else
+              />
+              <span style="margin-left: 8px; line-height: 24px">
+                {{ fromSteemToTron ? "STEEM" : "TSTEEM" }}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="pink-arrow-box">
+          <div style="margin: 0 auto" @click="changeTransOrder">
+            <img class="pink-arrow" src="../../static/images/pink-arrow.svg" />
+          </div>
+        </div>
+
+        <div class="round-box">
+          <div class="box-title-container">
+            <span>to</span>
+            <span>{{ $t("message.balance") + ": " + toTokenBalance }} </span>
+          </div>
+          <div class="box-content-container">
+            <input
+              class="mb-2 mr-sm-2 mb-sm-0 user input"
+              :class="canTransFlag ? 'isok' : 'isfalse'"
+              placeholder="0.0"
+              v-model="transValue"
+              @keyup="checkTransValue"
+              inputmode="decimal"
+              pattern="^[0-9]*[.,]?[0-9]*$"
+              spellcheck="false"
+              value
+            />
+            <div style="display: flex; align-content: center">
+              <img
+                class="coin-icon"
+                src="../../static/images/tsteem.svg"
+                alt=""
+                v-if="fromSteemToTron"
+              />
+              <img
+                class="coin-icon"
+                src="../../static/images/steem.svg"
+                alt=""
+                v-else
+              />
+              <span style="margin-left: 8px; line-height: 24px">
+                {{ fromSteemToTron ? "TSTEEM" : "STEEM" }}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="confirm-box">
+          <button class="confirm-btn" @click="trans" :disabled="!canTransFlag">
+            <b-spinner
+              small
+              type="grow"
+              v-show="isLoading"
+              variant="primary"
+              style="margin-right: 8px"
+            ></b-spinner>
+            {{ $t("message.confirmconvert") }}
+          </button>
+        </div>
+
+        <!--手续费-->
+        <p class="tip" v-show="fromSteemToTron">
+          {{ $t("message.servicecharge") }}：
+          {{ parseFloat(transferRatio * 100).toFixed(2) }}%，{{
+            $t("message.atleastcharge")
+          }}
+          {{ transferFee }} STEEM
+        </p>
+        <!-- 兑换率 -->
+        <p class="tip" v-if="fromSteemToTron">
+          {{ $t("message.convertrate") }}： 1 STEEM = 1 TSTEEM
+        </p>
+        <p class="tip" v-else>
+          {{ $t("message.convertrate") }}： 1 TSTEEM = 1 STEEM<br />
+        </p>
+      </div>
+    </Card>
+    <TipMessage
+      :showMessage="tipMessage"
+      :title="tipTitle"
+      v-if="showMessage"
+      @hideMask="showMessage = false"
+    />
+  </div>
+</template>
+
+<script>
+import Card from "../ToolsComponents/Card";
+import TipMessage from "../ToolsComponents/TipMessage";
+import { mapState, mapGetters, mapActions, mapMutations } from "vuex";
+import {
+  TSTEEM_TRANSFER_FEE,
+  TRANSFER_FEE_RATIO,
+  STEEM_DEX_ACCOUNT,
+  TRON_CONTRACT_CALL_PARAMS,
+} from "../../config";
+import { isAddress, amountToInt, isTransactionSuccess, isInsufficientEnerge } from "../../utils/chain/tron";
+import { getContract } from "../../utils/chain/contract"
+import { steemWrap } from "../../utils/chain/steem";
+import { formatBalance } from "../../utils/helper"
+
+export default {
+  name: "TSteemSwap",
+  components: {
+    Card,
+    TipMessage,
+  },
+  data() {
+    return {
+      fromSteemToTron: true,
+      canTransFlag: false,
+      isLoading: false,
+      transValue: "",
+      transferFee: TSTEEM_TRANSFER_FEE,
+      transferRatio: TRANSFER_FEE_RATIO,
+      tipMessage: "",
+      tipTitle: "",
+      showMessage: false,
+    };
+  },
+  computed: {
+    ...mapState(["steemBalance", "steemAccount", "tronAddress"]),
+    ...mapGetters(["tsteemBalance"]),
+    fromTokenBalance() {
+      if (this.fromSteemToTron) {
+        return formatBalance(this.steemBalance) + " STEEM";
+      } else {
+        return formatBalance(this.tsteemBalance) + " TSTEEM";
+      }
+    },
+    toTokenBalance() {
+      if (!this.fromSteemToTron) {
+        return formatBalance(this.steemBalance) + " STEEM";
+      } else {
+        return formatBalance(this.tsteemBalance) + " TSTEEM";
+      }
+    },
+    transFee() {
+      if (this.fromSteemToTron) {
+        const f = parseFloat(this.transValue) * TRANSFER_FEE_RATIO;
+        return f > TSTEEM_TRANSFER_FEE ? f : TSTEEM_TRANSFER_FEE;
+      }
+      return 0;
+    },
+  },
+  methods: {
+    ...mapActions(["getSteem", "getTsteem"]),
+    ...mapMutations(['saveSteemBalance', 'saveTsteemBalanceInt']),
+
+    checkTransValue() {
+      this.isLoading = false;
+      const reg = /^\d+(\.\d+)?$/;
+      const res = reg.test(this.transValue);
+      let res1 = false;
+      if (parseFloat(this.transValue) > 0) {
+        res1 = true;
+      }
+      if (this.fromSteemToTron) {
+        const res2 =
+          parseFloat(this.transValue) <=
+          parseFloat(parseFloat(this.steemBalance) - this.transFee).toFixed(3);
+
+        this.canTransFlag = res1 && res && res2;
+      } else {
+        const res3 =
+          parseFloat(this.transValue) <= parseFloat(this.tsteemBalance);
+        this.canTransFlag = res1 && res && res3;
+      }
+    },
+
+    changeTransOrder() {
+      this.fromSteemToTron = !this.fromSteemToTron;
+      this.transValue = "";
+      this.checkTransValue();
+    },
+
+    fillMaxTrans() {
+      if (this.fromSteemToTron) {
+        this.transValue = this.steemBalance
+        this.transValue = parseFloat(this.steemBalance - this.transFee).toFixed(
+          3
+        );
+      } else {
+        this.transValue = parseFloat(this.tsteemBalance).toFixed(3);
+      }
+      this.checkTransValue();
+    },
+
+    trans() {
+      if (!isAddress(this.tronAddress)) {
+        this.tipTitle = this.$t("error.error");
+        this.tipMessage = this.$t("error.illegalTronAddress");
+        this.showMessage = true;
+        return;
+      }
+      this.isLoading = true;
+      this.canTransFlag = false;
+      if (this.fromSteemToTron) {
+        this.steemToTsteem();
+      } else {
+        this.tsteemToSteem();
+      }
+    },
+
+    async steemToTsteem() {
+      try {
+        const amount = parseFloat(this.transValue).toFixed(3);
+        const res = await steemWrap(
+          this.steemAccount,
+          STEEM_DEX_ACCOUNT,
+          amount,
+          this.tronAddress + " +" + amount + " TSTEEM",
+          "STEEM",
+          this.tronAddress,
+          this.transFee
+        );
+        if (res.success === true) {
+          const tsteemBalance = parseFloat(this.tsteemBalance)
+          const steemBalance = parseFloat(this.steemBalance)
+          this.saveTsteemBalanceInt(amountToInt(tsteemBalance + parseFloat(amount)))
+          this.saveSteemBalance(steemBalance - parseFloat(amount) - parseFloat(this.transFee))
+        } else {
+          this.tipTitle = this.$t('error.error')
+          this.tipMessage = res.message;
+          this.showMessage = true;
+        }
+      } catch (e) {
+        this.tipTitle = this.$t('error.error')
+        this.tipMessage = e.message;
+        this.showMessage = true;
+      } finally {
+        this.transValue = ''
+        this.checkTransValue()
+      }
+    },
+
+    async tsteemToSteem() {
+      try{
+        const contract = await getContract("TSTEEM")
+        let amount = parseFloat(this.transValue).toFixed(3);
+        amount = amountToInt(amount);
+        const res = await contract
+          .tsteemToSteem(this.steemAccount, amount)
+          .send(TRON_CONTRACT_CALL_PARAMS);
+        if ( res && (await isTransactionSuccess(res))){
+          this.saveTsteemBalanceInt(amountToInt(parseFloat(this.tsteemBalance) - parseFloat(amount)))
+          this.saveSteemBalance(parseFloat(this.steemBalance) + parseFloat(amount))
+        }else{
+          if (res && (await isInsufficientEnerge(res))){
+            this.tipMessage = this.$t('error.insufficientEnerge')
+          }else{
+            this.tipMessage = this.$t('error.transferFail')
+          }
+          this.tipTitle = this.$t('error.error')
+          this.showMessage = true
+        }
+      }catch(e){
+          this.tipTitle = this.$t('error.error')
+          this.tipMessage = e.message
+          this.showMessage = true
+      }finally{
+        this.transValue = ''
+        this.checkTransValue()
+      }
+    },
+  },
+  mounted() {
+    if (this.steemAccount && this.steemAccount.length > 0) {
+      this.getSteem();
+      this.getTsteem();
+    }
+  },
+};
+</script>
+
+<style lang="less" scoped>
+.swap-field {
+    display: flex;
+    justify-content:space-around;
+}
+@import "../../static/css/swap.less";
+
+</style>

@@ -114,6 +114,9 @@ module.exports = {
       confirmCancelTspLPDeposit: '确认取消储蓄'
     }
   },
+  liquidStaking:{
+    liquidStaking: "Liquid Staking"
+  },
   error: {
     error: '错误',
     depositFail: '储蓄失败',

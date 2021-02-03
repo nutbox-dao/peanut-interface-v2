@@ -310,6 +310,20 @@ export default new Vuex.Store({
       })
     },
 
+    async getDepositedTspLp(context) {
+      retryMethod(async () => {
+        try{
+          const contract = await getContract('TSP_LP_POOL')
+          let amount = await contract.delegators(context.state.tronAddress).call();
+          amount = amount.tspLPAmount
+          context.commit('saveDepositedTspLpInt', amount || 0)
+        }catch(e){
+          consol.error('Get Deposited TSP_LP Fail:', e.message)
+          throw e
+        }
+      })
+    },
+
     async initializeTronAccount({
       commit,
       dispatch
@@ -323,6 +337,7 @@ export default new Vuex.Store({
       dispatch('getTspLp')
       dispatch('getDelegatedSp')
       dispatch('getDepositedTsp')
+      dispatch('getDepositedTspLp')
     }
   },
   modules: {}
