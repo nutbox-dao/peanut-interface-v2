@@ -87,7 +87,6 @@ module.exports = {
       balanceOfTsp: 'TSP 余额',
       tspMinlingFee: '挖矿手续费',
       totalDepositTsp: 'TSP总储蓄量',
-      tsptosteemintro: '转换的STEEM将在33-40天内陆续返还',
       confirmDeposit: '确认储蓄',
       tspIsCirculatingSP: '备注：TSP是流通的SP',
       addTspDeposit: '增加储蓄',
@@ -115,7 +114,10 @@ module.exports = {
     }
   },
   liquidStaking:{
-    liquidStaking: "Liquid Staking"
+    liquidStaking: "Liquid Staking",
+    tsp:{
+      tsptosteemintro: '转换的STEEM将在33-40天内陆续返还',
+    }
   },
   error: {
     error: '错误',

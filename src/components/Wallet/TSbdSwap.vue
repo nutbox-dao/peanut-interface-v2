@@ -10,7 +10,6 @@
           <div class="box-content-container">
             <input
               class="mb-2 mr-sm-2 mb-sm-0 user input"
-              :class="canTransFlag ? 'isok' : 'isfalse'"
               placeholder="0.0"
               v-model="transValue"
               @keyup="checkTransValue"
@@ -54,7 +53,6 @@
           <div class="box-content-container">
             <input
               class="mb-2 mr-sm-2 mb-sm-0 user input"
-              :class="canTransFlag ? 'isok' : 'isfalse'"
               placeholder="0.0"
               v-model="transValue"
               @keyup="checkTransValue"

@@ -10,7 +10,6 @@
           <div class="box-content-container">
             <input
               class="mb-2 mr-sm-2 mb-sm-0 user input"
-              :class="canTransFlag ? 'isok' : 'isfalse'"
               placeholder="0.0"
               v-model="transValue"
               @keyup="checkTransValue"
@@ -29,12 +28,12 @@
               />
               <img
                 class="coin-icon"
-                src="../../static/images/tsteem.svg"
+                src="../../static/images/tsp.svg"
                 alt=""
                 v-else
               />
               <span style="margin-left: 8px; line-height: 24px">
-                {{ fromSteemToTron ? "STEEM" : "TSTEEM" }}
+                {{ fromSteemToTron ? "STEEM" : "TSP" }}
               </span>
             </div>
           </div>
@@ -54,7 +53,6 @@
           <div class="box-content-container">
             <input
               class="mb-2 mr-sm-2 mb-sm-0 user input"
-              :class="canTransFlag ? 'isok' : 'isfalse'"
               placeholder="0.0"
               v-model="transValue"
               @keyup="checkTransValue"
@@ -66,7 +64,7 @@
             <div style="display: flex; align-content: center">
               <img
                 class="coin-icon"
-                src="../../static/images/tsteem.svg"
+                src="../../static/images/tsp.svg"
                 alt=""
                 v-if="fromSteemToTron"
               />
@@ -77,7 +75,7 @@
                 v-else
               />
               <span style="margin-left: 8px; line-height: 24px">
-                {{ fromSteemToTron ? "TSTEEM" : "STEEM" }}
+                {{ fromSteemToTron ? "TSP" : "STEEM" }}
               </span>
             </div>
           </div>
@@ -106,10 +104,13 @@
         </p>
         <!-- 兑换率 -->
         <p class="tip" v-if="fromSteemToTron">
-          {{ $t("message.convertrate") }}： 1 STEEM = 1 TSTEEM
+          {{ $t("message.convertrate") }}： 1 STEEM = 1 TSSP
         </p>
         <p class="tip" v-else>
-          {{ $t("message.convertrate") }}： 1 TSTEEM = 1 STEEM<br />
+          {{ $t("message.convertrate") }}： 1 TSP = 1 STEEM<br />
+        </p>
+        <p class="tip" v-show="!fromSteemToTron">
+          {{ $t("liquidStaking.tsp.tsptosteemintro") }}
         </p>
       </div>
     </Card>
@@ -127,18 +128,18 @@ import Card from "../ToolsComponents/Card";
 import TipMessage from "../ToolsComponents/TipMessage";
 import { mapState, mapGetters, mapActions, mapMutations } from "vuex";
 import {
-  TSTEEM_TRANSFER_FEE,
-  TRANSFER_FEE_RATIO,
-  STEEM_DEX_ACCOUNT,
+  STEEM_TO_TSP_FEE,
+  STEEM_TO_TSP_FEE_RATIO,
+  STEEM_TSP_ACCOUNT,
   TRON_CONTRACT_CALL_PARAMS,
 } from "../../config";
 import { isAddress, amountToInt, isTransactionSuccess, isInsufficientEnerge } from "../../utils/chain/tron";
 import { getContract } from "../../utils/chain/contract"
-import { steemWrap } from "../../utils/chain/steem";
+import { steemTransferVest } from "../../utils/chain/steem";
 import { formatBalance } from "../../utils/helper"
 
 export default {
-  name: "TSteemSwap",
+  name: "TSP",
   components: {
     Card,
     TipMessage,
@@ -149,8 +150,8 @@ export default {
       canTransFlag: false,
       isLoading: false,
       transValue: "",
-      transferFee: TSTEEM_TRANSFER_FEE,
-      transferRatio: TRANSFER_FEE_RATIO,
+      transferFee: STEEM_TO_TSP_FEE,
+      transferRatio: STEEM_TO_TSP_FEE_RATIO,
       tipMessage: "",
       tipTitle: "",
       showMessage: false,
@@ -158,32 +159,32 @@ export default {
   },
   computed: {
     ...mapState(["steemBalance", "steemAccount", "tronAddress"]),
-    ...mapGetters(["tsteemBalance"]),
+    ...mapGetters(["tspBalance"]),
     fromTokenBalance() {
       if (this.fromSteemToTron) {
         return formatBalance(this.steemBalance) + " STEEM";
       } else {
-        return formatBalance(this.tsteemBalance) + " TSTEEM";
+        return formatBalance(this.tspBalance) + " TSP";
       }
     },
     toTokenBalance() {
       if (!this.fromSteemToTron) {
         return formatBalance(this.steemBalance) + " STEEM";
       } else {
-        return formatBalance(this.tsteemBalance) + " TSTEEM";
+        return formatBalance(this.tspBalance) + " TSP";
       }
     },
     transFee() {
       if (this.fromSteemToTron) {
-        const f = parseFloat(this.transValue) * TRANSFER_FEE_RATIO;
-        return f > TSTEEM_TRANSFER_FEE ? f : TSTEEM_TRANSFER_FEE;
+        const f = parseFloat(this.transValue) * STEEM_TO_TSP_FEE_RATIO;
+        return f > STEEM_TO_TSP_FEE ? f : STEEM_TO_TSP_FEE;
       }
       return 0;
     },
   },
   methods: {
-    ...mapActions(["getSteem", "getTsteem"]),
-    ...mapMutations(['saveSteemBalance', 'saveTsteemBalanceInt']),
+    ...mapActions(["getSteem", "getTsp"]),
+    ...mapMutations(['saveSteemBalance', 'saveTspBalanceInt']),
 
     checkTransValue() {
       this.isLoading = false;
@@ -201,7 +202,7 @@ export default {
         this.canTransFlag = res1 && res && res2;
       } else {
         const res3 =
-          parseFloat(this.transValue) <= parseFloat(this.tsteemBalance);
+          parseFloat(this.transValue) <= parseFloat(this.tspBalance);
         this.canTransFlag = res1 && res && res3;
       }
     },
@@ -219,7 +220,7 @@ export default {
           3
         );
       } else {
-        this.transValue = parseFloat(this.tsteemBalance).toFixed(3);
+        this.transValue = parseFloat(this.tsp).toFixed(3);
       }
       this.checkTransValue();
     },
@@ -234,28 +235,26 @@ export default {
       this.isLoading = true;
       this.canTransFlag = false;
       if (this.fromSteemToTron) {
-        this.steemToTsteem();
+        this.steemToTsp();
       } else {
-        this.tsteemToSteem();
+        this.tspToSteem();
       }
     },
 
-    async steemToTsteem() {
+    async steemToTsp() {
       try {
         const amount = parseFloat(this.transValue).toFixed(3);
-        const res = await steemWrap(
+        const res = await steemTransferVest(
           this.steemAccount,
-          STEEM_DEX_ACCOUNT,
+          STEEM_TSP_ACCOUNT,
           amount,
-          this.tronAddress + " +" + amount + " TSTEEM",
-          "STEEM",
           this.tronAddress,
           this.transFee
         );
         if (res.success === true) {
-          const tsteemBalance = parseFloat(this.tsteemBalance)
+          const tspBalance = parseFloat(this.tspBalance)
           const steemBalance = parseFloat(this.steemBalance)
-          this.saveTsteemBalanceInt(amountToInt(tsteemBalance + parseFloat(amount)))
+          this.saveTspBalanceInt(amountToInt(tspBalance + parseFloat(amount)))
           this.saveSteemBalance(steemBalance - parseFloat(amount) - parseFloat(this.transFee))
         } else {
           this.tipTitle = this.$t('error.error')
@@ -272,16 +271,16 @@ export default {
       }
     },
 
-    async tsteemToSteem() {
+    async tspToSteem() {
       try{
-        const contract = await getContract("TSTEEM")
+        const contract = await getContract("TSP")
         let amount = parseFloat(this.transValue).toFixed(3);
         amount = amountToInt(amount);
         const res = await contract
-          .tsteemToSteem(this.steemAccount, amount)
+          .tspToSteem(this.steemAccount, amount)
           .send(TRON_CONTRACT_CALL_PARAMS);
         if ( res && (await isTransactionSuccess(res))){
-          this.saveTsteemBalanceInt(amountToInt(parseFloat(this.tsteemBalance) - parseFloat(amount)))
+          this.saveTspBalanceInt(amountToInt(parseFloat(this.tspBalance) - parseFloat(amount)))
           this.saveSteemBalance(parseFloat(this.steemBalance) + parseFloat(amount))
         }else{
           if (res && (await isInsufficientEnerge(res))){
@@ -305,7 +304,7 @@ export default {
   mounted() {
     if (this.steemAccount && this.steemAccount.length > 0) {
       this.getSteem();
-      this.getTsteem();
+      this.getTsp();
     }
   },
 };

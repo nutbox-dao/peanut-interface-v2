@@ -17,9 +17,28 @@
           $t("message.logout")
         }}</b-dropdown-item-btn>
       </b-dropdown>
-      {{ steemBalance | amountForm }}
-      {{ sbdBalance | amountForm }}
-      {{ spBalance | amountForm }}
+      <div class="balance-box">
+        <Card>
+          <h4>
+            STEEM
+          </h4>
+          <span>
+            {{ steemBalance | amountForm }}
+          </span>
+        </Card>
+        <Card>
+          <h4>
+            SBD
+          </h4>
+          <span>{{ sbdBalance | amountForm }}</span>
+        </Card>
+        <Card>
+          <h4>
+            SP
+          </h4>
+          <span>{{ spBalance | amountForm }}</span>
+        </Card>
+      </div>
     </div>
 
     <login v-else />
@@ -30,6 +49,7 @@
 import Login from '../Login'
 import { mapState, mapGetters } from 'vuex'
 import { getKeychain } from '../../utils/chain/steem'
+import Card from '../ToolsComponents/Card'
 
 export default {
   name: 'SteemWallet',
@@ -50,7 +70,8 @@ export default {
     }
   },
   components: {
-    Login
+    Login,
+    Card
   },
   async mounted () {
     if (!(await getKeychain())) {
@@ -72,5 +93,17 @@ export default {
 <style lang="less" scoped>
 .steem-wallet {
   margin-top: 20px;
+  .balance-box{
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    span{
+      font-size:20px;
+    }
+  }
+  .card{
+    width:30%;
+    margin-top: 24px;
+  }
 }
 </style>

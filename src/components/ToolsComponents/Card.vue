@@ -15,7 +15,7 @@ export default {
     background-color: white;
     box-shadow: rgba(0, 0, 0, 0.08) 0px 3px 30px, rgba(0, 0, 0, 0.04) 0px 4px 8px,
     rgba(0, 0, 0, 0.04) 3px 16px 24px, rgba(0, 0, 0, 0.01) 3px 24px 32px;
-    border-radius: 30px;
+    border-radius: 16px;
     display: block;
     z-index: 1;
     box-sizing: border-box;

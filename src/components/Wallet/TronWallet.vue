@@ -1,14 +1,43 @@
 <template>
     <div class="tron">
-      <p>tronaddre: {{ tronAddress }}</p>
-      <p/>
-      <p>tron:{{ tronBalance | amountForm }}</p> <br/>
-      <p>tsteem:{{ tsteemBalance | amountForm }}</p> <br/>
-      <p>tsp:{{ tspBalance | amountForm }}</p> <br/>
-      <p>tsbd:{{ tsbdBalance | amountForm }}</p> <br/>
-      <p>tsplp:{{ tspLpBalance | amountForm }}</p> <br/>
-      <p>pnut:{{ pnutBalance | amountForm }}</p>
-
+      <div class="balance-box">
+        <Card>
+          <h4>TRON</h4>
+          <span>
+            {{ tronBalance | amountForm }}
+          </span>
+        </Card>
+        <Card>
+          <h4>PNUT</h4>
+          <span>
+            {{ pnutBalance | amountForm }}
+          </span>
+        </Card>
+        <Card>
+          <h4>TSP</h4>
+          <span>
+            {{ tspBalance | amountForm }}
+          </span>
+        </Card>
+        <Card>
+          <h4>TSBD</h4>
+          <span>
+            {{ tsbdBalance | amountForm }}
+          </span>
+        </Card>
+        <Card>
+          <h4>TSTEEM</h4>
+          <span>
+            {{ tsteemBalance | amountForm }}
+          </span>
+        </Card>
+        <Card>
+          <h4>TSP-LP</h4>
+          <span>
+            {{ tspLpBalance | amountForm }}
+          </span>
+        </Card>
+      </div>
       <TipMessage :showMessage='tipMessage' :title="tipTitle" v-if="showMessage" @hideMask="showMessage=false"/>
     </div>
 </template>
@@ -68,8 +97,17 @@ export default {
   align-items: center;
   justify-content: space-evenly;
   flex-wrap: wrap;
-  >p{
-    width:90%;
+  .balance-box{
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    span{
+      font-size:20px;
+    }
+  }
+  .card{
+    width:30%;
+    margin-top: 24px;
   }
 }
 </style>
