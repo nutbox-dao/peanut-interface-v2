@@ -119,6 +119,9 @@ module.exports = {
       tsptosteemintro: '转换的STEEM将在33-40天内陆续返还',
     }
   },
+  nps: {
+    nps: "提案改善",
+  },
   error: {
     error: '错误',
     depositFail: '储蓄失败',

@@ -15,7 +15,7 @@ export const sleep = async function (interval = 6) {
   })
 }
 
-export const retryMethod = async function(func, retries=2, interval=1){
+export const retryMethod = async function(func, retries=5, interval=1){
   return new Promise(async (resolve, reject) => {
     const exc = async (retries) => {
       try {

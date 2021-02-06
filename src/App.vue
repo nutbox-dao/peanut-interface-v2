@@ -4,20 +4,31 @@
       <img src="./static/images/logo.svg" alt="nutbox" class="logo">
       <b-nav pills vertical align="center">
         <b-nav-item to="/wallet">
-          <b-icon icon="nut"></b-icon>
+          <b-icon icon="person-fill"></b-icon>
           {{ (tronAddrFromat && tronAddrFromat.length > 0) ? tronAddrFromat : $t('wallet.wallet') }}
         </b-nav-item>
         <b-nav-item to="/stake">
-          <b-icon icon="nut"></b-icon>
+          <b-icon icon="nut-fill"></b-icon>
           {{ $t('stake.stake') }}
         </b-nav-item>
         <b-nav-item to="/farm">
-          <b-icon icon="nut"></b-icon>
+          <b-icon icon="hammer"></b-icon>
           {{ $t('farm.farm') }}
         </b-nav-item>
         <b-nav-item to="/liquid-staking">
-          <b-icon icon="nut"></b-icon>
+          <b-icon icon="tools"></b-icon>
           {{ $t('liquidStaking.liquidStaking') }}
+        </b-nav-item>
+        <b-nav-item to="/nps">
+        <b-icon icon="pencil-fill"></b-icon>
+          {{ $t('nps.nps') }}
+        </b-nav-item>
+        
+        <p style="height:20px">
+
+        </p>
+        <b-nav-item>
+            
         </b-nav-item>
         <div class="bottom">
           <a href="/wallet" target="_blank">
@@ -69,6 +80,7 @@ export default {
   async mounted () {
     this.$store.dispatch('setVestsToSteem')
     var store = this.$store
+
     const address = await getTronLinkAddr()
     if (address && address === TRON_LINK_ADDR_NOT_FOUND.noTronLink) {
       this.tipTitle = this.$t('error.needtronlink')
@@ -141,7 +153,11 @@ h3{
 }
 .right{
   background-color:#fefefa;
-  flex: 1
+  flex: 1;
+  height:100vh;
+  max-height: 100vh;
+  min-height: 100vh;
+  overflow-y: overlay;
 }
 
 .left .nav-item{

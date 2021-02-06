@@ -104,7 +104,7 @@
         </p>
         <!-- 兑换率 -->
         <p class="tip" v-if="fromSteemToTron">
-          {{ $t("message.convertrate") }}： 1 STEEM = 1 TSSP
+          {{ $t("message.convertrate") }}： 1 STEEM = 1 TSP
         </p>
         <p class="tip" v-else>
           {{ $t("message.convertrate") }}： 1 TSP = 1 STEEM<br />
@@ -220,7 +220,7 @@ export default {
           3
         );
       } else {
-        this.transValue = parseFloat(this.tsp).toFixed(3);
+        this.transValue = parseFloat(this.tspBalance).toFixed(3);
       }
       this.checkTransValue();
     },

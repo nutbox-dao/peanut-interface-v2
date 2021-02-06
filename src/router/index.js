@@ -10,6 +10,7 @@ import TSPPool from '../components/Farm/TSPPool'
 import TSPLPPool from '../components/Farm/TSPLPPool'
 import LiquidStaking from '../components/LiquidStaking/LiquidStaking'
 import TSP from '../components/LiquidStaking/TSP'
+import Nps from '../components/Nps/Nps'
 
 Vue.use(VueRouter)
 
@@ -71,6 +72,10 @@ const routes = [
         component: TSP
       }
     ]
+  },
+  {
+    path: '/nps',
+    component: Nps,
   }
 ]
 
