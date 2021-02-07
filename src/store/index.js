@@ -45,7 +45,9 @@ export default new Vuex.Store({
     // pool info
     delegatedVestsInt: 0,
     depositedTspInt: 0,
-    depositedTspLpInt: 0
+    depositedTspLpInt: 0,
+    // apy
+    apy: Cookie.get('apy')
   },
   mutations: {
     // steem
@@ -101,6 +103,10 @@ export default new Vuex.Store({
     },
     saveDepositedTspLpInt: function (state, depositedTspLpInt) {
       state.depositedTspLpInt = depositedTspLpInt
+    },
+    saveApy: function(state, apy) {
+      this.state.apy = apy
+      Cookie.set('apy', apy, '30d')
     }
   },
   getters: {

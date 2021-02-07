@@ -121,6 +121,8 @@ module.exports = {
   },
   nps: {
     nps: "提案改善",
+    pass: "已通过",
+    pending: "待审核"
   },
   error: {
     error: '错误',

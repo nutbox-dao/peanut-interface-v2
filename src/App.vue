@@ -57,10 +57,11 @@
 </template>
 
 <script>
-import { watchWallet, getTronLinkAddr } from './utils/chain/tron'
+import { watchWallet, getTronLinkAddr, getTronPrice, getPnutPrice } from './utils/chain/tron'
 import { TRON_LINK_ADDR_NOT_FOUND } from './config'
 import TipMessage from './components/ToolsComponents/TipMessage'
-import { mapState, mapGetters } from 'vuex'
+import { mapState, mapGetters, mapMutations } from 'vuex'
+import { getSteemPrice } from './utils/chain/steem'
 
 export default {
   data () {
@@ -71,11 +72,14 @@ export default {
     }
   },
   computed: {
-    ...mapState(['tronAddress']),
+    ...mapState(['tronAddress', 'apy']),
     ...mapGetters(['tronAddrFromat'])
   },
   components: {
     TipMessage
+  },
+  methods: {
+    ...mapMutations(['saveApy']),
   },
   async mounted () {
     this.$store.dispatch('setVestsToSteem')
