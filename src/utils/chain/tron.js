@@ -185,37 +185,45 @@ async function wa (callback) {
   }
 }
 
-export const getTronPrice = async function () {
-  const res = await axios.request({
-    method: 'get',
-    url: 'https://api.coingecko.com/api/v3/coins/tron',
-    headers: {
-      accept: 'application/json'
+export const getTronPrice = function () {
+  return new Promise(async resolve => {
+    const res = await axios.request({
+      method: 'get',
+      url: 'https://api.coingecko.com/api/v3/coins/tron',
+      headers: {
+        accept: 'application/json'
+      }
+    })
+    // console.log(111,res.data.tickers)
+    const arr = res.data.tickers
+    for (let i = 0; i < arr.length; i++) {
+      if (arr[i].target === 'USDT') {
+        // console.log(112,arr[i].last)
+        resolve(parseFloat(arr[i].last))
+      }
     }
+    resolve(1)
   })
-  // console.log(111,res.data.tickers)
-  const arr = res.data.tickers
-  for (let i = 0; i < arr.length; i++) {
-    if (arr[i].target === 'USDT') {
-      // console.log(112,arr[i].last)
-      return parseFloat(arr[i].last)
-    }
-  }
+  
 }
 
-export const getPnutPrice = async function () {
-  let res = await axios.request({
-    method: 'get',
-    url: 'https://api.justswap.io/v2/allpairs',
-    headers: {
-      accept: 'application/json'
-    },
-    params: {
-      page_size: 2500,
-      page_num: 1
-    }
+export const getPnutPrice = function () {
+  return new Promise(async resolve => {
+    const res = await axios.request({
+      method: 'get',
+      url: 'https://api.justswap.io/v2/allpairs',
+      headers: {
+        accept: 'application/json'
+      },
+      params: {
+        page_size: 2500,
+        page_num: 1
+      }
+    })
+    console.log(11);
+    const price = res.data.data['0_TPZddNpQJHu8UtKPY1PYDBv2J5p5QpJ6XW'].price
+    console.log(22,price);
+    resolve(parseFloat(price))
   })
-  const price = res.data.data['0_TPZddNpQJHu8UtKPY1PYDBv2J5p5QpJ6XW'].price
-  res = null
-  return parseFloat(price)
+
 }

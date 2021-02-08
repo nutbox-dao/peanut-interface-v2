@@ -125,8 +125,6 @@ import {
   amountToInt,
   isTransactionSuccess,
   isInsufficientEnerge,
-  getTronPrice,
-  getPnutPrice
 } from "../../utils/chain/tron";
 import { getContract } from "../../utils/chain/contract";
 import { storeApy } from "../../utils/helper"
@@ -418,9 +416,6 @@ export default {
     },
   },
   mounted() {
-    getPnutPrice().then(price => {
-      console.log('price',price);
-    })
     if (this.tronAddress && this.tronAddress.length > 0) {
       this.getTsp();
       this.getPnut();

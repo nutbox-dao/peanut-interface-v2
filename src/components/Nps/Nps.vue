@@ -66,7 +66,7 @@ export default {
         display: flex;
         align-items:center;
         justify-content: space-between;
-        height: 72px;
+        min-height: 72px;
         p , a{
             margin: 0 10px;
             color: #333;

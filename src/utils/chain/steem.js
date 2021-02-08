@@ -171,22 +171,26 @@ export const getVestingShares = async (username) => {
   return staked - delegated
 }
 
-export const getSteemPrice = async function () {
-  const res = await axios.request({
-    method: 'get',
-    url: 'https://api.coingecko.com/api/v3/coins/steem',
-    headers: {
-      accept: 'application/json'
+export const getSteemPrice = function () {
+  return new Promise(async resolve => {
+    const res = await axios.request({
+      method: 'get',
+      url: 'https://api.coingecko.com/api/v3/coins/steem',
+      headers: {
+        accept: 'application/json'
+      }
+    })
+    // console.log(111,res.data.tickers)
+    const arr = res.data.tickers
+    for (let i = 0; i < arr.length; i++) {
+      if (arr[i].target === 'USDT') {
+        // console.log(112,arr[i].last)
+        resolve(parseFloat(arr[i].last))
+      }
     }
+    resolve(1)
   })
-  // console.log(111,res.data.tickers)
-  const arr = res.data.tickers
-  for (let i = 0; i < arr.length; i++) {
-    if (arr[i].target === 'USDT') {
-      // console.log(112,arr[i].last)
-      return parseFloat(arr[i].last)
-    }
-  }
+  
 }
 
 export const getKeychain = async () => {

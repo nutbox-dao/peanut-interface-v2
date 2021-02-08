@@ -1,13 +1,18 @@
 <template>
     <div class="liquid-staking">
         <h3>{{ $t('liquidStaking.liquidStaking') }}</h3>
-        <router-view></router-view>
+        <router-view v-if="$store.state.steemAccount"></router-view>
+        <Login v-else/>
     </div>
 </template>
 
 <script>
+import Login from '../Login'
     export default {
-        name: 'LiquidStaking'
+        name: 'LiquidStaking',
+        components: {
+            Login,
+        },
     }
 </script>
 
