@@ -119,6 +119,9 @@ export default new Vuex.Store({
     },
     // tron
     tronAddrFromat: state => {
+      if (!state.tronAddress){
+        return ''
+      }
       return state.tronAddress.substring(0, 6) + '...' + state.tronAddress.substring(30)
     },
     tronBalance: state => {
