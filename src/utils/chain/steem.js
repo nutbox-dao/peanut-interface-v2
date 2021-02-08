@@ -180,11 +180,9 @@ export const getSteemPrice = function () {
         accept: 'application/json'
       }
     })
-    // console.log(111,res.data.tickers)
     const arr = res.data.tickers
     for (let i = 0; i < arr.length; i++) {
       if (arr[i].target === 'USDT') {
-        // console.log(112,arr[i].last)
         resolve(parseFloat(arr[i].last))
       }
     }

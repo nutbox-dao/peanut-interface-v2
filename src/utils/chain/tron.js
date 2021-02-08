@@ -194,11 +194,9 @@ export const getTronPrice = function () {
         accept: 'application/json'
       }
     })
-    // console.log(111,res.data.tickers)
     const arr = res.data.tickers
     for (let i = 0; i < arr.length; i++) {
       if (arr[i].target === 'USDT') {
-        // console.log(112,arr[i].last)
         resolve(parseFloat(arr[i].last))
       }
     }
@@ -220,9 +218,7 @@ export const getPnutPrice = function () {
         page_num: 1
       }
     })
-    console.log(11);
     const price = res.data.data['0_TPZddNpQJHu8UtKPY1PYDBv2J5p5QpJ6XW'].price
-    console.log(22,price);
     resolve(parseFloat(price))
   })
 
