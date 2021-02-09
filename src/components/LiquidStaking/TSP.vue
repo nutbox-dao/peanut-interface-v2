@@ -311,10 +311,10 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.swap-field {
-    display: flex;
-    justify-content:space-around;
-}
+// .swap-field {
+//     display: flex;
+//     justify-content:space-around;
+// }
 @import "../../static/css/swap.less";
 
 </style>

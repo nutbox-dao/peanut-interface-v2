@@ -93,10 +93,10 @@ export default {
 
 <style lang="less" scoped>
 .tron{
-  display: flex;
-  align-items: center;
-  justify-content: space-evenly;
-  flex-wrap: wrap;
+  // display: flex;
+  // align-items: center;
+  // justify-content: space-evenly;
+  // flex-wrap: wrap;
   .balance-box{
     display: flex;
     justify-content: space-between;
@@ -107,6 +107,7 @@ export default {
   }
   .card{
     width:30%;
+    min-width: 200px;
     margin-top: 24px;
   }
 }

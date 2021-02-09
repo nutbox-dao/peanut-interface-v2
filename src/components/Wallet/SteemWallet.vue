@@ -103,6 +103,7 @@ export default {
   }
   .card{
     width:30%;
+    min-width: 200px;
     margin-top: 24px;
   }
 }

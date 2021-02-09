@@ -31,20 +31,17 @@
             
         </b-nav-item>
         <div class="bottom">
-          <a href="/wallet" target="_blank">
-            <b-icon icon="nut"></b-icon>
+          <a href="https://github.com/nutbox-dao" target="_blank">
+            <b-icon icon="github"></b-icon>
           </a>
-          <a href="/stake" target="_blank">
-            <b-icon icon="nut"></b-icon>
+          <a href="https://docs.nutbox.io/" target="_blank">
+            <b-icon icon="archive-fill"></b-icon>
           </a>
-           <a href="/stake" target="_blank">
-            <b-icon icon="nut"></b-icon>
+           <a href="https://discord.com/invite/zPkMuGY" target="_blank">
+            <b-icon icon="discord"></b-icon>
           </a>
-           <a href="/stake" target="_blank">
-            <b-icon icon="nut"></b-icon>
-          </a>
-           <a href="/stake" target="_blank">
-            <b-icon icon="nut"></b-icon>
+           <a href="https://blog.nutbox.io/" target="_blank">
+            <b-icon icon="inbox-fill"></b-icon>
           </a>
         </div>
       </b-nav>
