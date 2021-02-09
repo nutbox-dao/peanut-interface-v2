@@ -8,7 +8,7 @@
             <p style="width:20px">
                 {{ index+1 }}
             </p>
-            <a target="_blank" :href="'https://blog.nutbox.io/@'+item.author" style="width:100px">
+            <a target="_blank" :href="'https://blog.nutbox.io/@'+item.author" style="width:100px;text-align:left">
                 {{ item.author }}
             </a>
             <a target="_blank" :href="'https://blog.nutbox.io/@'+item.author + '/' + item.permlink" style="flex:1;text-align:left;font-weight:500">
