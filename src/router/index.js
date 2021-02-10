@@ -50,32 +50,32 @@ const routes = [
   {
     path: '/farm',
     component: Farm,
-    redirect:'/farm/tsp',
+    redirect: '/farm/tsp',
     children: [
       {
-        path:'tsp',
+        path: 'tsp',
         component: TSPPool
       },
       {
-        path:'tsplp',
+        path: 'tsplp',
         component: TSPLPPool
       }
     ]
   },
   {
-    path:'/liquid-staking',
+    path: '/liquid-staking',
     component: LiquidStaking,
     redirect: '/liquid-staking/tsp',
     children: [
       {
-        path:'tsp',
+        path: 'tsp',
         component: TSP
       }
     ]
   },
   {
     path: '/nps',
-    component: Nps,
+    component: Nps
   }
 ]
 

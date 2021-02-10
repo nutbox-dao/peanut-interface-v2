@@ -66,59 +66,59 @@
 </template>
 
 <script>
-import { watchWallet, getTronLinkAddr } from "./utils/chain/tron";
-import { TRON_LINK_ADDR_NOT_FOUND } from "./config";
-import TipMessage from "./components/ToolsComponents/TipMessage";
-import { mapState, mapGetters, mapMutations } from "vuex";
-import { storeApy } from "./utils/helper"
+import { watchWallet, getTronLinkAddr } from './utils/chain/tron'
+import { TRON_LINK_ADDR_NOT_FOUND } from './config'
+import TipMessage from './components/ToolsComponents/TipMessage'
+import { mapState, mapGetters } from 'vuex'
+import { storeApy } from './utils/helper'
 
 export default {
-  data() {
+  data () {
     return {
-      tipMessage: "",
-      tipTitle: "",
-      showMessage: false,
-    };
+      tipMessage: '',
+      tipTitle: '',
+      showMessage: false
+    }
   },
   computed: {
-    ...mapState(["tronAddress"]),
-    ...mapGetters(["tronAddrFromat", "pnutBalance"]),
+    ...mapState(['tronAddress']),
+    ...mapGetters(['tronAddrFromat', 'pnutBalance'])
   },
   components: {
-    TipMessage,
+    TipMessage
   },
-  async mounted() {
-    var store = this.$store;
-    store.dispatch("setVestsToSteem");
+  async mounted () {
+    var store = this.$store
+    store.dispatch('setVestsToSteem')
 
-    const address = await getTronLinkAddr();
+    const address = await getTronLinkAddr()
     if (address && address === TRON_LINK_ADDR_NOT_FOUND.noTronLink) {
-      this.tipTitle = this.$t("error.needtronlink");
-      this.tipMessage = "TronLink: https://www.tronlink.org";
-      this.showMessage = true;
+      this.tipTitle = this.$t('error.needtronlink')
+      this.tipMessage = 'TronLink: https://www.tronlink.org'
+      this.showMessage = true
     } else if (address && address === TRON_LINK_ADDR_NOT_FOUND.walletLocked) {
-      this.tipTitle = this.$t("error.error");
-      this.tipMessage = this.$t("error.unlockWallet");
-      this.showMessage = true;
+      this.tipTitle = this.$t('error.error')
+      this.tipMessage = this.$t('error.unlockWallet')
+      this.showMessage = true
     } else if (address) {
-      store.dispatch("initializeTronAccount", address);
+      store.dispatch('initializeTronAccount', address)
     }
     watchWallet((address) => {
       if (address && address === TRON_LINK_ADDR_NOT_FOUND.noTronLink) {
-        this.tipTitle = this.$t("error.needtronlink");
-        this.tipMessage = "TronLink: https://www.tronlink.org";
-        this.showMessage = true;
+        this.tipTitle = this.$t('error.needtronlink')
+        this.tipMessage = 'TronLink: https://www.tronlink.org'
+        this.showMessage = true
       } else if (address && address === TRON_LINK_ADDR_NOT_FOUND.walletLocked) {
-        this.tipTitle = this.$t("error.error");
-        this.tipMessage = this.$t("error.unlockWallet");
-        this.showMessage = true;
+        this.tipTitle = this.$t('error.error')
+        this.tipMessage = this.$t('error.unlockWallet')
+        this.showMessage = true
       } else if (address) {
-        store.dispatch("initializeTronAccount", address);
+        store.dispatch('initializeTronAccount', address)
       }
-    });
+    })
     storeApy(store)
-  },
-};
+  }
+}
 </script>
 
 <style lang="scss">

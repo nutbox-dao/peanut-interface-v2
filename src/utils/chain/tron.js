@@ -33,7 +33,7 @@ export async function getTronLinkAddr () {
     return addr
   } else {
     await sleep(1)
-    addr = tronlink.defaultAddress.base58
+    addr = tronLink.defaultAddress.base58
     return addr || TRON_LINK_ADDR_NOT_FOUND.walletLocked
   }
 }
@@ -202,7 +202,6 @@ export const getTronPrice = function () {
     }
     resolve(1)
   })
-  
 }
 
 export const getPnutPrice = function () {
@@ -221,5 +220,4 @@ export const getPnutPrice = function () {
     const price = res.data.data['0_TPZddNpQJHu8UtKPY1PYDBv2J5p5QpJ6XW'].price
     resolve(parseFloat(price))
   })
-
 }

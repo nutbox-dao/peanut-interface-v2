@@ -8,12 +8,12 @@
 
 <script>
 import Login from '../Login'
-    export default {
-        name: 'LiquidStaking',
-        components: {
-            Login,
-        },
-    }
+export default {
+  name: 'LiquidStaking',
+  components: {
+    Login
+  }
+}
 </script>
 
 <style lang="less" scoped>

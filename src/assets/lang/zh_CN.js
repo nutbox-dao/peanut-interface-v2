@@ -77,10 +77,10 @@ module.exports = {
     swap: '跨链转账'
   },
   stake: {
-    stake: "质押"
+    stake: '质押'
   },
   farm: {
-    farm: "流动性挖矿",
+    farm: '流动性挖矿',
     tsp: {
       tspMine: 'TSP挖矿',
       yourTspAmount: '储蓄的TSP数量',
@@ -96,7 +96,7 @@ module.exports = {
       confirmMinusTspDeposit: '确认减少储蓄',
       confirmCancelTspDeposit: '确认取消储蓄',
       notEnoughFee: '手续费不足',
-      approveNutbox: '授权Nutbox',
+      approveNutbox: '授权Nutbox'
     },
     tspLp: {
       tspLPMine: 'TSP-LP挖矿',
@@ -113,16 +113,16 @@ module.exports = {
       confirmCancelTspLPDeposit: '确认取消储蓄'
     }
   },
-  liquidStaking:{
-    liquidStaking: "Liquid Staking",
-    tsp:{
-      tsptosteemintro: '转换的STEEM将在33-40天内陆续返还',
+  liquidStaking: {
+    liquidStaking: 'Liquid Staking',
+    tsp: {
+      tsptosteemintro: '转换的STEEM将在33-40天内陆续返还'
     }
   },
   nps: {
-    nps: "提案改善",
-    pass: "已通过",
-    pending: "待审核"
+    nps: '提案改善',
+    pass: '已通过',
+    pending: '待审核'
   },
   error: {
     error: '错误',
@@ -144,10 +144,10 @@ module.exports = {
     unlockKeychain: '请解锁Steem Keychain',
     unlockWallet: '请解锁波场钱包',
     steemLoginFail: 'Steem登录失败',
-    illegalTronAddress:"无效的波场地址",
-    inputError:"输入值无效",
-    inputOverflow:"输入超过最大值",
-    notEnoughFee: '手续费不足',
-  },
+    illegalTronAddress: '无效的波场地址',
+    inputError: '输入值无效',
+    inputOverflow: '输入超过最大值',
+    notEnoughFee: '手续费不足'
+  }
 
 }

@@ -45,7 +45,7 @@
 <script>
 import Card from '../ToolsComponents/Card'
 import TipMessage from '../ToolsComponents/TipMessage'
-import { mapActions, mapState, mapGetters} from 'vuex'
+import { mapActions, mapState, mapGetters } from 'vuex'
 import { getTronLinkAddr } from '../../utils/chain/tron'
 import { TRON_LINK_ADDR_NOT_FOUND } from '../../config'
 
@@ -54,15 +54,15 @@ export default {
 
   data () {
     return {
-      tipMessage:'',
-      tipTitle:'',
-      showMessage:false,
+      tipMessage: '',
+      tipTitle: '',
+      showMessage: false
     }
   },
 
   computed: {
     ...mapState(['tronAddress']),
-    ...mapGetters(['tronBalance','pnutBalance','tsteemBalance','tspBalance', 'tsbdBalance','tspLpBalance'])
+    ...mapGetters(['tronBalance', 'pnutBalance', 'tsteemBalance', 'tspBalance', 'tsbdBalance', 'tspLpBalance'])
   },
 
   components: {
@@ -76,18 +76,18 @@ export default {
 
   async mounted () {
     const address = await getTronLinkAddr()
-    if (address && address === TRON_LINK_ADDR_NOT_FOUND.noTronLink){
+    if (address && address === TRON_LINK_ADDR_NOT_FOUND.noTronLink) {
       this.tipTitle = this.$t('error.needtronlink')
-      this.tipMessage = "TronLink: https://www.tronlink.org";
+      this.tipMessage = 'TronLink: https://www.tronlink.org'
       this.showMessage = true
-    }else if (address && address === TRON_LINK_ADDR_NOT_FOUND.walletLocked){
+    } else if (address && address === TRON_LINK_ADDR_NOT_FOUND.walletLocked) {
       this.tipTitle = this.$t('error.error')
-      this.tipMessage = this.$t('error.unlockWallet');
+      this.tipMessage = this.$t('error.unlockWallet')
       this.showMessage = true
-    }else if (address){
+    } else if (address) {
       this.initializeTronAccount(address)
     }
-  },
+  }
 }
 </script>
 

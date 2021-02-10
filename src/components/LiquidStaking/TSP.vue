@@ -124,133 +124,133 @@
 </template>
 
 <script>
-import Card from "../ToolsComponents/Card";
-import TipMessage from "../ToolsComponents/TipMessage";
-import { mapState, mapGetters, mapActions, mapMutations } from "vuex";
+import Card from '../ToolsComponents/Card'
+import TipMessage from '../ToolsComponents/TipMessage'
+import { mapState, mapGetters, mapActions, mapMutations } from 'vuex'
 import {
   STEEM_TO_TSP_FEE,
   STEEM_TO_TSP_FEE_RATIO,
   STEEM_TSP_ACCOUNT,
-  TRON_CONTRACT_CALL_PARAMS,
-} from "../../config";
-import { isAddress, amountToInt, isTransactionSuccess, isInsufficientEnerge } from "../../utils/chain/tron";
-import { getContract } from "../../utils/chain/contract"
-import { steemTransferVest } from "../../utils/chain/steem";
-import { formatBalance } from "../../utils/helper"
+  TRON_CONTRACT_CALL_PARAMS
+} from '../../config'
+import { isAddress, amountToInt, isTransactionSuccess, isInsufficientEnerge } from '../../utils/chain/tron'
+import { getContract } from '../../utils/chain/contract'
+import { steemTransferVest } from '../../utils/chain/steem'
+import { formatBalance } from '../../utils/helper'
 
 export default {
-  name: "TSP",
+  name: 'TSP',
   components: {
     Card,
-    TipMessage,
+    TipMessage
   },
-  data() {
+  data () {
     return {
       fromSteemToTron: true,
       canTransFlag: false,
       isLoading: false,
-      transValue: "",
+      transValue: '',
       transferFee: STEEM_TO_TSP_FEE,
       transferRatio: STEEM_TO_TSP_FEE_RATIO,
-      tipMessage: "",
-      tipTitle: "",
-      showMessage: false,
-    };
+      tipMessage: '',
+      tipTitle: '',
+      showMessage: false
+    }
   },
   computed: {
-    ...mapState(["steemBalance", "steemAccount", "tronAddress"]),
-    ...mapGetters(["tspBalance"]),
-    fromTokenBalance() {
+    ...mapState(['steemBalance', 'steemAccount', 'tronAddress']),
+    ...mapGetters(['tspBalance']),
+    fromTokenBalance () {
       if (this.fromSteemToTron) {
-        return formatBalance(this.steemBalance) + " STEEM";
+        return formatBalance(this.steemBalance) + ' STEEM'
       } else {
-        return formatBalance(this.tspBalance) + " TSP";
+        return formatBalance(this.tspBalance) + ' TSP'
       }
     },
-    toTokenBalance() {
+    toTokenBalance () {
       if (!this.fromSteemToTron) {
-        return formatBalance(this.steemBalance) + " STEEM";
+        return formatBalance(this.steemBalance) + ' STEEM'
       } else {
-        return formatBalance(this.tspBalance) + " TSP";
+        return formatBalance(this.tspBalance) + ' TSP'
       }
     },
-    transFee() {
+    transFee () {
       if (this.fromSteemToTron) {
-        const f = parseFloat(this.transValue) * STEEM_TO_TSP_FEE_RATIO;
-        return f > STEEM_TO_TSP_FEE ? f : STEEM_TO_TSP_FEE;
+        const f = parseFloat(this.transValue) * STEEM_TO_TSP_FEE_RATIO
+        return f > STEEM_TO_TSP_FEE ? f : STEEM_TO_TSP_FEE
       }
-      return 0;
-    },
+      return 0
+    }
   },
   methods: {
-    ...mapActions(["getSteem", "getTsp"]),
+    ...mapActions(['getSteem', 'getTsp']),
     ...mapMutations(['saveSteemBalance', 'saveTspBalanceInt']),
 
-    checkTransValue() {
-      this.isLoading = false;
-      const reg = /^\d+(\.\d+)?$/;
-      const res = reg.test(this.transValue);
-      let res1 = false;
+    checkTransValue () {
+      this.isLoading = false
+      const reg = /^\d+(\.\d+)?$/
+      const res = reg.test(this.transValue)
+      let res1 = false
       if (parseFloat(this.transValue) > 0) {
-        res1 = true;
+        res1 = true
       }
       if (this.fromSteemToTron) {
         const res2 =
           parseFloat(this.transValue) <=
-          parseFloat(parseFloat(this.steemBalance) - this.transFee).toFixed(3);
+          parseFloat(parseFloat(this.steemBalance) - this.transFee).toFixed(3)
 
-        this.canTransFlag = res1 && res && res2;
+        this.canTransFlag = res1 && res && res2
       } else {
         const res3 =
-          parseFloat(this.transValue) <= parseFloat(this.tspBalance);
-        this.canTransFlag = res1 && res && res3;
+          parseFloat(this.transValue) <= parseFloat(this.tspBalance)
+        this.canTransFlag = res1 && res && res3
       }
     },
 
-    changeTransOrder() {
-      this.fromSteemToTron = !this.fromSteemToTron;
-      this.transValue = "";
-      this.checkTransValue();
+    changeTransOrder () {
+      this.fromSteemToTron = !this.fromSteemToTron
+      this.transValue = ''
+      this.checkTransValue()
     },
 
-    fillMaxTrans() {
+    fillMaxTrans () {
       if (this.fromSteemToTron) {
         this.transValue = this.steemBalance
         this.transValue = parseFloat(this.steemBalance - this.transFee).toFixed(
           3
-        );
+        )
       } else {
-        this.transValue = parseFloat(this.tspBalance).toFixed(3);
+        this.transValue = parseFloat(this.tspBalance).toFixed(3)
       }
-      this.checkTransValue();
+      this.checkTransValue()
     },
 
-    trans() {
+    trans () {
       if (!isAddress(this.tronAddress)) {
-        this.tipTitle = this.$t("error.error");
-        this.tipMessage = this.$t("error.illegalTronAddress");
-        this.showMessage = true;
-        return;
+        this.tipTitle = this.$t('error.error')
+        this.tipMessage = this.$t('error.illegalTronAddress')
+        this.showMessage = true
+        return
       }
-      this.isLoading = true;
-      this.canTransFlag = false;
+      this.isLoading = true
+      this.canTransFlag = false
       if (this.fromSteemToTron) {
-        this.steemToTsp();
+        this.steemToTsp()
       } else {
-        this.tspToSteem();
+        this.tspToSteem()
       }
     },
 
-    async steemToTsp() {
+    async steemToTsp () {
       try {
-        const amount = parseFloat(this.transValue).toFixed(3);
+        const amount = parseFloat(this.transValue).toFixed(3)
         const res = await steemTransferVest(
           this.steemAccount,
           STEEM_TSP_ACCOUNT,
           amount,
           this.tronAddress,
           this.transFee
-        );
+        )
         if (res.success === true) {
           const tspBalance = parseFloat(this.tspBalance)
           const steemBalance = parseFloat(this.steemBalance)
@@ -258,56 +258,56 @@ export default {
           this.saveSteemBalance(steemBalance - parseFloat(amount) - parseFloat(this.transFee))
         } else {
           this.tipTitle = this.$t('error.error')
-          this.tipMessage = res.message;
-          this.showMessage = true;
+          this.tipMessage = res.message
+          this.showMessage = true
         }
       } catch (e) {
         this.tipTitle = this.$t('error.error')
-        this.tipMessage = e.message;
-        this.showMessage = true;
+        this.tipMessage = e.message
+        this.showMessage = true
       } finally {
         this.transValue = ''
         this.checkTransValue()
       }
     },
 
-    async tspToSteem() {
-      try{
-        const contract = await getContract("TSP")
-        let amount = parseFloat(this.transValue).toFixed(3);
-        amount = amountToInt(amount);
+    async tspToSteem () {
+      try {
+        const contract = await getContract('TSP')
+        let amount = parseFloat(this.transValue).toFixed(3)
+        amount = amountToInt(amount)
         const res = await contract
           .tspToSteem(this.steemAccount, amount)
-          .send(TRON_CONTRACT_CALL_PARAMS);
-        if ( res && (await isTransactionSuccess(res))){
+          .send(TRON_CONTRACT_CALL_PARAMS)
+        if (res && (await isTransactionSuccess(res))) {
           this.saveTspBalanceInt(amountToInt(parseFloat(this.tspBalance) - parseFloat(amount)))
           this.saveSteemBalance(parseFloat(this.steemBalance) + parseFloat(amount))
-        }else{
-          if (res && (await isInsufficientEnerge(res))){
+        } else {
+          if (res && (await isInsufficientEnerge(res))) {
             this.tipMessage = this.$t('error.insufficientEnerge')
-          }else{
+          } else {
             this.tipMessage = this.$t('error.transferFail')
           }
           this.tipTitle = this.$t('error.error')
           this.showMessage = true
         }
-      }catch(e){
-          this.tipTitle = this.$t('error.error')
-          this.tipMessage = e.message
-          this.showMessage = true
-      }finally{
+      } catch (e) {
+        this.tipTitle = this.$t('error.error')
+        this.tipMessage = e.message
+        this.showMessage = true
+      } finally {
         this.transValue = ''
         this.checkTransValue()
       }
-    },
-  },
-  mounted() {
-    if (this.steemAccount && this.steemAccount.length > 0) {
-      this.getSteem();
-      this.getTsp();
     }
   },
-};
+  mounted () {
+    if (this.steemAccount && this.steemAccount.length > 0) {
+      this.getSteem()
+      this.getTsp()
+    }
+  }
+}
 </script>
 
 <style lang="less" scoped>

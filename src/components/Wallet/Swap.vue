@@ -35,7 +35,7 @@ export default {
   components: {
     Login,
     TSteemSwap,
-    TSbdSwap,
+    TSbdSwap
   },
   computed: {
     ...mapState(['steemAccount'])

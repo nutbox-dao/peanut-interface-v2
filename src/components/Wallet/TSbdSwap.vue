@@ -121,135 +121,135 @@
 </template>
 
 <script>
-import Card from "../ToolsComponents/Card";
-import TipMessage from "../ToolsComponents/TipMessage";
-import { mapState, mapGetters, mapActions, mapMutations } from "vuex";
+import Card from '../ToolsComponents/Card'
+import TipMessage from '../ToolsComponents/TipMessage'
+import { mapState, mapGetters, mapActions, mapMutations } from 'vuex'
 import {
   TSBD_TRANSFER_FEE,
   TRANSFER_FEE_RATIO,
   STEEM_DEX_ACCOUNT,
-  TRON_CONTRACT_CALL_PARAMS,
-} from "../../config";
-import { isAddress, amountToInt, isTransactionSuccess, isInsufficientEnerge } from "../../utils/chain/tron";
-import { getContract } from "../../utils/chain/contract"
-import { steemWrap } from "../../utils/chain/steem";
-import { formatBalance } from "../../utils/helper"
+  TRON_CONTRACT_CALL_PARAMS
+} from '../../config'
+import { isAddress, amountToInt, isTransactionSuccess, isInsufficientEnerge } from '../../utils/chain/tron'
+import { getContract } from '../../utils/chain/contract'
+import { steemWrap } from '../../utils/chain/steem'
+import { formatBalance } from '../../utils/helper'
 
 export default {
-  name: "TSbdSwap",
+  name: 'TSbdSwap',
   components: {
     Card,
-    TipMessage,
+    TipMessage
   },
-  data() {
+  data () {
     return {
       fromSteemToTron: true,
       canTransFlag: false,
       isLoading: false,
-      transValue: "",
+      transValue: '',
       transferFee: TSBD_TRANSFER_FEE,
       transferRatio: TRANSFER_FEE_RATIO,
-      tipMessage: "",
-      tipTitle: "",
-      showMessage: false,
-    };
+      tipMessage: '',
+      tipTitle: '',
+      showMessage: false
+    }
   },
   computed: {
-    ...mapState(["sbdBalance", "steemAccount", "tronAddress"]),
-    ...mapGetters(["tsbdBalance"]),
-    fromTokenBalance() {
+    ...mapState(['sbdBalance', 'steemAccount', 'tronAddress']),
+    ...mapGetters(['tsbdBalance']),
+    fromTokenBalance () {
       if (this.fromSteemToTron) {
-        return formatBalance(this.sbdBalance) + " SBD";
+        return formatBalance(this.sbdBalance) + ' SBD'
       } else {
-        return formatBalance(this.tsbdBalance) + " TSBD";
+        return formatBalance(this.tsbdBalance) + ' TSBD'
       }
     },
-    toTokenBalance() {
+    toTokenBalance () {
       if (!this.fromSteemToTron) {
-        return formatBalance(this.sbdBalance) + " SBD";
+        return formatBalance(this.sbdBalance) + ' SBD'
       } else {
-        return formatBalance(this.tsbdBalance) + " TSBD";
+        return formatBalance(this.tsbdBalance) + ' TSBD'
       }
     },
-    transFee() {
+    transFee () {
       if (this.fromSteemToTron) {
-        const f = parseFloat(this.transValue) * TRANSFER_FEE_RATIO;
-        return f > TSBD_TRANSFER_FEE ? f : TSBD_TRANSFER_FEE;
+        const f = parseFloat(this.transValue) * TRANSFER_FEE_RATIO
+        return f > TSBD_TRANSFER_FEE ? f : TSBD_TRANSFER_FEE
       }
-      return 0;
-    },
+      return 0
+    }
   },
   methods: {
-    ...mapActions(["getSbd", "getTsbd"]),
+    ...mapActions(['getSbd', 'getTsbd']),
     ...mapMutations(['saveSbdBalance', 'saveTsbdBalanceInt']),
 
-    checkTransValue() {
-      this.isLoading = false;
-      const reg = /^\d+(\.\d+)?$/;
-      const res = reg.test(this.transValue);
-      let res1 = false;
+    checkTransValue () {
+      this.isLoading = false
+      const reg = /^\d+(\.\d+)?$/
+      const res = reg.test(this.transValue)
+      let res1 = false
       if (parseFloat(this.transValue) > 0) {
-        res1 = true;
+        res1 = true
       }
       if (this.fromSteemToTron) {
         const res2 =
           parseFloat(this.transValue) <=
-          parseFloat(parseFloat(this.sbdBalance) - this.transFee).toFixed(3);
+          parseFloat(parseFloat(this.sbdBalance) - this.transFee).toFixed(3)
 
-        this.canTransFlag = res1 && res && res2;
+        this.canTransFlag = res1 && res && res2
       } else {
         const res3 =
-          parseFloat(this.transValue) <= parseFloat(this.tsbdBalance);
-        this.canTransFlag = res1 && res && res3;
+          parseFloat(this.transValue) <= parseFloat(this.tsbdBalance)
+        this.canTransFlag = res1 && res && res3
       }
     },
 
-    changeTransOrder() {
-      this.fromSteemToTron = !this.fromSteemToTron;
-      this.transValue = "";
-      this.checkTransValue();
+    changeTransOrder () {
+      this.fromSteemToTron = !this.fromSteemToTron
+      this.transValue = ''
+      this.checkTransValue()
     },
 
-    fillMaxTrans() {
+    fillMaxTrans () {
       if (this.fromSteemToTron) {
         this.transValue = this.sbdBalance
         this.transValue = parseFloat(this.sbdBalance - this.transFee).toFixed(
           3
-        );
+        )
       } else {
-        this.transValue = parseFloat(this.tsbdBalance).toFixed(3);
+        this.transValue = parseFloat(this.tsbdBalance).toFixed(3)
       }
-      this.checkTransValue();
+      this.checkTransValue()
     },
 
-    trans() {
+    trans () {
       if (!isAddress(this.tronAddress)) {
-        this.tipTitle = this.$t("error.error");
-        this.tipMessage = this.$t("error.illegalTronAddress");
-        this.showMessage = true;
-        return;
+        this.tipTitle = this.$t('error.error')
+        this.tipMessage = this.$t('error.illegalTronAddress')
+        this.showMessage = true
+        return
       }
-      this.isLoading = true;
-      this.canTransFlag = false;
+      this.isLoading = true
+      this.canTransFlag = false
       if (this.fromSteemToTron) {
-        this.sbdToTsbd();
+        this.sbdToTsbd()
       } else {
-        this.tsbdToSbd();
+        this.tsbdToSbd()
       }
     },
 
-    async sbdToTsbd() {
+    async sbdToTsbd () {
       try {
-        const amount = parseFloat(this.transValue).toFixed(3);
+        const amount = parseFloat(this.transValue).toFixed(3)
         const res = await steemWrap(
           this.steemAccount,
           STEEM_DEX_ACCOUNT,
           amount,
-          this.tronAddress + " +" + amount + " TSBD",
-          "SBD",
+          this.tronAddress + ' +' + amount + ' TSBD',
+          'SBD',
           this.tronAddress,
           this.transFee
-        );
+        )
         if (res.success === true) {
           const tsbdBalance = parseFloat(this.tsbdBalance)
           const sbdBalance = parseFloat(this.sbdBalance)
@@ -257,56 +257,56 @@ export default {
           this.saveSbdBalance(sbdBalance - parseFloat(amount) - parseFloat(this.transFee))
         } else {
           this.tipTitle = this.$t('error.error')
-          this.tipMessage = res.message;
-          this.showMessage = true;
+          this.tipMessage = res.message
+          this.showMessage = true
         }
       } catch (e) {
         this.tipTitle = this.$t('error.error')
-        this.tipMessage = e.message;
-        this.showMessage = true;
+        this.tipMessage = e.message
+        this.showMessage = true
       } finally {
         this.transValue = ''
         this.checkTransValue()
       }
     },
 
-    async tsbdToSbd() {
-      try{
-        const contract = await getContract("TSBD")
-        let amount = parseFloat(this.transValue).toFixed(3);
-        amount = amountToInt(amount);
+    async tsbdToSbd () {
+      try {
+        const contract = await getContract('TSBD')
+        let amount = parseFloat(this.transValue).toFixed(3)
+        amount = amountToInt(amount)
         const res = await contract
           .tsbdToSbd(this.steemAccount, amount)
-          .send(TRON_CONTRACT_CALL_PARAMS);
-        if ( res && (await isTransactionSuccess(res))){
+          .send(TRON_CONTRACT_CALL_PARAMS)
+        if (res && (await isTransactionSuccess(res))) {
           this.saveTsbdBalanceInt(amountToInt(parseFloat(this.tsbdBalance) - parseFloat(amount)))
           this.saveSbdBalance(parseFloat(this.sbdBalance) + parseFloat(amount))
-        }else{
-          if (res && (await isInsufficientEnerge(res))){
+        } else {
+          if (res && (await isInsufficientEnerge(res))) {
             this.tipMessage = this.$t('error.insufficientEnerge')
-          }else{
+          } else {
             this.tipMessage = this.$t('error.transferFail')
           }
           this.tipTitle = this.$t('error.error')
           this.showMessage = true
         }
-      }catch(e){
-          this.tipTitle = this.$t('error.error')
-          this.tipMessage = e.message
-          this.showMessage = true
-      }finally{
+      } catch (e) {
+        this.tipTitle = this.$t('error.error')
+        this.tipMessage = e.message
+        this.showMessage = true
+      } finally {
         this.transValue = ''
         this.checkTransValue()
       }
-    },
-  },
-  mounted() {
-    if (this.steemAccount && this.steemAccount.length > 0) {
-      this.getSbd();
-      this.getTsbd();
     }
   },
-};
+  mounted () {
+    if (this.steemAccount && this.steemAccount.length > 0) {
+      this.getSbd()
+      this.getTsbd()
+    }
+  }
+}
 </script>
 
 <style lang="less" scoped>
