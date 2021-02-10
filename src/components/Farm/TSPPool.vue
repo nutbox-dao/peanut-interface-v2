@@ -6,7 +6,6 @@
         <p>
           {{ $t("farm.tsp.yourTspAmount") }} : {{ depositedTsp | amountForm }}
         </p>
-        <p>{{ $t("message.pnutbalance") }} : {{ pnutBalance | amountForm }}</p>
         <p>{{ $t("message.apy") }} : {{ apy }}</p>
         <input
           placeholder="0.0"
@@ -127,9 +126,6 @@ import {
   isInsufficientEnerge,
 } from "../../utils/chain/tron";
 import { getContract } from "../../utils/chain/contract";
-import { storeApy } from "../../utils/helper"
-
-import { getSteemPrice } from '../../utils/chain/steem'
 
 export default {
   name: "TSPPool",
@@ -418,9 +414,8 @@ export default {
   mounted() {
     if (this.tronAddress && this.tronAddress.length > 0) {
       this.getTsp();
-      this.getPnut();
+      // this.getPnut();
       this.getDepositedTsp();
-      storeApy(this.$store)
       //设置定时器以更新当前收益
       const timer = setInterval(this.getPendingPeanut, 3000);
       // 通过$once来监听定时器，在beforeDestroy钩子时被清除。

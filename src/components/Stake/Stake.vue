@@ -1,7 +1,7 @@
 <template>
-  <div id="stake" style="padding: 0px 40px 64px;">
+  <div id="stake" style="padding: 0px 40px 64px">
     <h3>
-        {{ this.$t('stake.stake') }}
+      {{ this.$t("stake.stake") }}
     </h3>
     <b-row>
       <b-col
@@ -24,10 +24,7 @@
                 {{ $t("message.yourspdelegate") }} :
                 {{ delegatedSp | amountForm }} SP
               </p>
-              <p>
-                {{ $t("message.pnutbalance") }} :
-                {{ pnutBalance | amountForm }} PNUT
-              </p>
+              <p>{{ $t("message.apy") }} : {{ apy }}</p>
               <input
                 placeholder="0.0"
                 v-model="delegatevalue"
@@ -54,7 +51,7 @@
                 </b-button>
               </div>
               <div v-else class="btn-container">
-              <!-- 增加代理 -->
+                <!-- 增加代理 -->
                 <b-button
                   variant="primary"
                   @click="addDelegate"
@@ -149,7 +146,12 @@ import Card from "../ToolsComponents/Card";
 import Login from "../Login";
 import TipMessage from "../ToolsComponents/TipMessage";
 import { getContract } from "../../utils/chain/contract";
-import { amountToInt, intToAmount, isTransactionSuccess, isInsufficientEnerge } from "../../utils/chain/tron";
+import {
+  amountToInt,
+  intToAmount,
+  isTransactionSuccess,
+  isInsufficientEnerge,
+} from "../../utils/chain/tron";
 import { mapState, mapGetters, mapActions, mapMutations } from "vuex";
 import { steemDelegation } from "../../utils/chain/steem";
 import {
@@ -182,7 +184,8 @@ export default {
       "tronAddress",
       "steemBalance",
       "vestsToSteem",
-      'vestsBalance'
+      "vestsBalance",
+      "apy"
     ]),
     ...mapGetters(["spBalance", "pnutBalance", "delegatedSp"]),
 
@@ -205,14 +208,12 @@ export default {
     ]),
 
     async getPendingPeanut() {
-      try{
+      try {
         const nutPool = await getContract("PNUT_POOL");
         if (!nutPool) return;
         let s = await nutPool.getPendingPeanuts().call();
         this.pendingPnut = intToAmount(s);
-      }catch(e){
-
-      }
+      } catch (e) {}
     },
 
     checkInputValue() {
@@ -226,7 +227,7 @@ export default {
     },
 
     async checkAddress() {
-      try{
+      try {
         const nutPool = await getContract("PNUT_POOL");
         const res = await nutPool.delegators(this.tronAddress).call();
         const steemAcc = res.steemAccount;
@@ -235,57 +236,65 @@ export default {
           res.hasDeposited &&
           steemAcc !== this.steemAccount
         ) {
-          this.showTip(this.$t("error.delegateerror"), this.$t("error.accountChanged"))
+          this.showTip(
+            this.$t("error.delegateerror"),
+            this.$t("error.accountChanged")
+          );
           return false;
         } else {
           return true;
         }
-      }catch(e){
-        this.showTip(this.$t("error.delegateerror"),e.message)
-        return false
+      } catch (e) {
+        this.showTip(this.$t("error.delegateerror"), e.message);
+        return false;
       }
     },
 
-    checkDelegateFee(){
-      if(this.steemBalance >= STEEM_STAKE_FEE){
-        return true
+    checkDelegateFee() {
+      if (this.steemBalance >= STEEM_STAKE_FEE) {
+        return true;
       }
-      this.showTip(this.$t("error.delegateerror"), this.$t("error.notEnoughFee"))
-      return false
+      this.showTip(
+        this.$t("error.delegateerror"),
+        this.$t("error.notEnoughFee")
+      );
+      return false;
     },
 
     delegate() {
-      this.delegateLoading = true
-      this.delegateSp(this.delegatevalue)
+      this.delegateLoading = true;
+      this.delegateSp(this.delegatevalue);
     },
 
     addDelegate() {
-      this.addLoading = true
-      this.delegateSp(this.delegatedSp + this.delegatevalue)
+      this.addLoading = true;
+      this.delegateSp(this.delegatedSp + this.delegatevalue);
     },
 
     minusDelegate() {
-      this.minusLoading = true
-      this.delegateSp(this.delegatedSp - this.delegatevalue)
+      this.minusLoading = true;
+      this.delegateSp(this.delegatedSp - this.delegatevalue);
     },
 
     cancelDelegate() {
-      this.cancelLoading = true
-      this.delegateSp(0)
+      this.cancelLoading = true;
+      this.delegateSp(0);
     },
 
-    async delegateSp(sp){
+    async delegateSp(sp) {
       try {
-        sp = parseFloat(sp)
-        this.loading = true
-        if ((sp != 0 && !this.checkInputValue()) || !(await this.checkAddress()) || !this.checkDelegateFee()) {
-          this.loading = false
-          this.delegateLoading = false
+        sp = parseFloat(sp);
+        this.loading = true;
+        if (
+          (sp != 0 && !this.checkInputValue()) ||
+          !(await this.checkAddress()) ||
+          !this.checkDelegateFee()
+        ) {
+          this.loading = false;
+          this.delegateLoading = false;
           return;
         }
-        const amount = parseFloat(
-          sp / this.vestsToSteem
-        ).toFixed(6);
+        const amount = parseFloat(sp / this.vestsToSteem).toFixed(6);
         const res = await steemDelegation(
           this.steemAccount,
           STEEM_MINE_ACCOUNT,
@@ -295,48 +304,51 @@ export default {
         if (res.success === true) {
           this.getVests();
           this.getSteem();
-          this.saveDelegatedVestsInt(amountToInt(parseFloat(amount)))
+          this.saveDelegatedVestsInt(amountToInt(parseFloat(amount)));
         } else {
-          this.showTip(this.$t("error.delegateerror"),res.message)
+          this.showTip(this.$t("error.delegateerror"), res.message);
         }
       } catch (e) {
-        this.showTip(this.$t("error.delegateerror"),e.message)
+        this.showTip(this.$t("error.delegateerror"), e.message);
       } finally {
         this.delegatevalue = "";
-        this.loading = false
-        this.delegateLoading = false
-        this.addLoading = false
-        this.minusLoading = false
-        this.cancelLoading = false
+        this.loading = false;
+        this.delegateLoading = false;
+        this.addLoading = false;
+        this.minusLoading = false;
+        this.cancelLoading = false;
       }
     },
 
     async withdrawPnut() {
-      try{
-        this.loading = true
-        this.withdrawLoading = true
-        const pnutPool = await getContract('PNUT_POOL')
+      try {
+        this.loading = true;
+        this.withdrawLoading = true;
+        const pnutPool = await getContract("PNUT_POOL");
         let res = await pnutPool
           .withdrawPeanuts()
           .send(TRON_CONTRACT_CALL_PARAMS);
         if (res && (await isTransactionSuccess(res))) {
           this.getPnut();
         } else {
-          if (res && await isInsufficientEnerge(res)) {
-            this.showTip(this.$t("error.error"), this.$t("error.insufficientEnerge"))
+          if (res && (await isInsufficientEnerge(res))) {
+            this.showTip(
+              this.$t("error.error"),
+              this.$t("error.insufficientEnerge")
+            );
           } else {
-            this.showTip(this.$t("error.error"), this.$t("error.withdrawFail"))
+            this.showTip(this.$t("error.error"), this.$t("error.withdrawFail"));
           }
         }
-      }catch(e){
-        this.showTip(this.$t("error.error"), e)
-      }finally{
-        this.loading = false
-        this.withdrawLoading = false
+      } catch (e) {
+        this.showTip(this.$t("error.error"), e);
+      } finally {
+        this.loading = false;
+        this.withdrawLoading = false;
       }
     },
 
-    showTip(title,message) {
+    showTip(title, message) {
       this.tipTitle = title;
       this.tipMessage = message;
       this.showMessage = true;
@@ -348,7 +360,7 @@ export default {
       this.getSteem();
     }
     if (this.tronAddress && this.tronAddress.length > 0) {
-      this.getPnut();
+      // this.getPnut();
       this.getDelegatedSp();
       //设置定时器以更新当前收益
       const timer = setInterval(this.getPendingPeanut, 3000);

@@ -6,7 +6,7 @@
         <p>
           {{ $t("farm.tspLp.yourTSPLPAmount") }} : {{ depositedTspLp | amountForm }}
         </p>
-        <p>{{ $t("message.pnutbalance") }} : {{ pnutBalance | amountForm }}</p>
+        <p>{{ $t("message.apy") }} : {{ apy }}</p>
         <input
           placeholder="0.0"
           v-model="depositeValue"
@@ -152,7 +152,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(["tronAddress", "tspLpBalanceInt", "depositedTspLpInt", 'pnutBalanceInt']),
+    ...mapState(["tronAddress", "tspLpBalanceInt", "depositedTspLpInt", 'pnutBalanceInt', 'apy']),
     ...mapGetters(["tspLpBalance", "depositedTspLp", "pnutBalance"]),
     deposited() {
       return this.depositedTspLp && this.depositedTspLp > 0;
@@ -433,7 +433,7 @@ export default {
   mounted() {
     if (this.tronAddress && this.tronAddress.length > 0) {
       this.getTspLp();
-      this.getPnut();
+      // this.getPnut();
       this.getDepositedTspLp();
       //设置定时器以更新当前收益
       const timer = setInterval(this.getPendingPeanut, 3000);

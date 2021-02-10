@@ -21,8 +21,8 @@ export const retryMethod = async function(func, retries=5, interval=1){
   return new Promise(async (resolve, reject) => {
     const exc = async (retries) => {
       try {
-        await func() 
-        resolve()
+        const res = await func() 
+        resolve(res)
       }catch(e) {
         setTimeout(async () => {
           if (retries > 0){
@@ -66,9 +66,14 @@ export const storeApy = async function(store) {
     getTronPrice(),
     getPnutPrice(),
   ]);
+  console.log(steemPrice, tronPrice, pnutPrice);
   const pnutPool = await getContract('PNUT_POOL')
-  const rewardsPerBlock = intToAmount(await pnutPool.getRewardsPerBlock().call())
-  const totalDepositedSP = intToAmount(await pnutPool.getTotalDepositedSP().call()) * store.state.vestsToSteem
+  const rewardsPerBlock = await retryMethod(async () => {
+    return intToAmount(await pnutPool.getRewardsPerBlock().call())
+  })
+  const totalDepositedSP = await retryMethod(async () => {
+    return intToAmount(await pnutPool.getTotalDepositedSP().call()) * store.state.vestsToSteem
+  })
   let apy =
     (28800 * rewardsPerBlock * 365 * pnutPrice * tronPrice) /
     (totalDepositedSP * steemPrice);
@@ -76,5 +81,6 @@ export const storeApy = async function(store) {
     return;
   }
   apy = (apy * 100).toFixed(1);
+  console.log(apy);
   store.commit('saveApy', apy+"%")
 }

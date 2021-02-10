@@ -47,7 +47,7 @@ export default new Vuex.Store({
     depositedTspInt: 0,
     depositedTspLpInt: 0,
     // apy
-    apy: Cookie.get('apy')
+    apy: Cookie.get('apy') || '0.0%',
   },
   mutations: {
     // steem
