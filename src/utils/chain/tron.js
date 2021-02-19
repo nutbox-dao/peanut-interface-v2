@@ -33,7 +33,7 @@ export async function getTronLinkAddr () {
     return addr
   } else {
     await sleep(1)
-    addr = tronlink.defaultAddress.base58
+    addr = tronLink.defaultAddress.base58
     return addr || TRON_LINK_ADDR_NOT_FOUND.walletLocked
   }
 }
