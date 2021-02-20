@@ -4,7 +4,7 @@
       <div>
         <p>{{ $t("farm.pnutLp.pnutLPBalance") }} : {{ pnutLpBalance | amountForm }}</p>
         <p>
-          {{ $t("farm.tspLp.yourTSPLPAmount") }} : {{ depositedPnutLp | amountForm }}
+          {{ $t("farm.pnutLp.yourPNUTLPAmount") }} : {{ depositedPnutLp | amountForm }}
         </p>
         <p>{{ $t("message.apy") }} : {{ apy }}</p>
         <input
