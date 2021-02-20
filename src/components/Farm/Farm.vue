@@ -7,29 +7,29 @@
             <router-link to='/farm/tsp'>TSP</router-link>
             <router-link to='/farm/tsplp'>TSP_LP</router-link>
         </div>
-        
+
         <router-view></router-view>
     </div>
 </template>
 
 <script>
 export default {
-  name: "Farm",
-  data() {
-      return {
-          
-      }
+  name: 'Farm',
+  data () {
+    return {
+
+    }
   },
 
   methods: {
-      tsp() {
-          
-      },
-      tsplp(){
+    tsp () {
 
-      }
-  },
-};
+    },
+    tsplp () {
+
+    }
+  }
+}
 </script>
 
 <style lang="less" scoped>

@@ -20,8 +20,7 @@ import {
   getVestingShares
 } from '../utils/chain/steem'
 import {
-  TSP_LP_TOKEN_ADDRESS,
-  TRON_CONTRACT_CALL_PARAMS
+  TSP_LP_TOKEN_ADDRESS
 } from '../config'
 
 Vue.use(Vuex)
@@ -47,7 +46,7 @@ export default new Vuex.Store({
     depositedTspInt: 0,
     depositedTspLpInt: 0,
     // apy
-    apy: Cookie.get('apy')
+    apy: Cookie.get('apy') || '0.0%'
   },
   mutations: {
     // steem
@@ -67,7 +66,7 @@ export default new Vuex.Store({
     saveVestsToSteem: function (state, vestsToSteem) {
       state.vestsToSteem = vestsToSteem
     },
-    clearSteemAccount(state) {
+    clearSteemAccount (state) {
       state.steemAccount = null
       Cookie.remove('steemAccount')
     },
@@ -104,7 +103,7 @@ export default new Vuex.Store({
     saveDepositedTspLpInt: function (state, depositedTspLpInt) {
       state.depositedTspLpInt = depositedTspLpInt
     },
-    saveApy: function(state, apy) {
+    saveApy: function (state, apy) {
       this.state.apy = apy
       Cookie.set('apy', apy, '30d')
     }
@@ -119,7 +118,7 @@ export default new Vuex.Store({
     },
     // tron
     tronAddrFromat: state => {
-      if (!state.tronAddress){
+      if (!state.tronAddress) {
         return ''
       }
       return state.tronAddress.substring(0, 6) + '...' + state.tronAddress.substring(30)
@@ -157,7 +156,7 @@ export default new Vuex.Store({
   },
   actions: {
     // steem
-    setVestsToSteem({
+    setVestsToSteem ({
       commit
     }) {
       vestsToSteem(1).then((res) => {
@@ -165,7 +164,7 @@ export default new Vuex.Store({
       })
     },
 
-    getSteem({
+    getSteem ({
       commit,
       state
     }) {
@@ -174,7 +173,7 @@ export default new Vuex.Store({
       })
     },
 
-    getSbd({
+    getSbd ({
       commit,
       state
     }) {
@@ -183,7 +182,7 @@ export default new Vuex.Store({
       })
     },
 
-    getVests({
+    getVests ({
       commit,
       state
     }) {
@@ -192,7 +191,7 @@ export default new Vuex.Store({
       })
     },
 
-    async initializeSteemAccount({
+    async initializeSteemAccount ({
       commit
     }, steemAccount) {
       try {
@@ -212,7 +211,7 @@ export default new Vuex.Store({
     },
 
     // tron
-    async getTron(context) {
+    async getTron (context) {
       const func = async () => {
         try {
           const tronweb = getTronweb()
@@ -226,7 +225,7 @@ export default new Vuex.Store({
       retryMethod(func)
     },
 
-    async getTsteem(context) {
+    async getTsteem (context) {
       retryMethod(async () => {
         try {
           const contract = await getContract('TSTEEM')
@@ -239,7 +238,7 @@ export default new Vuex.Store({
       })
     },
 
-    async getTsp(context) {
+    async getTsp (context) {
       retryMethod(async () => {
         try {
           const contract = await getContract('TSP')
@@ -252,7 +251,7 @@ export default new Vuex.Store({
       })
     },
 
-    async getTsbd(context) {
+    async getTsbd (context) {
       retryMethod(async () => {
         try {
           const contract = await getContract('TSBD')
@@ -265,7 +264,7 @@ export default new Vuex.Store({
       })
     },
 
-    async getPnut(context) {
+    async getPnut (context) {
       retryMethod(async () => {
         try {
           const contract = await getContract('PNUT')
@@ -278,7 +277,7 @@ export default new Vuex.Store({
       })
     },
 
-    async getTspLp(context) {
+    async getTspLp (context) {
       retryMethod(async () => {
         try {
           const tspAddr = TSP_LP_TOKEN_ADDRESS
@@ -291,49 +290,49 @@ export default new Vuex.Store({
       })
     },
 
-    async getDelegatedSp(context) {
+    async getDelegatedSp (context) {
       retryMethod(async () => {
         try {
           const contranct = await getContract('PNUT_POOL')
-          let amount = await contranct.delegators(context.state.tronAddress).call(); //balanceOfDelegate
+          let amount = await contranct.delegators(context.state.tronAddress).call() // balanceOfDelegate
           amount = amount.amount
           context.commit('saveDelegatedVestsInt', amount || 0)
         } catch (e) {
-          console.error('Get Delegated SP Fail:', e.message);
-          throw e;
+          console.error('Get Delegated SP Fail:', e.message)
+          throw e
         }
       })
     },
 
-    async getDepositedTsp(context) {
+    async getDepositedTsp (context) {
       retryMethod(async () => {
         try {
           const contract = await getContract('TSP_POOL')
-          let amount = await contract.delegators(context.state.tronAddress).call();
+          let amount = await contract.delegators(context.state.tronAddress).call()
           amount = amount.tspAmount
           context.commit('saveDepositedTspInt', amount || 0)
         } catch (e) {
-          console.error('Get Deposited TSP Fail:', e.message);
+          console.error('Get Deposited TSP Fail:', e.message)
           throw e
         }
       })
     },
 
-    async getDepositedTspLp(context) {
+    async getDepositedTspLp (context) {
       retryMethod(async () => {
-        try{
+        try {
           const contract = await getContract('TSP_LP_POOL')
-          let amount = await contract.delegators(context.state.tronAddress).call();
+          let amount = await contract.delegators(context.state.tronAddress).call()
           amount = amount.tspLPAmount
           context.commit('saveDepositedTspLpInt', amount || 0)
-        }catch(e){
-          consol.error('Get Deposited TSP_LP Fail:', e.message)
+        } catch (e) {
+          console.error('Get Deposited TSP_LP Fail:', e.message)
           throw e
         }
       })
     },
 
-    async initializeTronAccount({
+    async initializeTronAccount ({
       commit,
       dispatch
     }, tronAddress) {

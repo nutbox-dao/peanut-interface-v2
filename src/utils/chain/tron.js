@@ -202,7 +202,6 @@ export const getTronPrice = function () {
     }
     resolve(1)
   })
-  
 }
 
 export const getPnutPrice = function () {
@@ -221,5 +220,4 @@ export const getPnutPrice = function () {
     const price = res.data.data['0_TPZddNpQJHu8UtKPY1PYDBv2J5p5QpJ6XW'].price
     resolve(parseFloat(price))
   })
-
 }

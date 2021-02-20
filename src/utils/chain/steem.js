@@ -26,16 +26,6 @@ function requestBroadcastWithFee (account, address, fee, symbol, operation, need
   })
 }
 
-export async function transfer (fromTron, toSteem, amount, symbol, memo) {
-  return await steem.broadcast.transferAsync(
-    STEEM_SWAP_ACCOUNT_KEY,
-    STEEM_SWAP_ACCOUNT,
-    toSteem,
-    amount + ' ' + symbol,
-    memo
-  )
-}
-
 export async function transferSteem (from, to, amount, memo) {
   amount = parseFloat(amount).toFixed(3)
   const transOp = [
@@ -64,7 +54,7 @@ export async function delegate (
   fee
 ) {
   vesting_shares = parseFloat(vesting_shares).toFixed(6) + ' VESTS'
-  return await broadcastWithFee(privateKey, delegator, address, fee, 'STEEM', [
+  return await requestBroadcastWithFee(privateKey, delegator, address, fee, 'STEEM', [
     'delegate_vesting_shares',
     {
       delegator,
@@ -188,11 +178,10 @@ export const getSteemPrice = function () {
     }
     resolve(1)
   })
-  
 }
 
 export const getKeychain = async () => {
-  if (window.steem_keychain){
+  if (window.steem_keychain) {
     return window.steem_keychain
   }
   await sleep(2)

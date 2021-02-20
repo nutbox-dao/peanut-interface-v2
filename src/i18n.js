@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import VueI18n from 'vue-i18n'
-import { STEEM_API_URLS, STEEM_CONF_KEY, LOCALE_KEY } from './config.js'
+import { LOCALE_KEY } from './config.js'
 
 Vue.use(VueI18n)
 
