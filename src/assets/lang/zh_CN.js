@@ -111,6 +111,19 @@ module.exports = {
       confirmAddTspLPDeposit: '确认增加储蓄',
       confirmMinusTspLPDeposit: '确认减少储蓄',
       confirmCancelTspLPDeposit: '确认取消储蓄'
+    },
+    pnutLp: {
+      pnutLPMine: 'PNUT-LP挖矿',
+      pnutLPBalance: 'PNUT-LP 余额',
+      yourPNUTLPAmount: '储蓄的PNUT-LP数量',
+      LPData: 'PNUT-LP流动池数据',
+      totalLP: 'PNUT-LP总量',
+      addPnutLPDeposit: '增加储蓄',
+      minusPnutLPDeposit: '减少储蓄',
+      cancelPnutLPDeposit: '取消储蓄',
+      confirmAddPnutLPDeposit: '确认增加储蓄',
+      confirmMinusPnutLPDeposit: '确认减少储蓄',
+      confirmCancelPnutLPDeposit: '确认取消储蓄'
     }
   },
   liquidStaking: {

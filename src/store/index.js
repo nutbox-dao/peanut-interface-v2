@@ -20,7 +20,8 @@ import {
   getVestingShares
 } from '../utils/chain/steem'
 import {
-  TSP_LP_TOKEN_ADDRESS
+  TSP_LP_TOKEN_ADDRESS,
+  PNUT_LP_TOKEN_ADDRESS
 } from '../config'
 
 Vue.use(Vuex)
@@ -41,10 +42,12 @@ export default new Vuex.Store({
     tsbdBalanceInt: 0,
     tspBalanceInt: 0,
     tspLpBalanceInt: 0,
+    pnutLpBalanceInt: 0,
     // pool info
     delegatedVestsInt: 0,
     depositedTspInt: 0,
     depositedTspLpInt: 0,
+    depositedPnutLpInt: 0,
     // apy
     apy: Cookie.get('apy') || '0.0%'
   },
@@ -93,6 +96,9 @@ export default new Vuex.Store({
     saveTsbdBalanceInt: function (state, tsbdBalanceInt) {
       state.tsbdBalanceInt = tsbdBalanceInt
     },
+    savePnutLpBalanceInt: function (state, pnutLpBalanceInt) {
+      state.pnutLpBalanceInt = pnutLpBalanceInt
+    },
     // pool info
     saveDelegatedVestsInt: function (state, delegatedVestsInt) {
       state.delegatedVestsInt = delegatedVestsInt
@@ -102,6 +108,9 @@ export default new Vuex.Store({
     },
     saveDepositedTspLpInt: function (state, depositedTspLpInt) {
       state.depositedTspLpInt = depositedTspLpInt
+    },
+    saveDepositedPnutLpInt: function (state, depositedPnutLpInt) {
+      state.depositedPnutLpInt = depositedPnutLpInt
     },
     saveApy: function (state, apy) {
       this.state.apy = apy
@@ -138,6 +147,9 @@ export default new Vuex.Store({
     tspLpBalance: state => {
       return intToAmount(state.tspLpBalanceInt) || 0
     },
+    pnutLpBalance: state => {
+      return intToAmount(state.pnutLpBalanceInt) || 0
+    },
     pnutBalance: state => {
       return intToAmount(state.pnutBalanceInt) || 0
     },
@@ -151,8 +163,10 @@ export default new Vuex.Store({
     },
     depositedTspLp: state => {
       return intToAmount(state.depositedTspLpInt) || 0
+    },
+    depositedPnutLp: state => {
+      return intToAmount(state.depositedPnutLpInt) || 0
     }
-
   },
   actions: {
     // steem
@@ -290,6 +304,19 @@ export default new Vuex.Store({
       })
     },
 
+    async getPnutLp (context) {
+      retryMethod(async () => {
+        try {
+          const pnutLpAddr = PNUT_LP_TOKEN_ADDRESS
+          const pnutLpBalance = await getBalanceOfToken(pnutLpAddr, context.state.tronAddress)
+          context.commit('savePnutLpBalanceInt', pnutLpBalance || 0)
+        } catch (e) {
+          console.error('Get Pnut_Lp Fail:', e)
+          throw e
+        }
+      })
+    },
+
     async getDelegatedSp (context) {
       retryMethod(async () => {
         try {
@@ -332,6 +359,20 @@ export default new Vuex.Store({
       })
     },
 
+    async getDepositedPnutLp (context) {
+      retryMethod(async () => {
+        try {
+          const contract = await getContract('PNUT_LP_POOL')
+          let amount = await contract.delegators(context.state.tronAddress).call()
+          amount = amount.pnutLpAmount
+          context.commit('saveDepositedPnutLpInt', amount || 0)
+        }catch (e) {
+          console.error('Get Deposited PNUT_LP Fail:', e.message)
+          throw e
+        }
+      })
+    },
+
     async initializeTronAccount ({
       commit,
       dispatch
@@ -343,9 +384,11 @@ export default new Vuex.Store({
       dispatch('getTsbd')
       dispatch('getPnut')
       dispatch('getTspLp')
+      dispatch('getPnutLp')
       dispatch('getDelegatedSp')
       dispatch('getDepositedTsp')
       dispatch('getDepositedTspLp')
+      dispatch('getDepositedPnutLp')
     }
   },
   modules: {}

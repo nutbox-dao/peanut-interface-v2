@@ -2,9 +2,9 @@
   <div class="farm-box">
     <Card>
       <div>
-        <p>{{ $t("farm.tspLp.tspLPBalance") }} : {{ tspLpBalance | amountForm }}</p>
+        <p>{{ $t("farm.pnutLp.pnutLPBalance") }} : {{ pnutLpBalance | amountForm }}</p>
         <p>
-          {{ $t("farm.tspLp.yourTSPLPAmount") }} : {{ depositedTspLp | amountForm }}
+          {{ $t("farm.tspLp.yourTSPLPAmount") }} : {{ depositedPnutLp | amountForm }}
         </p>
         <p>{{ $t("message.apy") }} : {{ apy }}</p>
         <input
@@ -118,7 +118,7 @@
 import Card from '../ToolsComponents/Card'
 import TipMessage from '../ToolsComponents/TipMessage'
 import { mapState, mapActions, mapGetters, mapMutations } from 'vuex'
-import { TSP_LP_POOL_ADDRESS, TRON_CONTRACT_CALL_PARAMS, TSP_LP_TOKEN_ADDRESS } from '../../config'
+import { PNUT_LP_TOKEN_ADDRESS, PNUT_LP_POOL_ADDRESS, TRON_CONTRACT_CALL_PARAMS } from '../../config'
 import {
   intToAmount,
   getTronLink,
@@ -126,10 +126,10 @@ import {
   isTransactionSuccess,
   isInsufficientEnerge
 } from '../../utils/chain/tron'
-import { getContract } from '../../utils/chain/contract'
+import { getContract, getContractAddress } from '../../utils/chain/contract'
 
 export default {
-  name: 'TSPLPPool',
+  name: 'PnutLPPool',
   components: {
     Card,
     TipMessage
@@ -152,15 +152,15 @@ export default {
     }
   },
   computed: {
-    ...mapState(['tronAddress', 'tspLpBalanceInt', 'depositedTspLpInt', 'pnutBalanceInt', 'apy']),
-    ...mapGetters(['tspLpBalance', 'depositedTspLp', 'pnutBalance']),
+    ...mapState(['tronAddress', 'pnutLpBalanceInt', 'depositedPnutLpInt', 'pnutBalanceInt', 'apy']),
+    ...mapGetters(['pnutLpBalance', 'depositedPnutLp', 'pnutBalance']),
     deposited () {
-      return this.depositedTspLp && this.depositedTspLp > 0
+      return this.depositedPnutLp && this.depositedPnutLp > 0
     }
   },
   methods: {
-    ...mapActions(['getTspLp', 'getPnut', 'getDepositedTspLp']),
-    ...mapMutations(['saveTspLpBalanceInt', 'saveDepositedTspLpInt', 'savePnutBalanceInt']),
+    ...mapActions(['getPnutLp', 'getPnut', 'getDepositedPnutLp']),
+    ...mapMutations(['savePnutLpBalanceInt', 'saveDepositedPnutLpInt', 'savePnutBalanceInt']),
 
     checkInputValue () {
       const reg = /^\d+(\.\d+)?$/
@@ -176,7 +176,7 @@ export default {
       if (!this.checkInputValue()) {
         return
       }
-      if (parseFloat(this.depositeValue) > parseFloat(this.tspLpBalance)) {
+      if (parseFloat(this.depositeValue) > parseFloat(this.pnutLpBalance)) {
         this.showTip(this.$t('error.error'), this.$t('error.inputOverflow'))
         return
       }
@@ -186,11 +186,11 @@ export default {
         const approveInt = amountToInt(parseFloat(this.depositeValue))
         const tronLink = await getTronLink()
         const params = [
-          { type: 'address', value: TSP_LP_POOL_ADDRESS },
+          { type: 'address', value: PNUT_LP_POOL_ADDRESS },
           { type: 'uint256', value: approveInt }
         ]
         const { result, transaction } = await tronLink.transactionBuilder.triggerSmartContract(
-          TSP_LP_TOKEN_ADDRESS,
+          PNUT_LP_TOKEN_ADDRESS,
           'approve(address,uint256)',
           TRON_CONTRACT_CALL_PARAMS,
           params,
@@ -224,7 +224,7 @@ export default {
           }
         }
       } catch (err) {
-        this.showTip(this.$t('error.error'),err.message)
+        this.showTip(this.$t('error.error'), err.message)
       } finally {
         this.loading = false
         this.approveLoading = false
@@ -235,7 +235,7 @@ export default {
       if (!this.checkInputValue()) {
         return
       }
-      if (parseFloat(this.depositeValue) > parseFloat(this.tspLpBalance)) {
+      if (parseFloat(this.depositeValue) > parseFloat(this.pnutLpBalance)) {
         this.showTip(this.$t('error.error'), this.$t('error.inputOverflow'))
         return
       }
@@ -243,14 +243,15 @@ export default {
       this.depositeLoading = true
       try {
         const depositInt = amountToInt(parseFloat(this.depositeValue))
-        const tspLpPoolContract = await getContract('TSP_LP_POOL')
-        const res = await tspLpPoolContract
+        const pnutLpPoolContract = await getContract('PNUT_LP_POOL')
+        const res = await pnutLpPoolContract
           .deposit(depositInt)
           .send(TRON_CONTRACT_CALL_PARAMS)
         if (res && (await isTransactionSuccess(res))) {
-          this.saveTspLpBalanceInt(this.tspLpBalanceInt - depositInt)
-          this.saveDepositedTspLpInt(depositInt)
+          this.savePnutLpBalanceInt(this.pnutLpBalanceInt - depositInt)
+          this.saveDepositedPnutLpInt(depositInt)
           this.approved = false
+          this.depositeValue = ''
         } else {
           if (res && (await isInsufficientEnerge(res))) {
             this.showTip(
@@ -265,7 +266,8 @@ export default {
           }
         }
       } catch (err) {
-        this.showTip(this.$t('error.error'),err.message)
+        this.showTip(this.$t('error.error'), err.message)
+        console.log(err);
       } finally {
         this.loading = false
         this.depositeLoading = false
@@ -276,7 +278,7 @@ export default {
       if (!this.checkInputValue()) {
         return
       }
-      if (parseFloat(this.depositeValue) > parseFloat(this.tspLpBalance)) {
+      if (parseFloat(this.depositeValue) > parseFloat(this.pnutLpBalance)) {
         this.showTip(this.$t('error.error'), this.$t('error.inputOverflow'))
         return
       }
@@ -284,14 +286,15 @@ export default {
       this.addLoading = true
       try {
         const depositInt = amountToInt(parseFloat(this.depositeValue))
-        const tspLpPoolContract = await getContract('TSP_LP_POOL')
-        const res = await tspLpPoolContract
+        const pnutLpPoolContract = await getContract('PNUT_LP_POOL')
+        const res = await pnutLpPoolContract
           .deposit(depositInt)
           .send(TRON_CONTRACT_CALL_PARAMS)
         if (res && (await isTransactionSuccess(res))) {
-          this.saveTspLpBalanceInt(this.tspLpBalanceInt - depositInt)
-          this.saveDepositedTspLpInt(this.depositedTspLpInt - (-depositInt))
+          this.savePnutLpBalanceInt(this.pnutLpBalanceInt - depositInt)
+          this.saveDepositedPnutLpInt(this.depositedPnutLpInt - (-depositInt))
           this.approved = false
+          this.depositeValue = ''
         } else {
           if (res && (await isInsufficientEnerge(res))) {
             this.showTip(
@@ -306,7 +309,7 @@ export default {
           }
         }
       } catch (err) {
-        this.showTip(this.$t('error.error'),err.message)
+        this.showTip(this.$t('error.error'), err.message)
       } finally {
         this.loading = false
         this.addLoading = false
@@ -317,7 +320,7 @@ export default {
       if (!this.checkInputValue()) {
         return
       }
-      if (parseFloat(this.depositeValue) > parseFloat(this.depositedTspLp)) {
+      if (parseFloat(this.depositeValue) > parseFloat(this.depositedPnutLp)) {
         this.showTip(this.$t('error.error'), this.$t('error.inputOverflow'))
         return
       }
@@ -325,13 +328,14 @@ export default {
       this.minusLoading = true
       try {
         const minusInt = amountToInt(parseFloat(this.depositeValue))
-        const tspLpPoolContract = await getContract('TSP_LP_POOL')
-        const res = await tspLpPoolContract
+        const pnutLpPoolContract = await getContract('PNUT_LP_POOL')
+        const res = await pnutLpPoolContract
           .withdraw(minusInt)
           .send(TRON_CONTRACT_CALL_PARAMS)
         if (res && (await isTransactionSuccess(res))) {
-          this.saveTspLpBalanceInt(this.tspLpBalanceInt - (-minusInt))
-          this.saveDepositedTspLpInt(this.depositedTspLpInt - minusInt)
+          this.savePnutLpBalanceInt(this.pnutLpBalanceInt - (-minusInt))
+          this.saveDepositedPnutLpInt(this.depositedPnutLpInt - minusInt)
+          this.depositeValue = ''
         } else {
           if (res && (await isInsufficientEnerge(res))) {
             this.showTip(
@@ -346,7 +350,7 @@ export default {
           }
         }
       } catch (err) {
-        this.showTip(this.$t('error.error'),err.message)
+        this.showTip(this.$t('error.error'), err.message)
       } finally {
         this.loading = false
         this.minusLoading = false
@@ -357,14 +361,15 @@ export default {
       this.loading = true
       this.cancelLoading = true
       try {
-        const minusInt = parseFloat(this.depositedTspLpInt)
-        const tspLpPoolContract = await getContract('TSP_LP_POOL')
-        const res = await tspLpPoolContract
+        const minusInt = parseFloat(this.depositedPnutLpInt)
+        const pnutLpPoolContract = await getContract('PNUT_LP_POOL')
+        const res = await pnutLpPoolContract
           .withdraw(minusInt)
           .send(TRON_CONTRACT_CALL_PARAMS)
         if (res && (await isTransactionSuccess(res))) {
-          this.saveTspLpBalanceInt(this.tspLpBalanceInt - (-minusInt))
-          this.saveDepositedTspLpInt(0)
+          this.savePnutLpBalanceInt(this.pnutLpBalanceInt - (-minusInt))
+          this.saveDepositedPnutLpInt(0)
+          this.depositeValue = ''
         } else {
           if (res && (await isInsufficientEnerge(res))) {
             this.showTip(
@@ -379,7 +384,7 @@ export default {
           }
         }
       } catch (err) {
-        this.showTip(this.$t('error.error'),err.message)
+        this.showTip(this.$t('error.error'), err.message)
       } finally {
         this.loading = false
         this.cancelLoading = false
@@ -390,7 +395,7 @@ export default {
       try {
         this.loading = true
         this.withdrawLoading = true
-        const contract = await getContract('TSP_LP_POOL')
+        const contract = await getContract('PNUT_LP_POOL')
         const res = await contract.withdrawPeanuts().send(TRON_CONTRACT_CALL_PARAMS)
         if (res && (await isTransactionSuccess(res))) {
           this.savePnutBalanceInt(this.pnutBalanceInt - amountToInt(-parseFloat(this.pendingPnut)))
@@ -423,7 +428,7 @@ export default {
 
     async getPendingPeanut () {
       try {
-        const contract = await getContract('TSP_LP_POOL')
+        const contract = await getContract('PNUT_LP_POOL')
         if (!contract) return
         const s = await contract.getPendingPeanuts().call()
         this.pendingPnut = intToAmount(s)
@@ -432,9 +437,9 @@ export default {
   },
   mounted () {
     if (this.tronAddress && this.tronAddress.length > 0) {
-      this.getTspLp()
+      this.getPnutLp()
       // this.getPnut();
-      this.getDepositedTspLp()
+      this.getDepositedPnutLp()
       // 设置定时器以更新当前收益
       const timer = setInterval(this.getPendingPeanut, 3000)
       // 通过$once来监听定时器，在beforeDestroy钩子时被清除。

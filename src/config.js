@@ -34,9 +34,12 @@ export const TRON_CONTRACT_CALL_PARAMS = { feeLimit: 10_000_000 }
 export const TSP_TRX_CONTRACT_ADDRESS = 'TBpTbddofiBrE1AfhQbwU2BhsrBUM2Lnir'
 // TSP-LP token 地址
 export const TSP_LP_TOKEN_ADDRESS = 'TBpTbddofiBrE1AfhQbwU2BhsrBUM2Lnir'
-
 export const TSP_POOL_ADDRESS = 'TF2Qz1byu4b54HPCKKY8FVwFeocKEZKW9D'
 export const TSP_LP_POOL_ADDRESS = 'TTMY4ZkeBxmwj43bmaJUysac8w7ha7Fkhj'
+
+// PNUT_LP  
+export const PNUT_LP_TOKEN_ADDRESS = 'TCjk1d9bgrvyiaBTZkdT5DHf4BV1JKVXXG'
+export const PNUT_LP_POOL_ADDRESS = 'TFTKJDAC9ZGw8CdcCCSm2wdjGPBheFmgNS'
 
 export const TRON_LINK_ADDR_NOT_FOUND = {
   walletLocked: 'walletLocked',

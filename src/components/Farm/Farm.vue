@@ -4,7 +4,7 @@
             {{ this.$t('farm.farm') }}
         </h3>
         <div class="nav">
-            <router-link to='/farm/tsp'>TSP</router-link>
+            <router-link to='/farm/pnutlp'>PNUT_LP</router-link>
             <router-link to='/farm/tsplp'>TSP_LP</router-link>
         </div>
 
