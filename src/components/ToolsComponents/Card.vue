@@ -19,7 +19,7 @@ export default {
     display: block;
     z-index: 1;
     box-sizing: border-box;
-    padding:1.5rem 1rem 2rem 1rem;
+    padding:1.5rem 1rem 1.5rem 1rem;
 }
 .card:hover{
     box-shadow: rgba(0, 0, 0, 0.08) 0px 3px 30px, rgba(0, 0, 0, 0.04) 0px 4px 8px,

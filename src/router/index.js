@@ -5,8 +5,6 @@ import SteemWallet from '../components/Wallet/SteemWallet'
 import TronWallet from '../components/Wallet/TronWallet'
 import Swap from '../components/Wallet/Swap'
 import Stake from '../components/Stake/Stake'
-import SPPool from '../components/Stake/SPPool'
-import TSPPool from '../components/Stake/TSPPool'
 import Farm from '../components/Farm/Farm'
 import PnutLPPool from '../components/Farm/PnutLPPool'
 import TSPLPPool from '../components/Farm/TSPLPPool'
@@ -47,17 +45,6 @@ const routes = [
   {
     path: '/stake',
     component: Stake,
-    redirect: '/stake/sppool',
-    children: [
-      {
-        path: 'sppool',
-        component: SPPool
-      },
-      {
-        path: 'tsppool',
-        component: TSPPool
-      }
-    ]
   },
   {
     path: '/farm',

@@ -4,15 +4,20 @@
             {{ this.$t('stake.stake') }}
         </h3>
         <div class="nav">
-            <router-link to='/stake/sppool'>SP</router-link>
-            <router-link to='/stake/tsppool'>TSP</router-link>
+            <!-- <router-link to='/stake/sppool'>SP</router-link>
+            <router-link to='/stake/tsppool'>TSP</router-link> -->
         </div>
-
-        <router-view></router-view>
+        <div class="stake-box">
+            <SPPool/>
+            <TSPPool/>
+        </div>
     </div>
 </template>
 
 <script>
+import SPPool from "./SPPool"
+import TSPPool from "./TSPPool"
+
 export default {
   name: 'Stake',
   data () {
@@ -20,7 +25,10 @@ export default {
 
     }
   },
-
+components: {
+    SPPool,
+    TSPPool
+},
   methods: {
     tsp () {
 
@@ -55,6 +63,11 @@ export default {
             color:var(--primary);
             border-bottom: 2px solid var(--primary);
         }
+    }
+    .stake-box{
+        display:flex;
+        flex-wrap:wrap;
+        align-content:left;
     }
 
 }

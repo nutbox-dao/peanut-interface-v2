@@ -74,7 +74,9 @@ module.exports = {
   },
   wallet: {
     wallet: '钱包',
-    swap: '跨链转账'
+    swap: '跨链转账',
+    connectSteem:"链接Steem钱包",
+    connectTron:"链接波场钱包"
   },
   stake: {
     stake: '质押'

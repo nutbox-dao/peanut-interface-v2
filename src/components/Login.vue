@@ -1,5 +1,5 @@
 <template>
-  <div class="steem-login">
+  <div class="steem-login" @click.self="hideMask">
     <div class="login">
       <Card>
         <h4>{{ this.$t("message.userlogin") }}</h4>
@@ -33,91 +33,110 @@
 </template>
 
 <script>
-import Card from './ToolsComponents/Card'
-import TipMessage from './ToolsComponents/TipMessage'
+import Card from "./ToolsComponents/Card";
+import TipMessage from "./ToolsComponents/TipMessage";
 
 export default {
-  name: 'Login',
-  data () {
+  name: "Login",
+  data() {
     return {
-      loginBtnText: '',
+      loginBtnText: "",
       isLoging: false,
       showNeedKeyChain: false,
-      steemAccount: '',
-      tipTitle: '',
-      tipMessage: '',
+      steemAccount: "",
+      tipTitle: "",
+      tipMessage: "",
       showMessage: false,
-      canDismissTip: true
-    }
+      canDismissTip: true,
+    };
   },
   components: {
     Card,
-    TipMessage
+    TipMessage,
   },
   methods: {
-    showKeyChainNeeded () {},
-    login () {
+    showKeyChainNeeded() {},
+    login() {
       const message = `nutbox_login-${Math.floor(
         100000000 + Math.random() * 900000000
-      )}`
-      this.isLoging = true
-      const that = this
+      )}`;
+      this.isLoging = true;
+      const that = this;
       steem_keychain.requestSignBuffer(
         this.steemAccount,
         message,
-        'Active',
+        "Active",
         async function (res) {
-          console.log(res)
+          console.log(res);
           if (res.success === true) {
             const ress = await that.$store.dispatch(
-              'initializeSteemAccount',
+              "initializeSteemAccount",
               res.data.username
-            )
+            );
             if (!ress) {
-              that.tipTitle = that.$t('error.error')
-              that.tipMessage = that.$t('error.steemLoginFail')
-              that.showMessage = true
+              that.tipTitle = that.$t("error.error");
+              that.tipMessage = that.$t("error.steemLoginFail");
+              that.showMessage = true;
+              that.isLoging = false;
+              return;
             }
+            that.$emit("hideMask");
           } else {
-            if (res.error === 'user_cancel') {
-              that.tipTitle = that.$t('error.error')
-              that.tipMessage = that.$t('error.unlockKeychain')
-              that.showMessage = true
+            if (res.error === "user_cancel") {
+              that.tipTitle = that.$t("error.error");
+              that.tipMessage = that.$t("error.unlockKeychain");
+              that.showMessage = true;
             } else {
-              that.tipTitle = that.$t('error.error')
-              that.tipMessage = that.$t('error.steemLoginFail')
-              that.showMessage = true
+              that.tipTitle = that.$t("error.error");
+              that.tipMessage = that.$t("error.steemLoginFail");
+              that.showMessage = true;
             }
           }
-          that.isLoging = false
+          that.isLoging = false;
         }
-      )
-    }
+      );
+    },
+    hideMask() {
+      if (this.isLoging) return;
+      this.$emit("hideMask");
+    },
   },
-  async mounted () {
-    this.loginBtnText = this.$t('message.login')
-  }
-}
+  async mounted() {
+    this.loginBtnText = this.$t("message.login");
+  },
+};
 </script>
 
 <style lang="less" scoped>
 .steem-login {
+  position: fixed;
+  z-index: 1000;
+  overflow: hidden;
   display: flex;
-  justify-content: center;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  -webkit-box-align: center;
   align-items: center;
-  height: calc(100vh - 500px);
-}
-.input {
-  margin-top: 2rem;
-  margin-bottom: 2rem;
-  width: 480px;
-  min-width: 320px;
-  display: flex;
-  align-items: center;
+  -webkit-box-pack: center;
   justify-content: center;
-  .user {
-    flex: 1;
-    margin-left: 20px;
+  background-color: rgba(0, 0, 0, 0.3);
+  .login {
+    margin-top: -15%;
+  }
+  .input {
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    width: 480px;
+    min-width: 320px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .user {
+      flex: 1;
+      margin-left: 20px;
+    }
   }
 }
 </style>
