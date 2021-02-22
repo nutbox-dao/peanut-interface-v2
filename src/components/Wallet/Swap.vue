@@ -1,6 +1,6 @@
 <template>
     <div class="wallet-swap">
-      <template v-if="steemAccount && steemAccount.length > 0">
+      <template>
         <div class="tab">
           <div :class="['tab-card', currentTab === 'steem' ? 'checked' : '']" @click="change('steem')">
             <img src="../../static/images/tsteem.svg" alt="">
@@ -14,17 +14,12 @@
         <TSteemSwap v-show="currentTab === 'steem'"/>
         <TSbdSwap v-show="currentTab === 'sbd'"/>
       </template>
-      <template v-else>
-        <login/>
-      </template>
     </div>
 </template>
 
 <script>
-import Login from '../Login'
 import TSteemSwap from './TSteemSwap'
 import TSbdSwap from './TSbdSwap'
-import { mapState } from 'vuex'
 export default {
   name: 'Swap',
   data () {
@@ -33,12 +28,8 @@ export default {
     }
   },
   components: {
-    Login,
     TSteemSwap,
     TSbdSwap
-  },
-  computed: {
-    ...mapState(['steemAccount'])
   },
   methods: {
     change (tab) {

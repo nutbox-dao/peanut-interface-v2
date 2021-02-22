@@ -83,7 +83,7 @@
         </div>
 
         <div class="confirm-box">
-          <button class="confirm-btn" @click="trans" :disabled="!canTransFlag">
+          <button v-if="steemAccount && steemAccount.length > 0" class="confirm-btn" @click="trans" :disabled="!canTransFlag">
             <b-spinner
               small
               type="grow"
@@ -93,6 +93,7 @@
             ></b-spinner>
             {{ $t("message.confirmconvert") }}
           </button>
+          <ConnectWalletBtn class='connectSteem' type="STEEM"> </ConnectWalletBtn>
         </div>
 
         <!--手续费-->
@@ -124,6 +125,8 @@
 <script>
 import Card from '../ToolsComponents/Card'
 import TipMessage from '../ToolsComponents/TipMessage'
+import ConnectWalletBtn from '../ToolsComponents/ConnectWalletBtn'
+
 import { mapState, mapGetters, mapActions, mapMutations } from 'vuex'
 import {
   TSTEEM_TRANSFER_FEE,
@@ -140,7 +143,8 @@ export default {
   name: 'TSteemSwap',
   components: {
     Card,
-    TipMessage
+    TipMessage,
+    ConnectWalletBtn
   },
   data () {
     return {
@@ -152,7 +156,8 @@ export default {
       transferRatio: TRANSFER_FEE_RATIO,
       tipMessage: '',
       tipTitle: '',
-      showMessage: false
+      showMessage: false,
+      showSteemLogin: false
     }
   },
   computed: {

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-button variant="primary" @click="unlock" v-if="type=='STEEM' ? (!steemAccount || steemAccount.length === 0) : (!tronAddress || tronAddress.length === 0)">
+    <b-button class='login-btn' variant="primary" @click="unlock" v-if="type=='STEEM' ? (!steemAccount || steemAccount.length === 0) : (!tronAddress || tronAddress.length === 0)">
       <!-- <b-button variant="primary" @click="unlock"> -->
       {{
         type == "STEEM" ? $t("wallet.connectSteem") : $t("wallet.connectTron")
