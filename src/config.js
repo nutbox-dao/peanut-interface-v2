@@ -34,14 +34,22 @@ export const TRON_CONTRACT_CALL_PARAMS = { feeLimit: 10_000_000 }
 
 // TSP-TRX 交易对地址
 export const TSP_TRX_CONTRACT_ADDRESS = 'TBpTbddofiBrE1AfhQbwU2BhsrBUM2Lnir'
-// TSP-LP token 地址
-export const TSP_LP_TOKEN_ADDRESS = 'TBpTbddofiBrE1AfhQbwU2BhsrBUM2Lnir'
+// TSP 
+export const TSP_TOKEN_ADDRESS = 'TW2EWoRUJfwH9nMTfLxSL9JPLZeusUtTfR'
 export const TSP_POOL_ADDRESS = 'TF2Qz1byu4b54HPCKKY8FVwFeocKEZKW9D'
+// TSP-LP
+export const TSP_LP_TOKEN_ADDRESS = 'TBpTbddofiBrE1AfhQbwU2BhsrBUM2Lnir'
 export const TSP_LP_POOL_ADDRESS = 'TTMY4ZkeBxmwj43bmaJUysac8w7ha7Fkhj'
 
 // PNUT_LP  
 export const PNUT_LP_TOKEN_ADDRESS = 'TCjk1d9bgrvyiaBTZkdT5DHf4BV1JKVXXG'
 export const PNUT_LP_POOL_ADDRESS = 'TFTKJDAC9ZGw8CdcCCSm2wdjGPBheFmgNS'
+// approvement
+export const APPROVE_TOKEN_CONTRACT_PAIR = {
+  TSP_POOL:[TSP_TOKEN_ADDRESS,TSP_POOL_ADDRESS],
+  TSP_LP_POOL:[TSP_LP_TOKEN_ADDRESS,TSP_LP_POOL_ADDRESS],
+  PNUT_LP_POOL:[PNUT_LP_TOKEN_ADDRESS,PNUT_LP_POOL_ADDRESS]
+}
 
 export const TRON_LINK_ADDR_NOT_FOUND = {
   walletLocked: 'walletLocked',

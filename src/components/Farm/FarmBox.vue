@@ -32,7 +32,7 @@
             type="TRON"
           />
           <div v-if="!approved[symbol]">
-            <b-button variant="primary">
+            <b-button variant="primary" @click="approveContract">
               {{ $t("message.approveContract") }}
             </b-button>
           </div>
@@ -82,7 +82,7 @@
 import Card from "../ToolsComponents/Card";
 import TipMessage from "../ToolsComponents/TipMessage";
 import ChangeDepositeMask from "./ChangeDepositeMask";
-import { getContract } from "../../utils/chain/contract";
+import { getContract, approveContract } from "../../utils/chain/contract";
 import ConnectWalletBtn from "../ToolsComponents/ConnectWalletBtn";
 
 import {
@@ -105,7 +105,7 @@ export default {
   data() {
     return {
       approved: {},
-      approveMethod: {},
+      saveApproveMethod: {},
       tokenBalance: {},
       depositeBalance: {},
       totalDeposited: {},
@@ -113,13 +113,16 @@ export default {
       depositedDesc: {},
       totalDepositedDesc: {},
       logo: {},
-      tspPendingPnut:0,
-      tspLpPendingPnut:0,
-      pnutLpPendingPnut:0,
+      tspPendingPnut: 0,
+      tspLpPendingPnut: 0,
+      pnutLpPendingPnut: 0,
       tipMessage: "",
       tipTitle: "",
       showMessage: false,
       showChangeDepositMask: false,
+      isLoading: false,
+      isApproving: false,
+      isWithdrawing: false,
     };
   },
   props: {
@@ -159,15 +162,15 @@ export default {
     deposited() {
       return this.depositeBalance[this.symbol] > 0;
     },
-    pendingPnut(){
-        if(this.symbol === 'TSP_POOL'){
-            return this.tspPendingPnut
-        }else if(this.symbol === 'TSP_LP_POOL'){
-            return this.tspLpPendingPnut
-        }else if(this.symbol === 'PNUT_LP_POOL'){
-            return this.pnutLpPendingPnut
-        }
-    }
+    pendingPnut() {
+      if (this.symbol === "TSP_POOL") {
+        return this.tspPendingPnut;
+      } else if (this.symbol === "TSP_LP_POOL") {
+        return this.tspLpPendingPnut;
+      } else if (this.symbol === "PNUT_LP_POOL") {
+        return this.pnutLpPendingPnut;
+      }
+    },
   },
   methods: {
     ...mapActions([
@@ -194,6 +197,29 @@ export default {
       "saveApprovedPNUTLP",
     ]),
 
+    async approveContract() {
+      this.isLoading = true;
+      this.isApproving = true;
+      try {
+        const res = await approveContract(this.symbol);
+        if (res === 0) {
+          this.saveApproveMethod[this.symbol](true);
+        } else if (res === 1) {
+          this.showTip(this.$t("error.error"), this.$t("error.approveFail"));
+        } else {
+          this.showTip(
+            this.$t("error.error"),
+            this.$t("error.insufficientEnerge")
+          );
+        }
+      } catch (e) {
+        this.showTip(this.$t("error.error"), e.message);
+      } finally {
+        this.isLoading = false;
+        this.isApproving = false;
+      }
+    },
+    
     minusDeposit() {},
     addDeposit() {},
     withdrawPnut() {},
@@ -216,18 +242,23 @@ export default {
         const contract = await getContract(this.symbol);
         if (!contract) return;
         const s = await contract.getPendingPeanuts().call();
-        const pnut = intToAmount(s)
-        if(this.symbol === 'TSP_POOL'){
-            this.tspPendingPnut = pnut
-            console.log(2134,pnut);
-        }else if(this.symbol === 'TSP_LP_POOL'){
-            this.tspLpPendingPnut = pnut
-        }else if(this.symbol === 'PNUT_LP_POOL'){
-            this.pnutLpPendingPnut = pnut
+        const pnut = intToAmount(s);
+        if (this.symbol === "TSP_POOL") {
+          this.tspPendingPnut = pnut;
+          console.log(2134, pnut);
+        } else if (this.symbol === "TSP_LP_POOL") {
+          this.tspLpPendingPnut = pnut;
+        } else if (this.symbol === "PNUT_LP_POOL") {
+          this.pnutLpPendingPnut = pnut;
         }
       } catch (e) {
         //   console.log(234,e);
       }
+    },
+    showTip(title, message) {
+      this.tipTitle = title;
+      this.tipMessage = message;
+      this.showMessage = true;
     },
   },
   mounted() {
@@ -263,6 +294,11 @@ export default {
       TSP_POOL: this.$t("farm.tsp.totalDepositTsp"),
       TSP_LP_POOL: this.$t("farm.tspLp.totalDepositTspLP"),
       PNUT_LP_POOL: this.$t("farm.pnutLp.totalDepositPnutLP"),
+    };
+    this.saveApproveMethod = {
+      TSP_POOL: this.saveApprovedTSP,
+      TSP_LP_POOL: this.saveApprovedTSPLP,
+      PNUT_LP_POOL: this.saveApprovedPNUTLP,
     };
     if (this.tronAddress && this.tronAddress.length > 0) {
       // 设置定时器以更新当前收益

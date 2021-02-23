@@ -99,7 +99,7 @@ export default {
       withdrawLoading: false,
       showChangeDelegateMask:false,
       operate:"add",
-      spLogo: require("../../static/images/tsp.svg"),
+      spLogo: "https://coin.top/production/upload/logo/TW2EWoRUJfwH9nMTfLxSL9JPLZeusUtTfR.jpeg?t=1608343575484",
     };
   },
   computed: {

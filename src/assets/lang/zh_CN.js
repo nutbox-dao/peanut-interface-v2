@@ -11,7 +11,7 @@ module.exports = {
     confirm:'确认',
 
     miningpooldata: '矿池数据',
-    sptotaldelegate: 'SP总代理量',
+    sptotaldelegate: 'SP代理总量',
     totalpnut: 'PNUT总产量',
     apy: '年化收益率',
     pnutprofits: 'PNUT收益',
