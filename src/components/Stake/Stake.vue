@@ -1,5 +1,5 @@
 <template>
-      <div class="stake">
+      <div id="stake">
         <h3>
             {{ this.$t('stake.stake') }}
         </h3>
@@ -7,14 +7,14 @@
         </div>
         <div class="stake-box">
             <SPPool/>
-            <TSPPool/>
+            <FarmBox symbol="TSP_POOL"/>
         </div>
     </div>
 </template>
 
 <script>
 import SPPool from "./SPPool"
-import TSPPool from "./TSPPool"
+import FarmBox from "../Farm/FarmBox"
 
 export default {
   name: 'Stake',
@@ -25,7 +25,7 @@ export default {
   },
 components: {
     SPPool,
-    TSPPool
+    FarmBox
 },
   methods: {
     tsp () {
@@ -39,7 +39,7 @@ components: {
 </script>
 
 <style lang="less" scoped>
-.stake{
+#stake{
     padding: 0px 40px 64px;
     .nav{
         display:flex;

@@ -17,6 +17,7 @@ module.exports = {
     pnutprofits: 'PNUT收益',
     withdraw: '收割',
     balance: '余额',
+    approveContract:"授权合约",
     max:'最大',
     confirmconvert: '确认兑换',
     servicecharge: '手续费',
@@ -75,7 +76,7 @@ module.exports = {
       yourTspAmount: '储蓄的TSP数量',
       balanceOfTsp: 'TSP 余额',
       tspMinlingFee: '挖矿手续费',
-      totalDepositTsp: 'TSP总储蓄量',
+      totalDepositTsp: 'TSP储蓄总量',
       confirmDeposit: '确认储蓄',
       tspIsCirculatingSP: '备注：TSP是流通的SP',
       addTspDeposit: '增加储蓄',
@@ -88,31 +89,15 @@ module.exports = {
       approveNutbox: '授权Nutbox'
     },
     tspLp: {
-      tspLPMine: 'TSP-LP挖矿',
-      tspLPBalance: 'TSP-LP 余额',
-      yourTSPLPAmount: '储蓄的TSP-LP数量',
-      LPData: 'TSP-LP流动池数据',
-      totalLP: 'TSP-LP总量',
+      tspLPBalance: 'S-TSP-TRX 余额',
+      yourTSPLPAmount: '储蓄的S-TSP-TRX',
+      totalDepositTspLP:"S-TSP-TRX储蓄总量",
       totalTSP: 'TSP总量',
-      addTspLPDeposit: '增加储蓄',
-      minusTspLPDeposit: '减少储蓄',
-      cancelTspLPDeposit: '取消储蓄',
-      confirmAddTspLPDeposit: '确认增加储蓄',
-      confirmMinusTspLPDeposit: '确认减少储蓄',
-      confirmCancelTspLPDeposit: '确认取消储蓄'
     },
     pnutLp: {
-      pnutLPMine: 'PNUT-LP挖矿',
-      pnutLPBalance: 'PNUT-LP 余额',
-      yourPNUTLPAmount: '储蓄的PNUT-LP数量',
-      LPData: 'PNUT-LP流动池数据',
-      totalLP: 'PNUT-LP总量',
-      addPnutLPDeposit: '增加储蓄',
-      minusPnutLPDeposit: '减少储蓄',
-      cancelPnutLPDeposit: '取消储蓄',
-      confirmAddPnutLPDeposit: '确认增加储蓄',
-      confirmMinusPnutLPDeposit: '确认减少储蓄',
-      confirmCancelPnutLPDeposit: '确认取消储蓄'
+      pnutLPBalance: 'S-PNUT-TRX 余额',
+      yourPNUTLPAmount: '储蓄的S-PNUT-TRX',
+      totalDepositPnutLP:'S-PNUT-TRX储蓄总量'
     }
   },
   liquidStaking: {

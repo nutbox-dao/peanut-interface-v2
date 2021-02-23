@@ -4,17 +4,22 @@
             {{ this.$t('farm.farm') }}
         </h3>
         <div class="nav">
-            <router-link to='/farm/pnutlp'>PNUT_LP</router-link>
-            <router-link to='/farm/tsplp'>TSP_LP</router-link>
         </div>
-
+        <div class="farm-box">
+            <FarmBox symbol="PNUT_LP_POOL"/>
+            <FarmBox symbol="TSP_LP_POOL"/>
+        </div>
         <router-view></router-view>
     </div>
 </template>
 
 <script>
+import FarmBox from './FarmBox'
 export default {
   name: 'Farm',
+  components: {
+      FarmBox,
+  },
   data () {
     return {
 
@@ -22,12 +27,7 @@ export default {
   },
 
   methods: {
-    tsp () {
 
-    },
-    tsplp () {
-
-    }
   }
 }
 </script>
@@ -55,6 +55,12 @@ export default {
             color:var(--primary);
             border-bottom: 2px solid var(--primary);
         }
+    }
+    .farm-box{
+        display:flex;
+        align-content: left;
+        flex-wrap: wrap;
+        justify-content:space-between
     }
 
 }

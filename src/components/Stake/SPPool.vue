@@ -38,7 +38,7 @@
               {{ $t("message.delegatemine") }}
             </b-button>
           </div>
-          <ConnectWalletBtn v-if="!isLogin" />
+          <ConnectWalletBtn v-if="!isLogin" @steemLogin="showSteemLogin=true"/>
         </div>
       </div>
       <!--手续费-->
@@ -95,6 +95,7 @@ export default {
       showMessage: false,
       pendingPnut: "0.000000",
       loading: false,
+      showSteemLogin:false,
       withdrawLoading: false,
       showChangeDelegateMask:false,
       operate:"add",

@@ -6,8 +6,6 @@ import TronWallet from '../components/Wallet/TronWallet'
 import Swap from '../components/Wallet/Swap'
 import Stake from '../components/Stake/Stake'
 import Farm from '../components/Farm/Farm'
-import PnutLPPool from '../components/Farm/PnutLPPool'
-import TSPLPPool from '../components/Farm/TSPLPPool'
 import LiquidStaking from '../components/LiquidStaking/LiquidStaking'
 import TSP from '../components/LiquidStaking/TSP'
 import Nps from '../components/Nps/Nps'
@@ -49,17 +47,6 @@ const routes = [
   {
     path: '/farm',
     component: Farm,
-    redirect: '/farm/pnutlp',
-    children: [
-      {
-        path: 'pnutlp',
-        component: PnutLPPool
-      },
-      {
-        path: 'tsplp',
-        component: TSPLPPool
-      }
-    ]
   },
   {
     path: '/liquid-staking',

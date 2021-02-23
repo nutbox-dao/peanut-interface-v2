@@ -53,13 +53,13 @@ export default new Vuex.Store({
     depositedTspLpInt: 0,
     depositedPnutLpInt: 0,
     totalDelegatedVestsInt: 0,
-    totalDepositedTspInt:0,
-    totalDepositedTspLpInt:0,
+    totalDepositedTspInt: 0,
+    totalDepositedTspLpInt: 0,
     totalDepositedPnutLpInt: 0,
     // approvement
     approvedTSP: false,
-    approvedTSPLP:false,
-    approvedPNUTLP:false,
+    approvedTSPLP: false,
+    approvedPNUTLP: false,
 
     // apy
     apy: Cookie.get('apy') || '0.0%'
@@ -82,7 +82,7 @@ export default new Vuex.Store({
     saveVestsToSteem: function (state, vestsToSteem) {
       state.vestsToSteem = vestsToSteem
     },
-    clearSteemAccount (state) {
+    clearSteemAccount(state) {
       state.steemAccount = null
       Cookie.remove('steemAccount')
     },
@@ -138,13 +138,13 @@ export default new Vuex.Store({
       state.totalDepositedPnutLpInt = totalDepositedPnutLpInt
     },
     // approve ment
-    saveApprovedTSP :function(state, approvedTSP) {
+    saveApprovedTSP: function (state, approvedTSP) {
       state.approvedTSP = approvedTSP
     },
-    saveApprovedTSPLP :function(state, approvedTSPLP) {
+    saveApprovedTSPLP: function (state, approvedTSPLP) {
       state.approvedTSPLP = approvedTSPLP
     },
-    saveApprovedPNUTLP :function(state, approvedPNUTLP) {
+    saveApprovedPNUTLP: function (state, approvedPNUTLP) {
       state.approvedPNUTLP = approvedPNUTLP
     },
 
@@ -220,7 +220,7 @@ export default new Vuex.Store({
   },
   actions: {
     // steem
-    setVestsToSteem ({
+    setVestsToSteem({
       commit
     }) {
       vestsToSteem(1).then((res) => {
@@ -228,7 +228,7 @@ export default new Vuex.Store({
       })
     },
 
-    getSteem ({
+    getSteem({
       commit,
       state
     }) {
@@ -237,7 +237,7 @@ export default new Vuex.Store({
       })
     },
 
-    getSbd ({
+    getSbd({
       commit,
       state
     }) {
@@ -246,7 +246,7 @@ export default new Vuex.Store({
       })
     },
 
-    getVests ({
+    getVests({
       commit,
       state
     }) {
@@ -255,7 +255,7 @@ export default new Vuex.Store({
       })
     },
 
-    async initializeSteemAccount ({
+    async initializeSteemAccount({
       commit
     }, steemAccount) {
       try {
@@ -275,7 +275,7 @@ export default new Vuex.Store({
     },
 
     // tron
-    async getTron (context) {
+    async getTron(context) {
       const func = async () => {
         try {
           const tronweb = getTronweb()
@@ -289,7 +289,7 @@ export default new Vuex.Store({
       retryMethod(func)
     },
 
-    async getTsteem (context) {
+    async getTsteem(context) {
       retryMethod(async () => {
         try {
           const contract = await getContract('TSTEEM')
@@ -302,7 +302,7 @@ export default new Vuex.Store({
       })
     },
 
-    async getTsp (context) {
+    async getTsp(context) {
       retryMethod(async () => {
         try {
           const contract = await getContract('TSP')
@@ -315,7 +315,7 @@ export default new Vuex.Store({
       })
     },
 
-    async getTsbd (context) {
+    async getTsbd(context) {
       retryMethod(async () => {
         try {
           const contract = await getContract('TSBD')
@@ -328,7 +328,7 @@ export default new Vuex.Store({
       })
     },
 
-    async getPnut (context) {
+    async getPnut(context) {
       retryMethod(async () => {
         try {
           const contract = await getContract('PNUT')
@@ -341,7 +341,7 @@ export default new Vuex.Store({
       })
     },
 
-    async getTspLp (context) {
+    async getTspLp(context) {
       retryMethod(async () => {
         try {
           const tspAddr = TSP_LP_TOKEN_ADDRESS
@@ -354,7 +354,7 @@ export default new Vuex.Store({
       })
     },
 
-    async getPnutLp (context) {
+    async getPnutLp(context) {
       retryMethod(async () => {
         try {
           const pnutLpAddr = PNUT_LP_TOKEN_ADDRESS
@@ -367,7 +367,7 @@ export default new Vuex.Store({
       })
     },
 
-    async getDelegatedSp (context) {
+    async getDelegatedSp(context) {
       retryMethod(async () => {
         try {
           const contranct = await getContract('PNUT_POOL')
@@ -381,7 +381,7 @@ export default new Vuex.Store({
       })
     },
 
-    async getDepositedTsp (context) {
+    async getDepositedTsp(context) {
       retryMethod(async () => {
         try {
           const contract = await getContract('TSP_POOL')
@@ -395,7 +395,7 @@ export default new Vuex.Store({
       })
     },
 
-    async getDepositedTspLp (context) {
+    async getDepositedTspLp(context) {
       retryMethod(async () => {
         try {
           const contract = await getContract('TSP_LP_POOL')
@@ -409,153 +409,167 @@ export default new Vuex.Store({
       })
     },
 
-    async getDepositedPnutLp (context) {
+    async getDepositedPnutLp(context) {
       retryMethod(async () => {
         try {
           const contract = await getContract('PNUT_LP_POOL')
           let amount = await contract.delegators(context.state.tronAddress).call()
           amount = amount.pnutLpAmount
           context.commit('saveDepositedPnutLpInt', amount || 0)
-        }catch (e) {
+        } catch (e) {
           // console.error('Get Deposited PNUT_LP Fail:', e.message)
           throw e
         }
       })
     },
 
-    async getTotalDelegatedSP (context) {
-      retryMethod(async  () => {
+    async getTotalDelegatedSP(context) {
+      retryMethod(async () => {
         try {
           const contract = await getContract('PNUT_POOL')
           let amount = await contract.totalDepositedSP().call()
           context.commit('saveTotalDelegatedVestsInt', amount || 0)
-        }catch (e) {
+        } catch (e) {
           // console.error('Get Total Deposited SP Fail:', e.message)
           throw e
         }
       })
     },
 
-    async getTotalDepositedTsp (context) {
-      retryMethod(async  () => {
+    async getTotalDepositedTsp(context) {
+      retryMethod(async () => {
         try {
           const contract = await getContract('TSP_POOL')
           let amount = await contract.totalDepositedTSP().call()
           context.commit('saveTotalDepositedTspInt', amount || 0)
-        }catch (e) {
+        } catch (e) {
           // console.error('Get Total Deposited TSP Fail:', e.message)
           throw e
         }
       })
     },
 
-    async getTotalDepositedTspLp (context) {
-      retryMethod(async  () => {
+    async getTotalDepositedTspLp(context) {
+      retryMethod(async () => {
         try {
           const contract = await getContract('TSP_LP_POOL')
           let amount = await contract.totalDepositedTSPLP().call()
           context.commit('saveTotalDepositedTspLpInt', amount || 0)
-        }catch (e) {
+        } catch (e) {
           // console.error('Get Total Deposited TSP LP Fail:', e.message)
           throw e
         }
       })
     },
 
-    async getTotalDepositedPnutLp (context) {
-      retryMethod(async  () => {
+    async getTotalDepositedPnutLp(context) {
+      retryMethod(async () => {
         try {
           const contract = await getContract('PNUT_LP_POOL')
           let amount = await contract.totalDepositedPnutLp().call()
           context.commit('saveTotalDepositedPnutLpInt', amount || 0)
-        }catch (e) {
+        } catch (e) {
           // console.error('Get Total Deposited PNUT LP Fail:', e.message)
           throw e
         }
       })
     },
 
-    async getApprovedTSP (context) {
-      retryMethod(async  () => {
+    async getApprovedTSP(context) {
+      retryMethod(async () => {
         try {
           const contract = await getContract('TSP')
           let amount = await contract.allowance(context.state.tronAddress, TSP_POOL_ADDRESS).call()
           context.commit('saveApprovedTSP', intToAmount(amount) > 1e6)
-        }catch (e) {
+        } catch (e) {
           // console.error('Get ApprovedTSP Fail:', e.message)
           throw e
         }
+      }).catch((e) => {
+        console.error("Get Approve TSP fail", e.message);
       })
-    },
-    
-    async getApprovedTSPLP (context) {
-      retryMethod(async  () => {
-        try {
-          const tronWeb = await getTron()
-          const params = [
-            { type: 'address', value: context.state.tronAddress},
-            { type: 'address', TSP_LP_POOL_ADDRESS}
-          ]
-          const amount = await tronWeb.transactionBuilder
-          .triggerConstantContract(TSP_LP_TOKEN_ADDRESS,
-            'allowance(address,address)',
-            {},
-            params,
-            context.state.tronAddress)
-          context.commit('saveApprovedTSPLP', intToAmount(amount) > 1e6)
-        }catch (e) {
-          // console.error('Get ApprovedTSPLP Fail:', e.message)
-          throw e
-        }
-      })
-    },
-
-    async getApprovedPNUTLP (context) {
-      retryMethod(async  () => {
-        try {
-          const tronWeb = await getTron()
-          const params = [
-            { type: 'address', value: context.state.tronAddress},
-            { type: 'address', PNUT_LP_POOL_ADDRESS}
-          ]
-          const amount = await tronWeb.transactionBuilder
-          .triggerConstantContract(PNUT_LP_TOKEN_ADDRESS,
-            'allowance(address,address)',
-            {},
-            params,
-            context.state.tronAddress)
-          context.commit('saveApprovedPNUTLP', intToAmount(amount) > 1e6)
-        }catch (e) {
-          // console.error('Get ApprovedPNUTLP Fail:', e.message)
-          throw e
-        }
-      })
-    },
-
-    async initializeTronAccount ({
-      commit,
-      dispatch
-    }, tronAddress) {
-      commit('saveTronAddress', tronAddress)
-      dispatch('getTron')
-      dispatch('getTsteem')
-      dispatch('getTsp')
-      dispatch('getTsbd')
-      dispatch('getPnut')
-      dispatch('getTspLp')
-      dispatch('getPnutLp')
-      dispatch('getDelegatedSp')
-      dispatch('getDepositedTsp')
-      dispatch('getDepositedTspLp')
-      dispatch('getDepositedPnutLp')
-      dispatch('getTotalDelegatedSP')
-      dispatch('getTotalDepositedTsp')
-      dispatch('getTotalDepositedTspLp')
-      dispatch('getTotalDepositedPnutLp')
-      dispatch('getApprovedTSP')
-      dispatch('getApprovedTSPLP')
-      dispatch('getApprovedPNUTLP')
-    }
   },
-  modules: {}
+
+  async getApprovedTSPLP(context) {
+    retryMethod(async () => {
+      try {
+        const tronWeb = await getTron()
+        const params = [{
+            type: 'address',
+            value: context.state.tronAddress
+          },
+          {
+            type: 'address',
+            value: TSP_LP_POOL_ADDRESS
+          }
+        ]
+        const amount = await tronWeb.transactionBuilder
+          .triggerConstantContract(TSP_LP_TOKEN_ADDRESS,
+            'allowance(address,address)', {},
+            params,
+            context.state.tronAddress)
+        context.commit('saveApprovedTSPLP', intToAmount(amount) > 1e6)
+      } catch (e) {
+        // console.error('Get ApprovedTSPLP Fail:', e.message)
+        throw e
+      }
+    }).catch((e) => {
+      console.error("Get Approve TSPLP fail", e);
+    })
+  },
+
+  async getApprovedPNUTLP(context) {
+    retryMethod(async () => {
+      try {
+        const tronWeb = await getTron()
+        const params = [{
+            type: 'address',
+            value: context.state.tronAddress
+          },
+          {
+            type: 'address',
+            value:PNUT_LP_POOL_ADDRESS
+          }
+        ]
+        const amount = await tronWeb.transactionBuilder
+          .triggerConstantContract(PNUT_LP_TOKEN_ADDRESS,
+            'allowance(address,address)', {},
+            params,
+            context.state.tronAddress)
+        context.commit('saveApprovedPNUTLP', intToAmount(amount) > 1e6)
+      } catch (e) {
+        // console.error('Get ApprovedPNUTLP Fail:', e.message)
+        throw e
+      }
+    }).catch((e) => {
+      console.error('Get ApprovedPNUTLP Fail:', e);
+    })
+  },
+
+  async initializeTronAccount({
+    commit,
+    dispatch
+  }, tronAddress) {
+    commit('saveTronAddress', tronAddress)
+    dispatch('getTron')
+    dispatch('getTsteem')
+    dispatch('getTsp')
+    dispatch('getTsbd')
+    dispatch('getPnut')
+    dispatch('getTspLp')
+    dispatch('getPnutLp')
+    dispatch('getDelegatedSp')
+    dispatch('getDepositedTsp')
+    dispatch('getDepositedTspLp')
+    dispatch('getDepositedPnutLp')
+    dispatch('getTotalDelegatedSP')
+    dispatch('getTotalDepositedTsp')
+    dispatch('getTotalDepositedTspLp')
+    dispatch('getTotalDepositedPnutLp')
+    dispatch('getApprovedTSP')
+    dispatch('getApprovedTSPLP')
+    dispatch('getApprovedPNUTLP')
+  }
+},
+modules: {}
 })
