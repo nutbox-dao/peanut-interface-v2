@@ -14,7 +14,7 @@
           </p>
           <div>
             <span>
-              {{ pendingPnut[symbol] | amountForm }}
+              {{ pendingPnut | amountForm }}
             </span>
             <b-button variant="primary" @click="withdrawPnut">
               {{ $t("message.withdraw") }}
@@ -113,7 +113,9 @@ export default {
       depositedDesc: {},
       totalDepositedDesc: {},
       logo: {},
-      pendingPnut: {},
+      tspPendingPnut:0,
+      tspLpPendingPnut:0,
+      pnutLpPendingPnut:0,
       tipMessage: "",
       tipTitle: "",
       showMessage: false,
@@ -157,6 +159,15 @@ export default {
     deposited() {
       return this.depositeBalance[this.symbol] > 0;
     },
+    pendingPnut(){
+        if(this.symbol === 'TSP_POOL'){
+            return this.tspPendingPnut
+        }else if(this.symbol === 'TSP_LP_POOL'){
+            return this.tspLpPendingPnut
+        }else if(this.symbol === 'PNUT_LP_POOL'){
+            return this.pnutLpPendingPnut
+        }
+    }
   },
   methods: {
     ...mapActions([
@@ -205,8 +216,15 @@ export default {
         const contract = await getContract(this.symbol);
         if (!contract) return;
         const s = await contract.getPendingPeanuts().call();
-        this.pendingPnut[this.symbol] = intToAmount(s);
-        console.log(intToAmount(s));
+        const pnut = intToAmount(s)
+        if(this.symbol === 'TSP_POOL'){
+            this.tspPendingPnut = pnut
+            console.log(2134,pnut);
+        }else if(this.symbol === 'TSP_LP_POOL'){
+            this.tspLpPendingPnut = pnut
+        }else if(this.symbol === 'PNUT_LP_POOL'){
+            this.pnutLpPendingPnut = pnut
+        }
       } catch (e) {
         //   console.log(234,e);
       }
@@ -247,7 +265,6 @@ export default {
       PNUT_LP_POOL: this.$t("farm.pnutLp.totalDepositPnutLP"),
     };
     if (this.tronAddress && this.tronAddress.length > 0) {
-        console.log('get pending');
       // 设置定时器以更新当前收益
       const timer = setInterval(this.getPendingPeanut, 3000);
       // 通过$once来监听定时器，在beforeDestroy钩子时被清除。
