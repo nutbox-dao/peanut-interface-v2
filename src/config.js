@@ -15,7 +15,7 @@ export const LOCALE_KEY = 'localeLanguage'
 export const TRON_NODE_API = 'https://api.trongrid.io'
 // export const TRON_NODE_API = 'https://api.shasta.trongrid.io'
 
-export const TRC20_APPROVE_AMOUNT = 1e60
+export const TRC20_APPROVE_AMOUNT = 1e50
 
 export const TSTEEM_TRANSFER_FEE = 0.1
 export const STEEM_TO_TSP_FEE = 1

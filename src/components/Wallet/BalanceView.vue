@@ -19,19 +19,22 @@
           </div>
         </div>
       </div>
-      <ConnectWalletBtn :type="walletType"> </ConnectWalletBtn>
+      <ConnectWalletBtn :type="walletType" @steemLogin="showSteemLogin=true"> </ConnectWalletBtn>
     </Card>
+      <Login v-if="showSteemLogin" @hideMask="showSteemLogin=false"/>
   </div>
 </template>
 
 <script>
 import Card from "../ToolsComponents/Card";
+import Login from '../Login'
 import ConnectWalletBtn from "../ToolsComponents/ConnectWalletBtn";
 
 export default {
   name: "BalanceView",
   data() {
     return {
+      showSteemLogin:false,
     };
   },
   props: {
@@ -59,6 +62,7 @@ export default {
   components: {
     Card,
     ConnectWalletBtn,
+    Login
   },
   methods: {
   },
@@ -67,7 +71,6 @@ export default {
 
 <style lang="scss" scoped>
 .card {
-  z-index: 1;
   width: 30%;
   min-width: 320px;
   .top {

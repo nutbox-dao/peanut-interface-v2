@@ -22,13 +22,13 @@
         :logo="tspLogo"
         walletType="TRON"
       />
-      <BalanceView
+      <!-- <BalanceView
         name="TSBD"
         desc="Nutbox TSBD"
         :balances="tsbdBalance"
         :logo="tsbdLogo"
         walletType="TRON"
-      />
+      /> -->
       <BalanceView
         name="TSTEEM"
         desc="Nutbox TSTEEM"
@@ -37,14 +37,14 @@
         walletType="TRON"
       />
       <BalanceView
-        name="TSP-LP"
+        name="TSP-TRX LP"
         desc="S-TSP-TRX"
         :balances="tspLpBalance"
         :logo="tspLpLogo"
         walletType="TRON"
       />
       <BalanceView
-        name="PNUT-LP"
+        name="PNUT-TRX LP"
         desc="S-PNUT-TRX"
         :balances="pnutLpBalance"
         :logo="pnutLpLogo"

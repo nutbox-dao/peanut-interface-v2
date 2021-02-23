@@ -40,21 +40,6 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.mask {
-  z-index: 2000;
-  overflow: hidden;
-  display: flex;
-  position: fixed;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  -webkit-box-align: center;
-  align-items: center;
-  -webkit-box-pack: center;
-  justify-content: center;
-  background-color: rgba(0, 0, 0, 0.3);
-}
 
 .mask-box {
   position: relative;

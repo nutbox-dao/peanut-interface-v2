@@ -4,8 +4,6 @@
             {{ this.$t('stake.stake') }}
         </h3>
         <div class="nav">
-            <!-- <router-link to='/stake/sppool'>SP</router-link>
-            <router-link to='/stake/tsppool'>TSP</router-link> -->
         </div>
         <div class="stake-box">
             <SPPool/>

@@ -4,7 +4,8 @@ import Cookie from 'vue-cookies'
 import {
   intToAmount,
   getTron as getTronweb,
-  getBalanceOfToken
+  getBalanceOfToken,
+  getTron
 } from '../utils/chain/tron'
 import {
   getContract
@@ -20,8 +21,11 @@ import {
   getVestingShares
 } from '../utils/chain/steem'
 import {
+  TSP_POOL_ADDRESS,
   TSP_LP_TOKEN_ADDRESS,
-  PNUT_LP_TOKEN_ADDRESS
+  PNUT_LP_TOKEN_ADDRESS,
+  TSP_LP_POOL_ADDRESS,
+  PNUT_LP_POOL_ADDRESS,
 } from '../config'
 
 Vue.use(Vuex)
@@ -48,6 +52,15 @@ export default new Vuex.Store({
     depositedTspInt: 0,
     depositedTspLpInt: 0,
     depositedPnutLpInt: 0,
+    totalDelegatedVestsInt: 0,
+    totalDepositedTspInt:0,
+    totalDepositedTspLpInt:0,
+    totalDepositedPnutLpInt: 0,
+    // approvement
+    approvedTSP: false,
+    approvedTSPLP:false,
+    approvedPNUTLP:false,
+
     // apy
     apy: Cookie.get('apy') || '0.0%'
   },
@@ -112,6 +125,29 @@ export default new Vuex.Store({
     saveDepositedPnutLpInt: function (state, depositedPnutLpInt) {
       state.depositedPnutLpInt = depositedPnutLpInt
     },
+    saveTotalDelegatedVestsInt: function (state, totalDelegatedVestsInt) {
+      state.totalDelegatedVestsInt = totalDelegatedVestsInt
+    },
+    saveTotalDepositedTspInt: function (state, totalDepositedTspInt) {
+      state.totalDepositedTspInt = totalDepositedTspInt
+    },
+    saveTotalDepositedTspLpInt: function (state, totalDepositedTspLpInt) {
+      state.totalDepositedTspLpInt = totalDepositedTspLpInt
+    },
+    saveTotalDepositedPnutLpInt: function (state, totalDepositedPnutLpInt) {
+      state.totalDepositedPnutLpInt = totalDepositedPnutLpInt
+    },
+    // approve ment
+    saveApprovedTSP :function(state, approvedTSP) {
+      state.approvedTSP = approvedTSP
+    },
+    saveApprovedTSPLP :function(state, approvedTSPLP) {
+      state.approvedTSPLP = approvedTSPLP
+    },
+    saveApprovedPNUTLP :function(state, approvedPNUTLP) {
+      state.approvedPNUTLP = approvedPNUTLP
+    },
+
     saveApy: function (state, apy) {
       this.state.apy = apy
       Cookie.set('apy', apy, '30d')
@@ -166,7 +202,21 @@ export default new Vuex.Store({
     },
     depositedPnutLp: state => {
       return intToAmount(state.depositedPnutLpInt) || 0
-    }
+    },
+
+    totalDelegatedSp: state => {
+      const totalDelegatedVest = intToAmount(state.totalDelegatedVestsInt)
+      return totalDelegatedVest * state.vestsToSteem
+    },
+    totalDepositedTsp: state => {
+      return intToAmount(state.totalDepositedTspInt) || 0
+    },
+    totalDepositedTspLp: state => {
+      return intToAmount(state.totalDepositedTspLpInt) || 0
+    },
+    totalDepositedPnutLp: state => {
+      return intToAmount(state.totalDepositedPnutLpInt) || 0
+    },
   },
   actions: {
     // steem
@@ -219,7 +269,7 @@ export default new Vuex.Store({
         commit('saveSteemAccount', steemAccount)
         return true
       } catch (err) {
-        console.error('initializeSteemAccount Fail:', err.message)
+        // console.error('initializeSteemAccount Fail:', err.message)
         return false
       }
     },
@@ -232,7 +282,7 @@ export default new Vuex.Store({
           const tron = await tronweb.trx.getBalance(context.state.tronAddress)
           context.commit('saveTronBalanceInt', tron)
         } catch (e) {
-          console.error('Get Tron Fail:', e.message)
+          // console.error('Get Tron Fail:', e.message)
           throw e
         }
       }
@@ -246,7 +296,7 @@ export default new Vuex.Store({
           const tsteem = await contract.balanceOf(context.state.tronAddress).call()
           context.commit('saveTsteemBalanceInt', tsteem)
         } catch (e) {
-          console.error('Get Tsteem Fail:', e.message)
+          // console.error('Get Tsteem Fail:', e.message)
           throw e
         }
       })
@@ -259,7 +309,7 @@ export default new Vuex.Store({
           const tsp = await contract.balanceOf(context.state.tronAddress).call()
           context.commit('saveTspBalanceInt', tsp || 0)
         } catch (e) {
-          console.error('Get Tsp Fail:', e.message)
+          // console.error('Get Tsp Fail:', e.message)
           throw e
         }
       })
@@ -272,7 +322,7 @@ export default new Vuex.Store({
           const tsbd = await contract.balanceOf(context.state.tronAddress).call()
           context.commit('saveTsbdBalanceInt', tsbd || 0)
         } catch (e) {
-          console.error('Get Tsbd Fail:', e.message)
+          // console.error('Get Tsbd Fail:', e.message)
           throw e
         }
       })
@@ -285,7 +335,7 @@ export default new Vuex.Store({
           const pnut = await contract.balanceOf(context.state.tronAddress).call()
           context.commit('savePnutBalanceInt', pnut || 0)
         } catch (e) {
-          console.error('Get Pnut Fail:', e.message)
+          // console.error('Get Pnut Fail:', e.message)
           throw e
         }
       })
@@ -298,7 +348,7 @@ export default new Vuex.Store({
           const tsplpBalance = await getBalanceOfToken(tspAddr, context.state.tronAddress)
           context.commit('saveTspLpBalanceInt', tsplpBalance || 0)
         } catch (e) {
-          console.error('Get Tsp_Lp Fail:', e.message)
+          // console.error('Get Tsp_Lp Fail:', e.message)
           throw e
         }
       })
@@ -311,7 +361,7 @@ export default new Vuex.Store({
           const pnutLpBalance = await getBalanceOfToken(pnutLpAddr, context.state.tronAddress)
           context.commit('savePnutLpBalanceInt', pnutLpBalance || 0)
         } catch (e) {
-          console.error('Get Pnut_Lp Fail:', e)
+          // console.error('Get Pnut_Lp Fail:', e)
           throw e
         }
       })
@@ -325,7 +375,7 @@ export default new Vuex.Store({
           amount = amount.amount
           context.commit('saveDelegatedVestsInt', amount || 0)
         } catch (e) {
-          console.error('Get Delegated SP Fail:', e.message)
+          // console.error('Get Delegated SP Fail:', e.message)
           throw e
         }
       })
@@ -339,7 +389,7 @@ export default new Vuex.Store({
           amount = amount.tspAmount
           context.commit('saveDepositedTspInt', amount || 0)
         } catch (e) {
-          console.error('Get Deposited TSP Fail:', e.message)
+          // console.error('Get Deposited TSP Fail:', e.message)
           throw e
         }
       })
@@ -353,7 +403,7 @@ export default new Vuex.Store({
           amount = amount.tspLPAmount
           context.commit('saveDepositedTspLpInt', amount || 0)
         } catch (e) {
-          console.error('Get Deposited TSP_LP Fail:', e.message)
+          // console.error('Get Deposited TSP_LP Fail:', e.message)
           throw e
         }
       })
@@ -367,7 +417,116 @@ export default new Vuex.Store({
           amount = amount.pnutLpAmount
           context.commit('saveDepositedPnutLpInt', amount || 0)
         }catch (e) {
-          console.error('Get Deposited PNUT_LP Fail:', e.message)
+          // console.error('Get Deposited PNUT_LP Fail:', e.message)
+          throw e
+        }
+      })
+    },
+
+    async getTotalDelegatedSP (context) {
+      retryMethod(async  () => {
+        try {
+          const contract = await getContract('PNUT_POOL')
+          let amount = await contract.totalDepositedSP().call()
+          context.commit('saveTotalDelegatedVestsInt', amount || 0)
+        }catch (e) {
+          // console.error('Get Total Deposited SP Fail:', e.message)
+          throw e
+        }
+      })
+    },
+
+    async getTotalDepositedTsp (context) {
+      retryMethod(async  () => {
+        try {
+          const contract = await getContract('TSP_POOL')
+          let amount = await contract.totalDepositedTSP().call()
+          context.commit('saveTotalDepositedTspInt', amount || 0)
+        }catch (e) {
+          // console.error('Get Total Deposited TSP Fail:', e.message)
+          throw e
+        }
+      })
+    },
+
+    async getTotalDepositedTspLp (context) {
+      retryMethod(async  () => {
+        try {
+          const contract = await getContract('TSP_LP_POOL')
+          let amount = await contract.totalDepositedTSPLP().call()
+          context.commit('saveTotalDepositedTspLpInt', amount || 0)
+        }catch (e) {
+          // console.error('Get Total Deposited TSP LP Fail:', e.message)
+          throw e
+        }
+      })
+    },
+
+    async getTotalDepositedPnutLp (context) {
+      retryMethod(async  () => {
+        try {
+          const contract = await getContract('PNUT_LP_POOL')
+          let amount = await contract.totalDepositedPnutLp().call()
+          context.commit('saveTotalDepositedPnutLpInt', amount || 0)
+        }catch (e) {
+          // console.error('Get Total Deposited PNUT LP Fail:', e.message)
+          throw e
+        }
+      })
+    },
+
+    async getApprovedTSP (context) {
+      retryMethod(async  () => {
+        try {
+          const contract = await getContract('TSP')
+          let amount = await contract.allowance(context.state.tronAddress, TSP_POOL_ADDRESS).call()
+          context.commit('saveApprovedTSP', intToAmount(amount) > 1e6)
+        }catch (e) {
+          // console.error('Get ApprovedTSP Fail:', e.message)
+          throw e
+        }
+      })
+    },
+    
+    async getApprovedTSPLP (context) {
+      retryMethod(async  () => {
+        try {
+          const tronWeb = await getTron()
+          const params = [
+            { type: 'address', value: context.state.tronAddress},
+            { type: 'address', TSP_LP_POOL_ADDRESS}
+          ]
+          const amount = await tronWeb.transactionBuilder
+          .triggerConstantContract(TSP_LP_TOKEN_ADDRESS,
+            'allowance(address,address)',
+            {},
+            params,
+            context.state.tronAddress)
+          context.commit('saveApprovedTSPLP', intToAmount(amount) > 1e6)
+        }catch (e) {
+          // console.error('Get ApprovedTSPLP Fail:', e.message)
+          throw e
+        }
+      })
+    },
+
+    async getApprovedPNUTLP (context) {
+      retryMethod(async  () => {
+        try {
+          const tronWeb = await getTron()
+          const params = [
+            { type: 'address', value: context.state.tronAddress},
+            { type: 'address', PNUT_LP_POOL_ADDRESS}
+          ]
+          const amount = await tronWeb.transactionBuilder
+          .triggerConstantContract(PNUT_LP_TOKEN_ADDRESS,
+            'allowance(address,address)',
+            {},
+            params,
+            context.state.tronAddress)
+          context.commit('saveApprovedPNUTLP', intToAmount(amount) > 1e6)
+        }catch (e) {
+          // console.error('Get ApprovedPNUTLP Fail:', e.message)
           throw e
         }
       })
@@ -389,6 +548,13 @@ export default new Vuex.Store({
       dispatch('getDepositedTsp')
       dispatch('getDepositedTspLp')
       dispatch('getDepositedPnutLp')
+      dispatch('getTotalDelegatedSP')
+      dispatch('getTotalDepositedTsp')
+      dispatch('getTotalDepositedTspLp')
+      dispatch('getTotalDepositedPnutLp')
+      dispatch('getApprovedTSP')
+      dispatch('getApprovedTSPLP')
+      dispatch('getApprovedPNUTLP')
     }
   },
   modules: {}

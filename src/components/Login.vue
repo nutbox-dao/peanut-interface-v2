@@ -1,35 +1,41 @@
 <template>
-  <div class="steem-login" @click.self="hideMask">
-    <div class="login">
-      <Card>
-        <h4>{{ this.$t("message.userlogin") }}</h4>
-        <div class="input">
-          <img src="../static/images/keychain.png" alt="" />
-          <b-input
-            class="mb-2 mr-sm-2 mb-sm-0 user"
-            :placeholder="$t('message.steemAccoutPlaceHolder')"
-            v-model="steemAccount"
-          ></b-input>
-        </div>
-        <b-button variant="outline-primary" @click="login" :disabled="isLoging">
-          <b-spinner
-            small
-            type="grow"
-            v-show="isLoging"
-            variant="primary"
-          ></b-spinner>
-          {{ this.loginBtnText }}
-        </b-button>
-      </Card>
+  <transition name="fade">
+    <div class="mask" @click.self="hideMask">
+      <div class="login">
+        <Card>
+          <h4>{{ this.$t("message.userlogin") }}</h4>
+          <div class="input">
+            <img src="../static/images/keychain.png" alt="" />
+            <b-input
+              class="mb-2 mr-sm-2 mb-sm-0 user"
+              :placeholder="$t('message.steemAccoutPlaceHolder')"
+              v-model="steemAccount"
+            ></b-input>
+          </div>
+          <b-button
+            variant="outline-primary"
+            @click="login"
+            :disabled="isLoging"
+          >
+            <b-spinner
+              small
+              type="grow"
+              v-show="isLoging"
+              variant="primary"
+            ></b-spinner>
+            {{ this.loginBtnText }}
+          </b-button>
+        </Card>
+      </div>
+      <TipMessage
+        :showMessage="tipMessage"
+        :title="tipTitle"
+        v-if="showMessage"
+        @hideMask="showMessage = false"
+        :canDiss="canDismissTip"
+      />
     </div>
-    <TipMessage
-      :showMessage="tipMessage"
-      :title="tipTitle"
-      v-if="showMessage"
-      @hideMask="showMessage = false"
-      :canDiss="canDismissTip"
-    />
-  </div>
+  </transition>
 </template>
 
 <script>
@@ -108,35 +114,20 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.steem-login {
-  position: fixed;
-  z-index: 1000;
-  overflow: hidden;
+.login {
+  margin-top: -15%;
+}
+.input {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  width: 480px;
+  min-width: 320px;
   display: flex;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  -webkit-box-align: center;
   align-items: center;
-  -webkit-box-pack: center;
   justify-content: center;
-  background-color: rgba(0, 0, 0, 0.3);
-  .login {
-    margin-top: -15%;
-  }
-  .input {
-    margin-top: 2rem;
-    margin-bottom: 2rem;
-    width: 480px;
-    min-width: 320px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    .user {
-      flex: 1;
-      margin-left: 20px;
-    }
+  .user {
+    flex: 1;
+    margin-left: 20px;
   }
 }
 </style>

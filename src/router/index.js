@@ -18,7 +18,7 @@ const routes = [
   {
     path: '/',
     name: 'index',
-    redirect: '/wallet'
+    redirect: '/stake'
   },
   {
     path: '/wallet',

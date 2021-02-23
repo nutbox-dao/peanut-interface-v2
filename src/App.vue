@@ -152,6 +152,21 @@ h3 {
   display: block;
   width: 100%;
 }
+.mask {
+  z-index: 2000;
+  overflow: hidden;
+  display: flex;
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  -webkit-box-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.3);
+}
 
 .menu .nav-link {
   display: flex !important;
