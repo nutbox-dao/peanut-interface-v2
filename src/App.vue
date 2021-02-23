@@ -5,7 +5,7 @@
       <b-nav pills vertical align="center" class="menu">
         <b-nav-item to="/wallet">
           <b-icon icon="person-fill"></b-icon>
-          <div style="padding:0;">
+          <div style="padding: 0">
             <p>
               {{
                 tronAddrFromat && tronAddrFromat.length > 0
@@ -13,7 +13,7 @@
                   : $t("wallet.wallet")
               }}
             </p>
-            <p style="font-size:14px;font-weight:300">
+            <p style="font-size: 14px; font-weight: 300">
               {{ pnutBalance | amountForm }}
             </p>
           </div>
@@ -29,6 +29,10 @@
         <b-nav-item to="/liquid-staking">
           <b-icon icon="tools"></b-icon>
           {{ $t("liquidStaking.liquidStaking") }}
+        </b-nav-item>
+        <b-nav-item href="https://blog.nutbox.io/" target="_blank">
+          <b-icon icon="inbox-fill"></b-icon>
+          {{ $t("message.blog") }}
         </b-nav-item>
         <b-nav-item to="/nps">
           <b-icon icon="pencil-fill"></b-icon>
@@ -47,9 +51,6 @@
           <a href="https://discord.com/invite/zPkMuGY" target="_blank">
             <b-icon icon="discord"></b-icon>
           </a>
-          <a href="https://blog.nutbox.io/" target="_blank">
-            <b-icon icon="inbox-fill"></b-icon>
-          </a>
         </div>
       </b-nav>
     </div>
@@ -66,59 +67,59 @@
 </template>
 
 <script>
-import { watchWallet, getTronLinkAddr } from './utils/chain/tron'
-import { TRON_LINK_ADDR_NOT_FOUND } from './config'
-import TipMessage from './components/ToolsComponents/TipMessage'
-import { mapState, mapGetters } from 'vuex'
-import { storeApy } from './utils/helper'
+import { watchWallet, getTronLinkAddr } from "./utils/chain/tron";
+import { TRON_LINK_ADDR_NOT_FOUND } from "./config";
+import TipMessage from "./components/ToolsComponents/TipMessage";
+import { mapState, mapGetters } from "vuex";
+import { storeApy } from "./utils/helper";
 
 export default {
-  data () {
+  data() {
     return {
-      tipMessage: '',
-      tipTitle: '',
-      showMessage: false
-    }
+      tipMessage: "",
+      tipTitle: "",
+      showMessage: false,
+    };
   },
   computed: {
-    ...mapState(['tronAddress']),
-    ...mapGetters(['tronAddrFromat', 'pnutBalance'])
+    ...mapState(["tronAddress"]),
+    ...mapGetters(["tronAddrFromat", "pnutBalance"]),
   },
   components: {
-    TipMessage
+    TipMessage,
   },
-  async mounted () {
-    var store = this.$store
-    store.dispatch('setVestsToSteem')
+  async mounted() {
+    var store = this.$store;
+    store.dispatch("setVestsToSteem");
 
-    const address = await getTronLinkAddr()
+    const address = await getTronLinkAddr();
     if (address && address === TRON_LINK_ADDR_NOT_FOUND.noTronLink) {
-      this.tipTitle = this.$t('error.needtronlink')
-      this.tipMessage = 'TronLink: https://www.tronlink.org'
-      this.showMessage = true
+      this.tipTitle = this.$t("error.needtronlink");
+      this.tipMessage = "TronLink: https://www.tronlink.org";
+      this.showMessage = true;
     } else if (address && address === TRON_LINK_ADDR_NOT_FOUND.walletLocked) {
-      this.tipTitle = this.$t('error.error')
-      this.tipMessage = this.$t('error.unlockWallet')
-      this.showMessage = true
+      this.tipTitle = this.$t("error.error");
+      this.tipMessage = this.$t("error.unlockWallet");
+      this.showMessage = true;
     } else if (address) {
-      store.dispatch('initializeTronAccount', address)
+      store.dispatch("initializeTronAccount", address);
     }
     watchWallet((address) => {
       if (address && address === TRON_LINK_ADDR_NOT_FOUND.noTronLink) {
-        this.tipTitle = this.$t('error.needtronlink')
-        this.tipMessage = 'TronLink: https://www.tronlink.org'
-        this.showMessage = true
+        this.tipTitle = this.$t("error.needtronlink");
+        this.tipMessage = "TronLink: https://www.tronlink.org";
+        this.showMessage = true;
       } else if (address && address === TRON_LINK_ADDR_NOT_FOUND.walletLocked) {
-        this.tipTitle = this.$t('error.error')
-        this.tipMessage = this.$t('error.unlockWallet')
-        this.showMessage = true
+        this.tipTitle = this.$t("error.error");
+        this.tipMessage = this.$t("error.unlockWallet");
+        this.showMessage = true;
       } else if (address) {
-        store.dispatch('initializeTronAccount', address)
+        store.dispatch("initializeTronAccount", address);
       }
-    })
-    storeApy(store)
-  }
-}
+    });
+    storeApy(store);
+  },
+};
 </script>
 
 <style lang="scss">
