@@ -1,6 +1,7 @@
 import { getSteemPrice } from './chain/steem'
 import { getTronPrice, intToAmount, getPnutPrice } from './chain/tron'
 import { getContract } from './chain/contract'
+import store from '../store'
 export const firstToUpper = function (str) {
   if (!str) {
     return
@@ -60,7 +61,7 @@ export function getDateString (now, timezone, extra = 0) {
   return now.toISOString().replace('T', ' ').substring(0, 19)
 }
 
-export const storeApy = async function (store) {
+export const storeApy = async function () {
   const [steemPrice, tronPrice, pnutPrice] = await Promise.all([
     getSteemPrice(),
     getTronPrice(),
@@ -80,7 +81,7 @@ export const storeApy = async function (store) {
   if (!apy || isNaN(apy) || !isFinite(apy)) {
     return
   }
+  console.log('apy:',apy)
   apy = (apy * 100).toFixed(1)
-  console.log(apy)
   store.commit('saveApy', apy + '%')
 }

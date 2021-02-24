@@ -101,10 +101,14 @@ module.exports = {
     }
   },
   liquidStaking: {
-    liquidStaking: 'Liquid Staking',
+    liquidStaking: '质押资产流动',
     tsp: {
       tsptosteemintro: '转换的STEEM将在33-40天内陆续返还'
     }
+  },
+  vote:{
+    vote:"点赞帖子",
+    title:"支付PNUT,获得nutbox.mine点赞"
   },
   nps: {
     nps: '提案改善',

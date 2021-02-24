@@ -30,6 +30,10 @@
           <b-icon icon="tools"></b-icon>
           {{ $t("liquidStaking.liquidStaking") }}
         </b-nav-item>
+        <b-nav-item to="/get-vote">
+          <b-icon icon="tools"></b-icon>
+          {{ $t("vote.vote") }}
+        </b-nav-item>
         <b-nav-item href="https://blog.nutbox.io/" target="_blank">
           <b-icon icon="inbox-fill"></b-icon>
           {{ $t("message.blog") }}
@@ -38,9 +42,7 @@
           <b-icon icon="pencil-fill"></b-icon>
           {{ $t("nps.nps") }}
         </b-nav-item>
-
-        <p style="height: 20px"></p>
-        <b-nav-item> </b-nav-item>
+        
         <div class="bottom">
           <a href="https://github.com/nutbox-dao" target="_blank">
             <b-icon icon="github"></b-icon>
@@ -117,7 +119,7 @@ export default {
         store.dispatch("initializeTronAccount", address);
       }
     });
-    storeApy(store);
+    storeApy();
   },
 };
 </script>

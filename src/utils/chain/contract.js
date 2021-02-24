@@ -47,7 +47,6 @@ export const getContract = async function (symbol) {
   symbol = symbol.toUpperCase()
   let instance = store.state.contracts[symbol]
   if (Object.keys(instance).length !== 0) {
-    console.log('exist contract ',symbol);
     return instance
   }
   const tronLink = await getTronLink()

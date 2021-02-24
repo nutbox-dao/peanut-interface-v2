@@ -9,6 +9,7 @@ import Farm from '../components/Farm/Farm'
 import LiquidStaking from '../components/LiquidStaking/LiquidStaking'
 import TSP from '../components/LiquidStaking/TSP'
 import Nps from '../components/Nps/Nps'
+import Vote from '../components/Vote/Vote'
 
 Vue.use(VueRouter)
 
@@ -58,6 +59,10 @@ const routes = [
         component: TSP
       }
     ]
+  },
+  {
+    path: '/get-vote',
+    component:Vote,
   },
   {
     path: '/nps',
