@@ -61,6 +61,19 @@ export default new Vuex.Store({
     approvedTspLp: false,
     approvedPnutLp: false,
 
+    // contract
+    contracts: {
+      PNUT: {},
+      TSBD: {},
+      TSTEEM: {},
+      TSP: {},
+      PNUT_POOL: {},
+      TSP_LP_POOL: {},
+      PNUT_LP_POOL: {},
+      TSP_POOL: {},
+      PNUT_TRX: {}
+    },
+
     // apy
     apy: Cookie.get('apy') || '0.0%'
   },
@@ -147,9 +160,37 @@ export default new Vuex.Store({
     saveApprovedPNUTLP: function (state, approvedPnutLp) {
       state.approvedPnutLp = approvedPnutLp
     },
+    // contract
+    savePNUTContract: function (state, contract) {
+      state.contracts['PNUT'] = contract
+    },
+    saveTSBDContract: function (state, contract) {
+      state.contracts['TSBD'] = contract
+    },
+    saveTSTEEMContract: function (state, contract) {
+      state.contracts['TSTEEM'] = contract
+    },
+    saveTSPContract: function (state, contract) {
+      state.contracts['TSP'] = contract
+    },
+    savePNUT_POOLContract: function (state, contract) {
+      state.contracts['PNUT_POOL'] = contract
+    },
+    saveTSP_LP_POOLContract: function (state, contract) {
+      state.contracts['TSP_LP_POOL'] = contract
+    },
+    savePNUT_LP_POOLContract: function (state, contract) {
+      state.contracts['PNUT_LP_POOL'] = contract
+    },
+    saveTSP_POOLContract: function (state, contract) {
+      state.contracts['TSP_POOL'] = contract
+    },
+    savePNUT_TRXContract: function (state, contract) {
+      state.contracts['PNUT_TRX'] = contract
+    },
 
     saveApy: function (state, apy) {
-      this.state.apy = apy
+      state.apy = apy
       Cookie.set('apy', apy, '30d')
     }
   },
@@ -299,6 +340,8 @@ export default new Vuex.Store({
           // console.error('Get Tsteem Fail:', e.message)
           throw e
         }
+      }).catch((e) => {
+        console.error('Get Tsteem Fail:', e.message)
       })
     },
 
@@ -312,6 +355,8 @@ export default new Vuex.Store({
           // console.error('Get Tsp Fail:', e.message)
           throw e
         }
+      }).catch((e) => {
+        console.error('Get Tsp Fail:', e.message)
       })
     },
 
@@ -325,6 +370,8 @@ export default new Vuex.Store({
           // console.error('Get Tsbd Fail:', e.message)
           throw e
         }
+      }).catch((e) => {
+        console.error('Get Tsbd Fail:', e.message)
       })
     },
 
@@ -338,6 +385,8 @@ export default new Vuex.Store({
           // console.error('Get Pnut Fail:', e.message)
           throw e
         }
+      }).catch((e) => {
+        console.error('Get Pnut Fail:', e.message)
       })
     },
 
@@ -351,6 +400,8 @@ export default new Vuex.Store({
           // console.error('Get Tsp_Lp Fail:', e.message)
           throw e
         }
+      }).catch((e) => {
+        console.error('Get Tsp_Lp Fail:', e.message)
       })
     },
 
@@ -364,6 +415,8 @@ export default new Vuex.Store({
           // console.error('Get Pnut_Lp Fail:', e)
           throw e
         }
+      }).catch((e) => {
+        console.error('Get Pnut_Lp Fail:', e.message)
       })
     },
 
@@ -378,6 +431,8 @@ export default new Vuex.Store({
           // console.error('Get Delegated SP Fail:', e.message)
           throw e
         }
+      }).catch((e) => {
+        console.error('Get Delegated SP Fail:', e.message)
       })
     },
 
@@ -392,6 +447,8 @@ export default new Vuex.Store({
           // console.error('Get Deposited TSP Fail:', e.message)
           throw e
         }
+      }).catch((e) => {
+        console.error('Get Deposited TSP Fail:', e.message)
       })
     },
 
@@ -406,6 +463,8 @@ export default new Vuex.Store({
           // console.error('Get Deposited TSP_LP Fail:', e.message)
           throw e
         }
+      }).catch((e) => {
+        console.error('Get Deposited TSP_LP Fail:', e.message)
       })
     },
 
@@ -420,6 +479,8 @@ export default new Vuex.Store({
           // console.error('Get Deposited PNUT_LP Fail:', e.message)
           throw e
         }
+      }).catch((e) => {
+        console.error('Get Deposited PNUT_LP Fail:', e.message)
       })
     },
 
@@ -433,6 +494,8 @@ export default new Vuex.Store({
           // console.error('Get Total Deposited SP Fail:', e.message)
           throw e
         }
+      }).catch((e) => {
+        console.error('Get Total Deposited SP Fail:', e.message)
       })
     },
 
@@ -446,6 +509,8 @@ export default new Vuex.Store({
           // console.error('Get Total Deposited TSP Fail:', e.message)
           throw e
         }
+      }).catch((e) => {
+        console.error('Get Total Deposited TSP Fail:', e.message)
       })
     },
 
@@ -459,6 +524,8 @@ export default new Vuex.Store({
           // console.error('Get Total Deposited TSP LP Fail:', e.message)
           throw e
         }
+      }).catch((e) => {
+        console.error('Get Total Deposited TSP LP Fail:', e.message)
       })
     },
 
@@ -472,6 +539,8 @@ export default new Vuex.Store({
           // console.error('Get Total Deposited PNUT LP Fail:', e.message)
           throw e
         }
+      }).catch((e) => {
+        console.error('Get Total Deposited PNUT LP Fail:', e.message)
       })
     },
 

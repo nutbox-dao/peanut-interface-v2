@@ -5,9 +5,11 @@
         <h5>{{ isAddStake ? "Stake Tokens" : "Unstake Tokens" }}</h5>
         <div class="input-box">
           <div class="input-title">
-            <span>Stake</span>
+            <span>{{ isAddStake ? "Stake" : "Unstake" }}</span>
             <span
-              >Balance:{{ isAddStake === "add" ? formBalance : formStaked }}</span
+              >Balance:{{
+                (isAddStake ? tokenBalance : stakedBalance) | amountForm
+              }}</span
             >
           </div>
           <div class="input-area">
@@ -35,13 +37,16 @@
 <script>
 import Card from "../ToolsComponents/Card";
 import TipMessage from "../ToolsComponents/TipMessage";
-import { getContract } from "../../utils/chain/contract";
-import { formatBalance } from "../../utils/helper";
 
-import { amountToInt } from "../../utils/chain/tron";
+import {
+  intToAmount,
+  amountToInt,
+  isTransactionSuccess,
+  isInsufficientEnerge,
+} from "../../utils/chain/tron";
 import { mapState, mapGetters, mapActions, mapMutations } from "vuex";
-import { steemDelegation } from "../../utils/chain/steem";
-import { STEEM_MINE_ACCOUNT } from "../../config";
+import { TRON_CONTRACT_CALL_PARAMS } from "../../config";
+import {getContract} from '../../utils/chain/contract'
 export default {
   name: "ChangeDepositMask",
   data() {
@@ -50,7 +55,9 @@ export default {
       tipMessage: "",
       tipTitle: "",
       showMessage: false,
-      inputValue:''
+      inputValue: "",
+      saveTokenMethod:{},
+      saveStakedMethod:{},
     };
   },
   components: {
@@ -58,12 +65,59 @@ export default {
     TipMessage,
   },
   computed: {
-      formBalance() {
-          return formatBalance(0)
-      },
-      formStaked(){
-          return formatBalance(0)
+    ...mapState(["tronAddress"]),
+    ...mapGetters([
+      "tspBalance",
+      "depositedTsp",
+      "tspLpBalance",
+      "depositedTspLp",
+      "pnutLpBalance",
+      "depositedPnutLp",
+
+      "tspBalanceInt",
+      "depositedTspInt",
+      "tspLpBalanceInt",
+      "depositedTspLpInt",
+      "pnutLpBalanceInt",
+      "depositedPnutLpInt",
+    ]),
+
+    tokenBalance() {
+      if (this.symbol === "TSP_POOL") {
+        return this.tspBalance;
+      } else if (this.symbol === "TSP_LP_POOL") {
+        return this.tspLpBalance;
+      } else if (this.symbol === "PNUT_LP_POOL") {
+        return this.pnutLpBalance;
       }
+    },
+    stakedBalance() {
+      if (this.symbol === "TSP_POOL") {
+        return this.depositedTsp;
+      } else if (this.symbol === "TSP_LP_POOL") {
+        return this.depositedTspLp;
+      } else if (this.symbol === "PNUT_LP_POOL") {
+        return this.depositedPnutLp;
+      }
+    },
+    tokenBalanceInt() {
+      if (this.symbol === "TSP_POOL") {
+        return this.tspBalanceInt;
+      } else if (this.symbol === "TSP_LP_POOL") {
+        return this.tspLpBalanceInt;
+      } else if (this.symbol === "PNUT_LP_POOL") {
+        return this.pnutLpBalanceInt;
+      }
+    },
+    stakedBalanceInt() {
+      if (this.symbol === "TSP_POOL") {
+        return this.depositedTspInt;
+      } else if (this.symbol === "TSP_LP_POOL") {
+        return this.depositedTspLpInt;
+      } else if (this.symbol === "PNUT_LP_POOL") {
+        return this.depositedPnutLpInt;
+      }
+    },
   },
   props: {
     isAddStake: {
@@ -71,33 +125,155 @@ export default {
       default: true,
     },
     symbol: {
-        type: String,
-        default: "TSP_POOL"
-    }
+      type: String,
+      default: "TSP_POOL",
+    },
   },
   methods: {
+    ...mapActions(["getTsp", "getDepositedTsp"]),
+    ...mapMutations([
+      "saveTspBalanceInt",
+      "saveDepositedTspInt",
+      "saveTspLpBalanceInt",
+      "saveDepositedTspLpInt",
+      "savePnutLpBalanceInt",
+      "saveDepositedPnutLpInt"
+    ]),
+
+    checkInput() {
+      const reg = /^\d+(\.\d+)?$/;
+      const res = reg.test(this.inputValue) && parseFloat(this.inputValue) > 0;
+      if (!res) {
+        this.showTip(this.$t("error.error"), this.$t("error.inputError"));
+        return res;
+      }
+      const amount = parseFloat(this.inputValue);
+      if (this.isAddStake) {
+        if (amount > parseFloat(this.tokenBalance)) {
+          this.showTip(this.$t("error.error"), this.$t("error.inputOverflow"));
+          return false;
+        }
+        return true;
+      } else {
+        if (amount > parseFloat(this.stakedBalance)) {
+          this.showTip(this.$t("error.error"), this.$t("error.inputOverflow"));
+          return false;
+        }
+        return true;
+      }
+    },
+    fillMax() {
+      this.inputValue = this.isAddStake
+        ? this.tokenBalance
+        : this.stakedBalance;
+    },
+    confirm() {
+      this.isAddStake ? this.deposit() : this.withdraw();
+    },
+    async deposit() {
+      if (!this.checkInput()) {
+        return;
+      }
+      try {
+        this.isLoading = true;
+        const depositInt = amountToInt(parseFloat(this.inputValue));
+        const contract = await getContract(this.symbol);
+        const res = await contract
+          .deposit(depositInt)
+          .send(TRON_CONTRACT_CALL_PARAMS);
+        if (res && (await isTransactionSuccess(res))) {
+          this.saveTokenMethod[this.symbol](this.tokenBalanceInt - depositInt);
+          if (this.stakedBalanceInt > 0){
+              this.saveStakedMethod[this.symbol](this.stakedBalanceInt - (-depositInt))
+          }else{
+            this.saveStakedMethod[this.symbol](depositInt);
+          }
+          this.$emit('hideMask')
+        } else {
+          if (res && (await isInsufficientEnerge(res))) {
+            this.showTip(
+              this.$t("error.error"),
+              this.$t("error.insufficientEnerge")
+            );
+          } else {
+            this.showTip(this.$t("error.error"), this.$t("error.depositFail"));
+          }
+        }
+      } catch (e) {
+        this.showTip(this.$t("error.error"), e.message);
+      } finally {
+        this.isLoading = false;
+      }
+    },
+
+    async withdraw() {
+      if (!this.checkInput()) {
+        return;
+      }
+      try {
+        this.isLoading = true;
+        const minusInt = amountToInt(parseFloat(this.inputValue))
+        const contract = await getContract(this.symbol)
+        const res = await contract
+          .withdraw(minusInt)
+          .send(TRON_CONTRACT_CALL_PARAMS)
+        if (res && (await isTransactionSuccess(res))) {
+            this.saveTokenMethod[this.symbol](this.tokenBalanceInt - (-minusInt))
+            this.saveStakedMethod[this.symbol](this.stakedBalanceInt - minusInt)
+            await this.getPnut();
+            this.$emit('hideMask')
+        } else {
+          if (res && (await isInsufficientEnerge(res))) {
+            this.showTip(
+              this.$t('error.error'),
+              this.$t('error.insufficientEnerge')
+            )
+          } else {
+            this.showTip(
+              this.$t('error.error'),
+              this.$t('error.depositFail')
+            )
+          }
+        }
+      } catch (e) {
+        this.showTip(this.$t("error.error"), e.message);
+      } finally {
+        this.isLoading = false;
+      }
+    },
+
+    showTip(title, message) {
+      this.tipTitle = title;
+      this.tipMessage = message;
+      this.showMessage = true;
+    },
     hideMask() {
       if (this.isLoading) return;
       this.$emit("hideMask");
     },
-    fillMax() {
-      this.inputValue =
-        this.isAddStake ? this.spBalance : this.delegatedSp;
-    },
-    async confirm(){
-
-    },
     cancel() {
       this.hideMask();
     },
+  },
+
+  mounted() {
+      this.saveTokenMethod = {
+          TSP_POOL:this.saveTspBalanceInt,
+          TSP_LP_POOL:this.saveTspLpBalanceInt,
+          PNUT_LP_POOL:this.savePnutLpBalanceInt
+      },
+      this.saveStakedMethod = {
+          TSP_POOL:this.saveDepositedTspInt,
+          TSP_LP_POOL:this.saveDepositedTspLpInt,
+          PNUT_LP_POOL:this.saveDepositedPnutLpInt
+      }
   },
 };
 </script>
 
 <style lang="scss" scoped>
 .card {
-    width: 420px;
-    margin-top: -20%;
-  }
-
+  width: 420px;
+  margin-top: -20%;
+}
 </style>

@@ -126,7 +126,7 @@ import {
   isTransactionSuccess,
   isInsufficientEnerge
 } from '../../utils/chain/tron'
-import { getContract, getContractAddress } from '../../utils/chain/contract'
+import { getContractAddress } from '../../utils/chain/contract'
 
 export default {
   name: 'PnutLPPool',

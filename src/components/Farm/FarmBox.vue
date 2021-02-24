@@ -91,7 +91,7 @@
 import Card from "../ToolsComponents/Card";
 import TipMessage from "../ToolsComponents/TipMessage";
 import ChangeDepositMask from "./ChangeDepositMask";
-import { getContract, approveContract } from "../../utils/chain/contract";
+import { approveContract, getContract } from "../../utils/chain/contract";
 import ConnectWalletBtn from "../ToolsComponents/ConnectWalletBtn";
 
 import {
