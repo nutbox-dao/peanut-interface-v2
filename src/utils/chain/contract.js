@@ -1,4 +1,4 @@
-import { getTronLink, getTron, getTronLinkAddr, amountToInt } from './tron.js'
+import { getTronLink, getTron, getTronLinkAddr, amountToInt, isTransactionSuccess, isInsufficientEnerge } from './tron.js'
 import axios from 'axios'
 import { APPROVE_TOKEN_CONTRACT_PAIR, TRC20_APPROVE_AMOUNT, TRON_LINK_ADDR_NOT_FOUND } from '../../config'
 
@@ -91,8 +91,6 @@ export const approveContract = async function (symbol) {
     )
 
     if (result && result.result !== true) {
-      // this.showTip(this.$t('error.error'), this.$t('error.approveFail'))
-      console.log('failt');
       return 1
     }
 
@@ -104,13 +102,8 @@ export const approveContract = async function (symbol) {
       return 0
     } else {
       if (txid && (await isInsufficientEnerge(txid))) {
-      //   this.showTip(
-      //     this.$t('error.error'),
-      //     this.$t('error.insufficientEnerge')
-      //   )
         return 2
       } else {
-        console.log('else');
         return 1
       }
     }

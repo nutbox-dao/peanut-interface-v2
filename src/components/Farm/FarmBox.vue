@@ -16,7 +16,7 @@
             <span>
               {{ pendingPnut | amountForm }}
             </span>
-            <b-button variant="primary" @click="withdrawPnut">
+            <b-button variant="primary" @click="withdrawPnut" :disabled="(pendingPnut<=0) || isLoading">
               {{ $t("message.withdraw") }}
             </b-button>
           </div>
@@ -31,21 +31,21 @@
             @tronLogin="showTronLinkInfo"
             type="TRON"
           />
-          <div v-if="!approved[symbol]">
-            <b-button variant="primary" @click="approveContract">
+          <div v-if="!approved">
+            <b-button variant="primary" @click="approveContract" :disabled="isLoading">
               {{ $t("message.approveContract") }}
             </b-button>
           </div>
-          <div v-if="!deposited && isConnected && approved[symbol]">
+          <div v-if="!deposited && isConnected && approved">
             <span> 0 </span>
-            <b-button @click="addDeposit">
+            <b-button @click="addDeposit" :disabled="isLoading">
               {{ $t("stake.stake") }}
             </b-button>
           </div>
-          <div v-if="deposited && isConnected && approved[symbol]">
+          <div v-if="deposited && isConnected && approved">
             <span>0</span>
-            <button @click="minusDeposit">-</button>
-            <button @click="addDeposit">+</button>
+            <button @click="minusDeposit" :disabled="isLoading">-</button>
+            <button @click="addDeposit" :disabled="isLoading">+</button>
           </div>
         </div>
       </div>
@@ -104,7 +104,6 @@ export default {
   },
   data() {
     return {
-      approved: {},
       saveApproveMethod: {},
       tokenBalance: {},
       depositeBalance: {},
@@ -171,6 +170,15 @@ export default {
         return this.pnutLpPendingPnut;
       }
     },
+    approved() {
+      if (this.symbol === "TSP_POOL") {
+        return this.approvedTSP;
+      } else if (this.symbol === "TSP_LP_POOL") {
+        return this.approvedTSPLP;
+      } else if (this.symbol === "PNUT_LP_POOL") {
+        return this.approvedPNUTLP;
+      }
+    }
   },
   methods: {
     ...mapActions([
@@ -282,11 +290,6 @@ export default {
     };
     this.depositeBalance = {
       TSP_POOL: this.depositedTsp,
-      TSP_LP_POOL: this.approvedTSPLP,
-      PNUT_LP_POOL: this.approvedPNUTLP,
-    };
-    this.approved = {
-      TSP_POOL: this.approvedTSP,
       TSP_LP_POOL: this.approvedTSPLP,
       PNUT_LP_POOL: this.approvedPNUTLP,
     };

@@ -3,9 +3,9 @@ import Vuex from 'vuex'
 import Cookie from 'vue-cookies'
 import {
   intToAmount,
-  getTron as getTronweb,
+  getTronLink,
   getBalanceOfToken,
-  getTron
+  getTron as Tron
 } from '../utils/chain/tron'
 import {
   getContract
@@ -278,7 +278,7 @@ export default new Vuex.Store({
     async getTron(context) {
       const func = async () => {
         try {
-          const tronweb = getTronweb()
+          const tronweb = Tron()
           const tron = await tronweb.trx.getBalance(context.state.tronAddress)
           context.commit('saveTronBalanceInt', tron)
         } catch (e) {
@@ -493,7 +493,8 @@ export default new Vuex.Store({
   async getApprovedTSPLP(context) {
     retryMethod(async () => {
       try {
-        const tronWeb = await getTron()
+        const tronWeb = await getTronLink()
+        const tron = Tron()
         const params = [{
             type: 'address',
             value: context.state.tronAddress
@@ -503,11 +504,12 @@ export default new Vuex.Store({
             value: TSP_LP_POOL_ADDRESS
           }
         ]
-        const amount = await tronWeb.transactionBuilder
+        const tx = await tronWeb.transactionBuilder
           .triggerConstantContract(TSP_LP_TOKEN_ADDRESS,
             'allowance(address,address)', {},
             params,
             context.state.tronAddress)
+        const amount = tx && tx.constant_result && tx.constant_result[0] && tron.toDecimal('0x' + tx.constant_result[0])
         context.commit('saveApprovedTSPLP', intToAmount(amount) > 1e6)
       } catch (e) {
         // console.error('Get ApprovedTSPLP Fail:', e.message)
