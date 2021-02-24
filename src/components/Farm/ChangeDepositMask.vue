@@ -95,5 +95,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import url('../../static/css/changeStakeMask.less');
+.card {
+    width: 420px;
+    margin-top: -20%;
+  }
+
 </style>
