@@ -30,7 +30,7 @@ export const STEEM_GAS_ACCOUNT = process.env.STEEM_GAS_ACCOUNT || 'nutbox.gas'
 export const STEEM_MINE_ACCOUNT = process.env.STEEM_MINE_ACCOUNT || 'nutbox.mine'
 export const STEEM_TSP_ACCOUNT = process.env.STEEM_TSP_ACCOUNT || 'nutbox-tsp'
 
-export const TRON_CONTRACT_CALL_PARAMS = { feeLimit: 10_000_000 }
+export const TRON_CONTRACT_CALL_PARAMS = { feeLimit: 40_000_000 }
 
 // TSP-TRX 交易对地址
 export const TSP_TRX_CONTRACT_ADDRESS = 'TBpTbddofiBrE1AfhQbwU2BhsrBUM2Lnir'

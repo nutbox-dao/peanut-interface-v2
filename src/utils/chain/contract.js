@@ -3,7 +3,7 @@ import axios from 'axios'
 import { APPROVE_TOKEN_CONTRACT_PAIR, TRC20_APPROVE_AMOUNT, TRON_LINK_ADDR_NOT_FOUND } from '../../config'
 
 const CONTRACT_JSON_NAME_LIST = {
-  PNUT: 'NutboxPeanutsTest.json',
+  PNUT: 'NutboxPeanuts.json',
   TSBD: 'NutboxSbd.json',
   TSTEEM: 'NutboxSteem.json',
   TSP: 'NutboxTsp.json',

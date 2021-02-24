@@ -9,7 +9,6 @@
             <FarmBox symbol="PNUT_LP_POOL"/>
             <FarmBox symbol="TSP_LP_POOL"/>
         </div>
-        <router-view></router-view>
     </div>
 </template>
 

@@ -95,6 +95,7 @@ import ConnectWalletBtn from "../ToolsComponents/ConnectWalletBtn";
 
 import {
   intToAmount,
+  amountToInt,
   isTransactionSuccess,
   isInsufficientEnerge,
   getTronLinkAddr,
@@ -164,7 +165,6 @@ export default {
       return this.tronAddress && this.tronAddress.length > 0;
     },
     depositedBalance() {
-        console.log(23523,this.depositedTspLp);
       if (this.symbol === "TSP_POOL") {
         return this.depositedTsp;
       } else if (this.symbol === "TSP_LP_POOL") {
@@ -259,7 +259,34 @@ export default {
     },
     minusDeposit() {},
     addDeposit() {},
-    withdrawPnut() {},
+    async withdrawPnut() {
+        try {
+        this.isLoading = true
+        this.isWithdrawing = true
+        const contract = await getContract(this.symbol)
+        const res = await contract.withdrawPeanuts().send(TRON_CONTRACT_CALL_PARAMS)
+        if (res && (await isTransactionSuccess(res))) {
+          this.savePnutBalanceInt(this.pnutBalanceInt - amountToInt(-parseFloat(this.pendingPnut)))
+        } else {
+          if (res && (await isInsufficientEnerge(res))) {
+            this.showTip(
+              this.$t('error.error'),
+              this.$t('error.insufficientEnerge')
+            )
+          } else {
+            this.showTip(
+              this.$t('error.error'),
+              this.$t('error.withdrawFail')
+            )
+          }
+        }
+      } catch (e) {
+        this.showTip(this.$t('error.error'), e.message)
+      } finally {
+        this.isLoading = false
+        this.isWithdrawing = false
+      }
+    },
 
     async showTronLinkInfo() {
       const address = await getTronLinkAddr();
