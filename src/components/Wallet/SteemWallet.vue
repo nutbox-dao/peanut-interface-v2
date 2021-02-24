@@ -67,6 +67,9 @@ export default {
     },
     logout() {
       this.$store.commit("clearSteemAccount");
+      const confirm = () => {
+        
+      }
     },
   },
   components: {

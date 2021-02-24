@@ -2,17 +2,22 @@
   <div class="liquid-staking">
     <h3>{{ $t("liquidStaking.liquidStaking") }}</h3>
     <div class="nav"></div>
-    <router-view v-if="$store.state.steemAccount"></router-view>
-    <Login v-else />
+    <div class="tsp-exchange">
+    <TSP :fromSteemToTron='true'></TSP>
+    <TSP :fromSteemToTron='false'></TSP>
+    </div>
+
   </div>
 </template>
 
 <script>
+import TSP from './TSP'
 import Login from "../Login";
 export default {
   name: "LiquidStaking",
   components: {
     Login,
+    TSP,
   },
 };
 </script>
@@ -40,6 +45,11 @@ export default {
       color: var(--primary);
       border-bottom: 2px solid var(--primary);
     }
+  }
+  .tsp-exchange{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
   }
 }
 </style>

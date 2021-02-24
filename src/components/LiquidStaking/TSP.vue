@@ -40,8 +40,8 @@
         </div>
 
         <div class="pink-arrow-box">
-          <div style="margin: 0 auto" @click="changeTransOrder">
-            <img class="pink-arrow" src="../../static/images/pink-arrow.svg" />
+          <div style="margin: 0 auto">
+            <img class="pink-arrow" src="../../static/images/down-arrow.svg" />
           </div>
         </div>
 
@@ -82,7 +82,7 @@
         </div>
 
         <div class="confirm-box">
-          <button class="confirm-btn" @click="trans" :disabled="!canTransFlag">
+          <button class="confirm-btn" v-if="isLogin" @click="trans" :disabled="!canTransFlag">
             <b-spinner
               small
               type="grow"
@@ -92,6 +92,7 @@
             ></b-spinner>
             {{ $t("message.confirmconvert") }}
           </button>
+          <ConnectWalletBtn v-else type="STEEM" @steemLogin="showSteemLogin=true"/>
         </div>
 
         <!--手续费-->
@@ -114,6 +115,7 @@
         </p>
       </div>
     </Card>
+    <Login v-if="showSteemLogin" @hideMask="showSteemLogin = false" />
     <TipMessage
       :showMessage="tipMessage"
       :title="tipTitle"
@@ -126,6 +128,8 @@
 <script>
 import Card from '../ToolsComponents/Card'
 import TipMessage from '../ToolsComponents/TipMessage'
+import Login  from '../Login'
+import ConnectWalletBtn from '../ToolsComponents/ConnectWalletBtn'
 import { mapState, mapGetters, mapActions, mapMutations } from 'vuex'
 import {
   STEEM_TO_TSP_FEE,
@@ -142,11 +146,18 @@ export default {
   name: 'TSP',
   components: {
     Card,
-    TipMessage
+    TipMessage,
+    ConnectWalletBtn,
+    Login
+  },
+  props: {
+    fromSteemToTron: {
+      type: Boolean,
+      default:true 
+    },
   },
   data () {
     return {
-      fromSteemToTron: true,
       canTransFlag: false,
       isLoading: false,
       transValue: '',
@@ -154,7 +165,8 @@ export default {
       transferRatio: STEEM_TO_TSP_FEE_RATIO,
       tipMessage: '',
       tipTitle: '',
-      showMessage: false
+      showMessage: false,
+      showSteemLogin: false,
     }
   },
   computed: {
@@ -180,8 +192,13 @@ export default {
         return f > STEEM_TO_TSP_FEE ? f : STEEM_TO_TSP_FEE
       }
       return 0
+    },
+    isLogin(){
+      
+      return this.steemAccount && this.steemAccount.length > 0
     }
   },
+
   methods: {
     ...mapActions(['getSteem', 'getTsp']),
     ...mapMutations(['saveSteemBalance', 'saveTspBalanceInt']),
@@ -205,12 +222,6 @@ export default {
           parseFloat(this.transValue) <= parseFloat(this.tspBalance)
         this.canTransFlag = res1 && res && res3
       }
-    },
-
-    changeTransOrder () {
-      this.fromSteemToTron = !this.fromSteemToTron
-      this.transValue = ''
-      this.checkTransValue()
     },
 
     fillMaxTrans () {
@@ -302,6 +313,7 @@ export default {
     }
   },
   mounted () {
+    console.log(23542,this.fromSteemToTron);
     if (this.steemAccount && this.steemAccount.length > 0) {
       this.getSteem()
       this.getTsp()
