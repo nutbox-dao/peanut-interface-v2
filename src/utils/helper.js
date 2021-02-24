@@ -66,7 +66,7 @@ export const storeApy = async function (store) {
     getTronPrice(),
     getPnutPrice()
   ])
-  console.log(steemPrice, tronPrice, pnutPrice)
+  console.log('steemprice'+steemPrice, 'tronprice'+tronPrice, 'pnutprice'+pnutPrice)
   const pnutPool = await getContract('PNUT_POOL')
   const rewardsPerBlock = await retryMethod(async () => {
     return intToAmount(await pnutPool.getRewardsPerBlock().call())

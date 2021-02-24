@@ -16,7 +16,11 @@
             <span>
               {{ pendingPnut | amountForm }}
             </span>
-            <b-button variant="primary" @click="withdrawPnut" :disabled="(pendingPnut<=0) || isLoading">
+            <b-button
+              variant="primary"
+              @click="withdrawPnut"
+              :disabled="pendingPnut <= 0 || isLoading"
+            >
               {{ $t("message.withdraw") }}
             </b-button>
           </div>
@@ -32,18 +36,22 @@
             type="TRON"
           />
           <div v-if="!approved">
-            <b-button variant="primary" @click="approveContract" :disabled="isLoading">
+            <b-button
+              variant="primary"
+              @click="approveContract"
+              :disabled="isLoading"
+            >
               {{ $t("message.approveContract") }}
             </b-button>
           </div>
           <div v-if="!deposited && isConnected && approved">
-            <span> 0 </span>
-            <b-button @click="addDeposit" :disabled="isLoading">
+            <span> 0</span>
+            <b-button variant="primary" @click="addDeposit" :disabled="isLoading">
               {{ $t("stake.stake") }}
             </b-button>
           </div>
           <div v-if="deposited && isConnected && approved">
-            <span>0</span>
+            <span>{{ depositedBalance | amountForm }}</span>
             <button @click="minusDeposit" :disabled="isLoading">-</button>
             <button @click="addDeposit" :disabled="isLoading">+</button>
           </div>
@@ -60,7 +68,7 @@
           {{ totalDepositedDesc[symbol] }}
         </span>
         <span>
-          {{ totalDeposited[symbol] | amountForm }}
+          {{ totalDeposited | amountForm }}
         </span>
       </p>
     </Card>
@@ -105,9 +113,6 @@ export default {
   data() {
     return {
       saveApproveMethod: {},
-      tokenBalance: {},
-      depositeBalance: {},
-      totalDeposited: {},
       title: {},
       depositedDesc: {},
       totalDepositedDesc: {},
@@ -138,9 +143,9 @@ export default {
       "pnutBalanceInt",
       "tspBalanceInt",
       "depositedTspInt",
-      "approvedTSP",
-      "approvedTSPLP",
-      "approvedPNUTLP",
+      "approvedTsp",
+      "approvedTspLp",
+      "approvedPnutLp",
       "apy",
     ]),
     ...mapGetters([
@@ -158,8 +163,33 @@ export default {
     isConnected() {
       return this.tronAddress && this.tronAddress.length > 0;
     },
+    depositedBalance() {
+        console.log(23523,this.depositedTspLp);
+      if (this.symbol === "TSP_POOL") {
+        return this.depositedTsp;
+      } else if (this.symbol === "TSP_LP_POOL") {
+        return this.depositedTspLp;
+      } else if (this.symbol === "PNUT_LP_POOL") {
+        return this.depositedPnutLp;
+      }
+    },
     deposited() {
-      return this.depositeBalance[this.symbol] > 0;
+      if (this.symbol === "TSP_POOL") {
+        return this.depositedTsp > 0;
+      } else if (this.symbol === "TSP_LP_POOL") {
+        return this.depositedTspLp > 0;
+      } else if (this.symbol === "PNUT_LP_POOL") {
+        return this.depositedPnutLp > 0;
+      }
+    },
+    totalDeposited(){
+      if (this.symbol === "TSP_POOL") {
+        return this.totalDepositedTsp;
+      } else if (this.symbol === "TSP_LP_POOL") {
+        return this.totalDepositedTspLp;
+      } else if (this.symbol === "PNUT_LP_POOL") {
+        return this.totalDepositedPnutLp;
+      }
     },
     pendingPnut() {
       if (this.symbol === "TSP_POOL") {
@@ -172,13 +202,13 @@ export default {
     },
     approved() {
       if (this.symbol === "TSP_POOL") {
-        return this.approvedTSP;
+        return this.approvedTsp;
       } else if (this.symbol === "TSP_LP_POOL") {
-        return this.approvedTSPLP;
+        return this.approvedTspLp;
       } else if (this.symbol === "PNUT_LP_POOL") {
-        return this.approvedPNUTLP;
+        return this.approvedPnutLp;
       }
-    }
+    },
   },
   methods: {
     ...mapActions([
@@ -227,10 +257,10 @@ export default {
         this.isApproving = false;
       }
     },
-    
     minusDeposit() {},
     addDeposit() {},
     withdrawPnut() {},
+
     async showTronLinkInfo() {
       const address = await getTronLinkAddr();
       if (address && address === TRON_LINK_ADDR_NOT_FOUND.noTronLink) {
@@ -253,7 +283,6 @@ export default {
         const pnut = intToAmount(s);
         if (this.symbol === "TSP_POOL") {
           this.tspPendingPnut = pnut;
-          console.log(2134, pnut);
         } else if (this.symbol === "TSP_LP_POOL") {
           this.tspLpPendingPnut = pnut;
         } else if (this.symbol === "PNUT_LP_POOL") {
@@ -269,6 +298,7 @@ export default {
       this.showMessage = true;
     },
   },
+
   mounted() {
     this.logo = {
       TSP_POOL:
@@ -287,11 +317,6 @@ export default {
       TSP_POOL: this.$t("farm.tsp.yourTspAmount"),
       TSP_LP_POOL: this.$t("farm.tspLp.yourTSPLPAmount"),
       PNUT_LP_POOL: this.$t("farm.pnutLp.yourPNUTLPAmount"),
-    };
-    this.depositeBalance = {
-      TSP_POOL: this.depositedTsp,
-      TSP_LP_POOL: this.approvedTSPLP,
-      PNUT_LP_POOL: this.approvedPNUTLP,
     };
     this.totalDepositedDesc = {
       TSP_POOL: this.$t("farm.tsp.totalDepositTsp"),

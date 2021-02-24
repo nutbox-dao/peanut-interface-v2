@@ -57,9 +57,9 @@ export default new Vuex.Store({
     totalDepositedTspLpInt: 0,
     totalDepositedPnutLpInt: 0,
     // approvement
-    approvedTSP: false,
-    approvedTSPLP: false,
-    approvedPNUTLP: false,
+    approvedTsp: false,
+    approvedTspLp: false,
+    approvedPnutLp: false,
 
     // apy
     apy: Cookie.get('apy') || '0.0%'
@@ -138,14 +138,14 @@ export default new Vuex.Store({
       state.totalDepositedPnutLpInt = totalDepositedPnutLpInt
     },
     // approve ment
-    saveApprovedTSP: function (state, approvedTSP) {
-      state.approvedTSP = approvedTSP
+    saveApprovedTSP: function (state, approvedTsp) {
+      state.approvedTsp = approvedTsp
     },
-    saveApprovedTSPLP: function (state, approvedTSPLP) {
-      state.approvedTSPLP = approvedTSPLP
+    saveApprovedTSPLP: function (state, approvedTspLp) {
+      state.approvedTspLp = approvedTspLp
     },
-    saveApprovedPNUTLP: function (state, approvedPNUTLP) {
-      state.approvedPNUTLP = approvedPNUTLP
+    saveApprovedPNUTLP: function (state, approvedPnutLp) {
+      state.approvedPnutLp = approvedPnutLp
     },
 
     saveApy: function (state, apy) {
@@ -488,90 +488,92 @@ export default new Vuex.Store({
       }).catch((e) => {
         console.error("Get Approve TSP fail", e.message);
       })
-  },
+    },
 
-  async getApprovedTSPLP(context) {
-    retryMethod(async () => {
-      try {
-        const tronWeb = await getTronLink()
-        const tron = Tron()
-        const params = [{
-            type: 'address',
-            value: context.state.tronAddress
-          },
-          {
-            type: 'address',
-            value: TSP_LP_POOL_ADDRESS
-          }
-        ]
-        const tx = await tronWeb.transactionBuilder
-          .triggerConstantContract(TSP_LP_TOKEN_ADDRESS,
-            'allowance(address,address)', {},
-            params,
-            context.state.tronAddress)
-        const amount = tx && tx.constant_result && tx.constant_result[0] && tron.toDecimal('0x' + tx.constant_result[0])
-        context.commit('saveApprovedTSPLP', intToAmount(amount) > 1e6)
-      } catch (e) {
-        // console.error('Get ApprovedTSPLP Fail:', e.message)
-        throw e
-      }
-    }).catch((e) => {
-      console.error("Get Approve TSPLP fail", e);
-    })
-  },
+    async getApprovedTSPLP(context) {
+      retryMethod(async () => {
+        try {
+          const tronWeb = await getTronLink()
+          const tron = Tron()
+          const params = [{
+              type: 'address',
+              value: context.state.tronAddress
+            },
+            {
+              type: 'address',
+              value: TSP_LP_POOL_ADDRESS
+            }
+          ]
+          const tx = await tronWeb.transactionBuilder
+            .triggerConstantContract(TSP_LP_TOKEN_ADDRESS,
+              'allowance(address,address)', {},
+              params,
+              context.state.tronAddress)
+          const amount = tx && tx.constant_result && tx.constant_result[0] && tron.toDecimal('0x' + tx.constant_result[0])
+          context.commit('saveApprovedTSPLP', intToAmount(amount) > 1e6)
+        } catch (e) {
+          // console.error('Get ApprovedTSPLP Fail:', e.message)
+          throw e
+        }
+      }).catch((e) => {
+        console.error("Get Approve TSPLP fail", e);
+      })
+    },
 
-  async getApprovedPNUTLP(context) {
-    retryMethod(async () => {
-      try {
-        const tronWeb = await getTron()
-        const params = [{
-            type: 'address',
-            value: context.state.tronAddress
-          },
-          {
-            type: 'address',
-            value:PNUT_LP_POOL_ADDRESS
-          }
-        ]
-        const amount = await tronWeb.transactionBuilder
-          .triggerConstantContract(PNUT_LP_TOKEN_ADDRESS,
-            'allowance(address,address)', {},
-            params,
-            context.state.tronAddress)
-        context.commit('saveApprovedPNUTLP', intToAmount(amount) > 1e6)
-      } catch (e) {
-        // console.error('Get ApprovedPNUTLP Fail:', e.message)
-        throw e
-      }
-    }).catch((e) => {
-      console.error('Get ApprovedPNUTLP Fail:', e);
-    })
-  },
+    async getApprovedPNUTLP(context) {
+      retryMethod(async () => {
+        try {
+          const tronWeb = await getTronLink()
+          const tron = Tron()
+          const params = [{
+              type: 'address',
+              value: context.state.tronAddress
+            },
+            {
+              type: 'address',
+              value: PNUT_LP_POOL_ADDRESS
+            }
+          ]
+          const tx = await tronWeb.transactionBuilder
+            .triggerConstantContract(PNUT_LP_TOKEN_ADDRESS,
+              'allowance(address,address)', {},
+              params,
+              context.state.tronAddress)
+          const amount = tx && tx.constant_result && tx.constant_result[0] && tron.toDecimal('0x' + tx.constant_result[0])
+          context.commit('saveApprovedTSPLP', intToAmount(amount) > 1e6)
+        } catch (e) {
+          // console.error('Get ApprovedPNUTLP Fail:', e.message)
+          throw e
+        }
+      }).catch((e) => {
+        console.error('Get ApprovedPNUTLP Fail:', e);
+      })
+    },
 
-  async initializeTronAccount({
-    commit,
-    dispatch
-  }, tronAddress) {
-    commit('saveTronAddress', tronAddress)
-    dispatch('getTron')
-    dispatch('getTsteem')
-    dispatch('getTsp')
-    dispatch('getTsbd')
-    dispatch('getPnut')
-    dispatch('getTspLp')
-    dispatch('getPnutLp')
-    dispatch('getDelegatedSp')
-    dispatch('getDepositedTsp')
-    dispatch('getDepositedTspLp')
-    dispatch('getDepositedPnutLp')
-    dispatch('getTotalDelegatedSP')
-    dispatch('getTotalDepositedTsp')
-    dispatch('getTotalDepositedTspLp')
-    dispatch('getTotalDepositedPnutLp')
-    dispatch('getApprovedTSP')
-    dispatch('getApprovedTSPLP')
-    dispatch('getApprovedPNUTLP')
-  }
-},
-modules: {}
+    async initializeTronAccount({
+      commit,
+      dispatch
+    }, tronAddress) {
+      commit('saveTronAddress', tronAddress)
+      dispatch('getTron')
+      dispatch('getTsteem')
+      dispatch('getTsp')
+      dispatch('getTsbd')
+      dispatch('getPnut')
+      dispatch('getTspLp')
+      dispatch('getPnutLp')
+      dispatch('getDelegatedSp')
+      dispatch('getDepositedTsp')
+      dispatch('getDepositedTspLp')
+      dispatch('getDepositedPnutLp')
+      dispatch('getTotalDelegatedSP')
+      dispatch('getTotalDepositedTsp')
+      dispatch('getTotalDepositedTspLp')
+      dispatch('getTotalDepositedPnutLp')
+      dispatch('getApprovedTSP')
+      dispatch('getApprovedTSPLP')
+      dispatch('getApprovedPNUTLP')
+    }
+  },
+  modules: {}
 })
