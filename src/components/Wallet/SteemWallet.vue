@@ -95,7 +95,7 @@ export default {
   .balance-box {
     display: flex;
     align-content: left;
-    z-index: 1;
+    // z-index: 1;
     // justify-content: space-between;
     flex-wrap: wrap;
     >div{

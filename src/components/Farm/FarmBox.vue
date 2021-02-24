@@ -73,9 +73,10 @@
       </p>
     </Card>
     <ChangeDepositMask
-      :operate="operate"
+      :isAddStake="isAddStake"
       v-if="showChangeDepositMask"
       @hideMask="showChangeDepositMask = false"
+      :symbol="symbol"
     />
     <TipMessage
       :showMessage="tipMessage"
@@ -89,7 +90,7 @@
 <script>
 import Card from "../ToolsComponents/Card";
 import TipMessage from "../ToolsComponents/TipMessage";
-import ChangeDepositeMask from "./ChangeDepositeMask";
+import ChangeDepositMask from "./ChangeDepositMask";
 import { getContract, approveContract } from "../../utils/chain/contract";
 import ConnectWalletBtn from "../ToolsComponents/ConnectWalletBtn";
 
@@ -108,7 +109,7 @@ export default {
   components: {
     Card,
     TipMessage,
-    ChangeDepositeMask,
+    ChangeDepositMask,
     ConnectWalletBtn,
   },
   data() {
@@ -128,6 +129,7 @@ export default {
       isLoading: false,
       isApproving: false,
       isWithdrawing: false,
+      isAddStake:true,
     };
   },
   props: {
@@ -257,8 +259,14 @@ export default {
         this.isApproving = false;
       }
     },
-    minusDeposit() {},
-    addDeposit() {},
+    minusDeposit() {
+        this.isAddStake = false;
+        this.showChangeDepositMask = true;
+    },
+    addDeposit() {
+        this.isAddStake = true;
+        this.showChangeDepositMask = true;
+    },
     async withdrawPnut() {
         try {
         this.isLoading = true
