@@ -1,6 +1,6 @@
 import axios from 'axios'
 import Tron from 'tronweb'
-import { TRON_NODE_API, TRON_LINK_ADDR_NOT_FOUND, TRON_PNUT_CONTRACT } from '../../config.js'
+import { TRON_NODE_API, TRON_LINK_ADDR_NOT_FOUND, TRON_PNUT_CONTRACT, PNUT_LP_TOKEN_ADDRESS } from '../../config.js'
 import { sleep } from '../helper'
 
 function initTron (symbol) {
@@ -53,22 +53,20 @@ export const getTronLink = async function () {
 }
 
 export const transferPnut = async function (to, amount, memo = "") {
-  const method = "transfer(address,uint256)";
-  const params = [
-    { type: "address", value: to },
-    { type: "uint256", value: amount },
-  ];
   const tronweb = await getTronLink()
   const user = await getTronLinkAddr()
+  const method = "transfer(address,uint256)";
+  const params = [
+    { type: "address", value: tronweb.address.toHex(to) },
+    { type: "uint256", value: amount },
+  ];
 console.log('param',params);
   const {result,transaction} = await tronweb.transactionBuilder.triggerSmartContract(
-    TRON_PNUT_CONTRACT,
+    tronweb.address.toHex(TRON_PNUT_CONTRACT),
     method,
-    {
-      feeLimit: 10_000_000,
-    },
+    10000000, 0,
     params,
-    user
+    tronweb.address.toHex(user)
   );
   console.log(28984,transaction);
   if (
@@ -81,15 +79,15 @@ console.log('param',params);
     return false;
   }
   // add memo
-  const trans = await tronweb.transactionBuilder.addUpdateData(transaction, memo, 'utf8');
+  let trans = await tronweb.transactionBuilder.addUpdateData(transaction, memo, 'utf8');
+  trans.__payload__ = transaction.__payload__
   console.log('add memo',trans);
   // Sign transaction
-  const signedTx = await tronweb.trx.sign(trans);
+  const signedTx = await tronweb.trx.sign(trans,tronweb.defaultPrivateKey);
   console.log(23521,signedTx);
   // Broadcast transaction
-  const broadcastTx= await tronweb.trx.sendRawTransaction(signedTx);
-  console.log('txid',broadcastTx);
-  return false;
+  const {txid}= await tronweb.trx.sendRawTransaction(signedTx);
+  console.log('txid',txid);
   // Validate transaction
   if (
     txid &&

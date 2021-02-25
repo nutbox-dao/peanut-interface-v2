@@ -42,17 +42,56 @@
           <b-icon icon="pencil-fill"></b-icon>
           {{ $t("nps.nps") }}
         </b-nav-item>
-        
+
         <div class="bottom">
-          <a href="https://github.com/nutbox-dao" target="_blank">
-            <b-icon icon="github"></b-icon>
-          </a>
-          <a href="https://docs.nutbox.io/" target="_blank">
-            <b-icon icon="archive-fill"></b-icon>
-          </a>
-          <a href="https://discord.com/invite/zPkMuGY" target="_blank">
-            <b-icon icon="discord"></b-icon>
-          </a>
+          <div class="links">
+            <a href="https://github.com/nutbox-dao" target="_blank">
+              <b-icon icon="github"></b-icon>
+            </a>
+            <a href="https://docs.nutbox.io/" target="_blank">
+              <b-icon icon="archive-fill"></b-icon>
+            </a>
+            <a href="https://discord.com/invite/zPkMuGY" target="_blank">
+              <b-icon icon="discord"></b-icon>
+            </a>
+          </div>
+
+          <div class="settings">
+            <b-dd id="steem-node" :text="$t('message.changeSteemNode')" size="sm" dropup no-caret>
+              <b-dropdown-item v-for="item in steemUrls" :key="item">
+                <b-icon
+                  :icon="item == currentSteemNode ? 'check' : 'blank'"
+                  aria-hidden="true"
+                ></b-icon>
+                <span style="font-size:14px">{{ item }}</span>
+              </b-dropdown-item>
+            </b-dd>
+
+            <b-dd id='language' :text="$t('message.language')" size="sm" dropup no-caret>
+              <b-dropdown-item>
+                <b-icon
+                  :icon="lang == 'en' ? 'check' : 'blank'"
+                  aria-hidden="true"
+                ></b-icon>
+                <span style="font-size:14px">{{ $t('message.en') }}</span>
+              </b-dropdown-item>
+                            <b-dropdown-item>
+                <b-icon
+                  :icon="lang == 'cn' ? 'check' : 'blank'"
+                  aria-hidden="true"
+                ></b-icon>
+                <span style="font-size:14px">{{ $t('message.zh') }}</span>
+              </b-dropdown-item>
+                            <b-dropdown-item>
+                <b-icon
+                  :icon="lang == 'kr' ? 'check' : 'blank'"
+                  aria-hidden="true"
+                ></b-icon>
+                <span style="font-size:14px">{{ $t('message.kr') }}</span>
+              </b-dropdown-item>
+            </b-dd>
+
+          </div>
         </div>
       </b-nav>
     </div>
@@ -70,7 +109,11 @@
 
 <script>
 import { watchWallet, getTronLinkAddr } from "./utils/chain/tron";
-import { TRON_LINK_ADDR_NOT_FOUND } from "./config";
+import {
+  TRON_LINK_ADDR_NOT_FOUND,
+  STEEM_API_URLS,
+  STEEM_CONF_KEY,
+} from "./config";
 import TipMessage from "./components/ToolsComponents/TipMessage";
 import { mapState, mapGetters } from "vuex";
 import { storeApy } from "./utils/helper";
@@ -81,6 +124,10 @@ export default {
       tipMessage: "",
       tipTitle: "",
       showMessage: false,
+      steemUrls: STEEM_API_URLS,
+      steemNodeKey: STEEM_CONF_KEY,
+      currentSteemNode: window.localStorage.getItem(STEEM_CONF_KEY),
+      lang:'en'
     };
   },
   computed: {
@@ -235,13 +282,23 @@ h3 {
 
 .left .bottom {
   position: absolute;
-  padding: 0 40px;
+  padding: 0 20px;
   width: 100%;
   bottom: 30px;
   background-color: #fefefe;
-  display: flex;
-  justify-content: center;
-  justify-content: space-around;
+
+  .links {
+    width: 100%;
+    display: flex;
+    align-content: center;
+    justify-content: space-around;
+  }
+  .settings {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    align-content: center;
+  }
 }
 .left .bottom a {
   font-size: 1.2rem !important;

@@ -136,9 +136,9 @@ export default {
     },
 
     async transferPnut() {
-      // if (!this.checkLink() || !this.checkPnutAmount()) {
-      //   return;
-      // }
+      if (!this.checkLink() || !this.checkPnutAmount()) {
+        return;
+      }
       try {
         this.isLoading = true;
         const res = await transferPnut(

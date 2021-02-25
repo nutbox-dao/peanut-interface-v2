@@ -48,7 +48,7 @@ module.exports = {
     discord: 'Discord',
     about: '关于',
     blog: '博客',
-    changeSteemNode: '切换steem节点',
+    changeSteemNode: 'steem节点(可选)',
 
     contractAddr: '合约地址',
     attention: '注意:',
