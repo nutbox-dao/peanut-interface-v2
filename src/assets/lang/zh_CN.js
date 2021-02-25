@@ -74,15 +74,9 @@ module.exports = {
       tspMinlingFee: '挖矿手续费',
       totalDepositTsp: 'TSP储蓄总量',
       confirmDeposit: '确认储蓄',
-      tspIsCirculatingSP: '备注：TSP是流通的SP',
       addTspDeposit: '增加储蓄',
       minusTspDeposit: '减少储蓄',
-      cancelTspDeposit: '取消储蓄',
-      confirmAddTspDeposit: '确认增加储蓄',
-      confirmMinusTspDeposit: '确认减少储蓄',
-      confirmCancelTspDeposit: '确认取消储蓄',
       notEnoughFee: '手续费不足',
-      approveNutbox: '授权Nutbox'
     },
     tspLp: {
       tspLPBalance: 'S-TSP-TRX 余额',
@@ -99,6 +93,7 @@ module.exports = {
   liquidStaking: {
     liquidStaking: '质押资产流动',
     tsp: {
+      tspIsCirculatingSP: 'TSP为SP的等价物，TSP可享受SP同等的质押奖励，且TSP可交易',
       tsptosteemintro: '转换的STEEM将在33-40天内陆续返还'
     }
   },
