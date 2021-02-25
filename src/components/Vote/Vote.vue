@@ -58,7 +58,7 @@
 import Card from "../ToolsComponents/Card";
 import TipMessage from "../ToolsComponents/TipMessage";
 import ConnectWalletBtn from "../ToolsComponents/ConnectWalletBtn";
-import { mapState } from "vuex";
+import { mapGetters, mapState } from "vuex";
 import {
   PNUT_FOR_VOTE_RATE,
   POST_LINK_REG,
@@ -75,6 +75,7 @@ export default {
   name: "Vote",
   computed: {
     ...mapState(["tronAddress"]),
+    ...mapGetters(['pnutBalance'])
   },
   data() {
     return {
@@ -104,7 +105,7 @@ export default {
         this.tipMessage = this.$t("error.unlockWallet");
         this.showMessage = true;
       } else if (address) {
-        store.dispatch("initializeTronAccount", address);
+        this.$store.dispatch("getPnut");
       }
     },
     checkLink() {
@@ -123,6 +124,10 @@ export default {
         return res;
       }
       const amount = parseFloat(this.pnutAmount);
+      if (parseFloat(this.pnutBalance) < amount){
+        this.showTip(this.$t('error.error',this.$t('error.insufficentPnut')))
+        return false
+      }
       if (amount < this.payRate || amount > this.payRate * 10) {
         this.showTip(
           this.$t("error.error"),
@@ -164,7 +169,9 @@ export default {
       this.showMessage = true;
     },
   },
-  mounted() {},
+  mounted() {
+    this.$store.dispatch("getPnut");
+  },
 };
 </script>
 

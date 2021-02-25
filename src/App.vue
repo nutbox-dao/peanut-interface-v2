@@ -32,7 +32,7 @@
         </b-nav-item>
         <b-nav-item to="/get-vote">
           <b-icon icon="tools"></b-icon>
-          {{ $t("vote.vote") }}
+          {{ $t("vote.upvote") }}
         </b-nav-item>
         <b-nav-item href="https://blog.nutbox.io/" target="_blank">
           <b-icon icon="inbox-fill"></b-icon>
@@ -189,7 +189,7 @@ export default {
       this.tipMessage = this.$t("error.unlockWallet");
       this.showMessage = true;
     } else if (address) {
-      store.dispatch("initializeTronAccount", address);
+      store.dispatch("getPnut")
     }
     watchWallet((address) => {
       if (address && address === TRON_LINK_ADDR_NOT_FOUND.noTronLink) {

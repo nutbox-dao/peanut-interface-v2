@@ -98,6 +98,7 @@ module.exports = {
     }
   },
   vote:{
+    upvote:"点赞",
     vote:"点赞帖子",
     title:"支付PNUT,获得nutbox.mine点赞",
     link:"帖子链接",
@@ -138,7 +139,8 @@ module.exports = {
     inputOutOfRange: "请输入{lowerPnutAmount}-{uperPnutAmount}的值",
     inputLinkIllegal:"请输入正确的链接",
     transferFail:"转账失败",
-    notEnoughFee: '手续费不足'
+    notEnoughFee: '手续费不足',
+    insufficentPnut:"PNUT余额不足"
   }
 
 }

@@ -214,11 +214,13 @@ export default {
   },
   methods: {
     ...mapActions([
-      "getPnutLp",
       "getPnut",
-      "getDepositedPnutLp",
       "getTsp",
       "getDepositedTsp",
+      "getTspLp",
+      'getDepositedTspLp',
+      "getPnutLp",
+      "getDepositedPnutLp",
       "getTotalDepositedTsp",
       "getTotalDepositedTspLp",
       "getTotalDepositedPnutLp",
@@ -307,7 +309,7 @@ export default {
         this.tipMessage = this.$t("error.unlockWallet");
         this.showMessage = true;
       } else if (address) {
-        store.dispatch("initializeTronAccount", address);
+        this.$store.dispatch("initializeTronAccount", address);
       }
     },
     async getPendingPeanut() {
@@ -364,6 +366,23 @@ export default {
       PNUT_LP_POOL: this.saveApprovedPNUTLP,
     };
     if (this.tronAddress && this.tronAddress.length > 0) {
+      // 获取最新的数据
+      if (this.symbol === "TSP_POOL") {
+        this.getTsp();
+        this.getDepositedTsp();
+        this.getTotalDepositedTsp();
+        this.getApprovedTSP()
+      } else if (this.symbol === "TSP_LP_POOL") {
+        this.getTspLp();
+        this.getDepositedTspLp();
+        this.getTotalDepositedTspLp();
+        this.getApprovedTSPLP()
+      } else if (this.symbol === "PNUT_LP_POOL") {
+        this.getPnutLp();
+        this.getDepositedPnutLp();
+        this.getTotalDepositedPnutLp();
+        this.getApprovedPNUTLP()
+      }
       // 设置定时器以更新当前收益
       const timer = setInterval(this.getPendingPeanut, 3000);
       // 通过$once来监听定时器，在beforeDestroy钩子时被清除。

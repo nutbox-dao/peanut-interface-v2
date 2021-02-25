@@ -98,6 +98,7 @@ module.exports = {
     }
   },
   vote:{
+    upvote:"Upvote",
     vote:"Vote post",
     title:"Pay PNUT,get nutbox.mine's vote",
     link:"Post link",
@@ -105,10 +106,10 @@ module.exports = {
     linkPlaceholder:"Input post link",
     pnutPlaceholder:"Input PNUT amount",
     transfer:"Transfer",
-    voteRate:"Vote rate：{lowerPnutAmount}PNUT for 10% vote",
+    voteRate:"Vote rate：{lowerPnutAmount} PNUT for 10% vote",
   },
   nps: {
-    nps: 'Proposal',
+    nps: 'Goverance',
     pass: 'Passed',
     pending: 'Pending'
   },
@@ -138,5 +139,6 @@ module.exports = {
     inputOutOfRange: "Please input value between {lowerPnutAmount}-{uperPnutAmount}",
     inputLinkIllegal:"Please input correct link",
     notEnoughFee: 'Insufficient fee',
+    insufficentPnut:"Insufficent PNUT"
   },
 }

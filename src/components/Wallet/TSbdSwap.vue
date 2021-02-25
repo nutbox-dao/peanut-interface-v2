@@ -218,11 +218,9 @@ export default {
     fillMaxTrans () {
       if (this.fromSteemToTron) {
         this.transValue = this.sbdBalance
-        this.transValue = parseFloat(this.sbdBalance - this.transFee).toFixed(
-          3
-        )
+        this.transValue = parseFloat(this.sbdBalance - this.transFee)
       } else {
-        this.transValue = parseFloat(this.tsbdBalance).toFixed(3)
+        this.transValue = parseFloat(this.tsbdBalance)
       }
       this.checkTransValue()
     },
