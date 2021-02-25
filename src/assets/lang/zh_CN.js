@@ -10,7 +10,6 @@ module.exports = {
     cancel:'取消',
     confirm:'确认',
 
-    miningpooldata: '矿池数据',
     sptotaldelegate: 'SP代理总量',
     totalpnut: 'PNUT总产量',
     apy: '年化收益率',
@@ -49,10 +48,7 @@ module.exports = {
     about: '关于',
     blog: '博客',
     changeSteemNode: 'steem节点(可选)',
-
     contractAddr: '合约地址',
-    attention: '注意:',
-    attensionInfo: '假币骗局！请不要以代币的名字查询交易代币，应以代币的合约地址为准！',
 
     language: '语言',
     zh: '中文',

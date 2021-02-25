@@ -3,41 +3,29 @@ module.exports = {
     userlogin: 'Login',
     steemAccoutPlaceHolder: 'Input Steem Account',
     login: 'Login',
+    loging:"Login...",
     delegatemine: 'Mining by Delegation',
-    gateway: 'Gateway',
-    yourdata: 'Your Data',
     spbalance: 'SP Balance',
-    yourspdelegate: 'Your Delegated SP',
-    delegatorList: 'SP Delegator List',
-    tspDepositList: 'TSP Delegator List',
-    tspLPDepositList: 'TSP-LP Delegator List',
+    yourspdelegate: 'Delegated SP',
+    cancel: "Cancel",
+    comfirm: "Confrim",
 
-    miningpooldata: 'Mining Pool Data',
     sptotaldelegate: 'Total Delegated SP',
     totalpnut: 'Total PNUT',
     apy: 'APY',
-    rewardperblock: 'Rewards per Block',
-
-    adddelegate: 'Increase Delegation',
-    minusdelegate: 'Decrease Delegation',
-    canceldelegate: 'Cancel Delegation',
-    confirmadddelegate: 'Confirm Increase Delegation',
-    confirmminusdelegate: 'Confirm Decrease Delegation',
-    confirmcanceldelegate: 'Confirm Cancel Delegation',
     pnutprofits: 'Your Mined PNUT',
-    withdraw: 'Withdraw PNUT',
+    withdraw: 'Harvest',
     balance: 'Balance',
+    approveContract:"Approve Contract",
+    max:"Max",
     confirmconvert: 'Confirm Conversion',
     servicecharge: 'Transaction Fee',
     delegatecharge: 'Delegation Fee',
     atleastcharge: 'minimum',
     convertrate: 'Conversion Ratio',
-    mine: 'My Account',
-    mywallet: 'My Wallet',
     logout: 'Logout',
     confirmdelegate: 'Confirm Delegation',
     delegatedsp: 'Delegated SP',
-    wallet: 'Wallet',
     steembalance: 'STEEM Balance',
     sbdbalance: 'SBD Balance',
     tronbalance: 'Tron Balance',
@@ -59,17 +47,75 @@ module.exports = {
     discord: 'Discord',
     about: 'About',
     blog: 'Blog',
-    changeSteemNode: 'Steem Node',
-
+    changeSteemNode: 'Steem Node(Option)',
     contractAddr: 'Contract Address',
-    attention: 'Attention:',
-    attensionInfo: 'It is a fake-token fraud! The only way to determine the token is based on its smart contract address, please do not search or trade the token through a name.',
-
+    
     language: 'Language',
     zh: '中文',
     en: 'English',
     kr: '한국어',
     '': ''
+  },
+  wallet: {
+    wallet: 'Wallet',
+    swap: '跨链转账',
+    connectSteem:"Connect Steem-Keychain",
+    connectTron:"Connect tron-link"
+  },
+  stake: {
+    stake: 'Stake'
+  },
+  farm: {
+    farm: 'Farm',
+    tsp: {
+      tspMine: 'TSP挖矿',
+      yourTspAmount: '储蓄的TSP数量',
+      balanceOfTsp: 'TSP 余额',
+      tspMinlingFee: '挖矿手续费',
+      totalDepositTsp: 'TSP储蓄总量',
+      confirmDeposit: '确认储蓄',
+      tspIsCirculatingSP: '备注：TSP是流通的SP',
+      addTspDeposit: '增加储蓄',
+      minusTspDeposit: '减少储蓄',
+      cancelTspDeposit: '取消储蓄',
+      confirmAddTspDeposit: '确认增加储蓄',
+      confirmMinusTspDeposit: '确认减少储蓄',
+      confirmCancelTspDeposit: '确认取消储蓄',
+      notEnoughFee: '手续费不足',
+      approveNutbox: '授权Nutbox'
+    },
+    tspLp: {
+      tspLPBalance: 'S-TSP-TRX 余额',
+      yourTSPLPAmount: '储蓄的S-TSP-TRX',
+      totalDepositTspLP:"S-TSP-TRX储蓄总量",
+      totalTSP: 'TSP总量',
+    },
+    pnutLp: {
+      pnutLPBalance: 'S-PNUT-TRX 余额',
+      yourPNUTLPAmount: '储蓄的S-PNUT-TRX',
+      totalDepositPnutLP:'S-PNUT-TRX储蓄总量'
+    }
+  },
+  liquidStaking: {
+    liquidStaking: '质押资产流动',
+    tsp: {
+      tsptosteemintro: '转换的STEEM将在33-40天内陆续返还'
+    }
+  },
+  vote:{
+    vote:"Vote post",
+    title:"支付PNUT,获得nutbox.mine点赞",
+    link:"帖子链接",
+    payPnut:"支付PNUT",
+    linkPlaceholder:"请填写需要点赞的帖子链接",
+    pnutPlaceholder:"请填写支付金额",
+    transfer:"转账",
+    voteRate:"点赞比例：{lowerPnutAmount}PNUT对应10%点赞",
+  },
+  nps: {
+    nps: '提案改善',
+    pass: '已通过',
+    pending: '待审核'
   },
   error: {
     error: 'Error!',
