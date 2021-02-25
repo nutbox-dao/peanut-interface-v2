@@ -311,7 +311,6 @@ export default {
     }
   },
   mounted () {
-    console.log(23542,this.fromSteemToTron);
     if (this.steemAccount && this.steemAccount.length > 0) {
       this.getSteem()
       this.getTsp()

@@ -58,7 +58,7 @@ module.exports = {
   },
   wallet: {
     wallet: 'Wallet',
-    swap: '跨链转账',
+    swap: 'Cross chain transfer',
     connectSteem:"Connect Steem-Keychain",
     connectTron:"Connect tron-link"
   },
@@ -68,54 +68,49 @@ module.exports = {
   farm: {
     farm: 'Farm',
     tsp: {
-      tspMine: 'TSP挖矿',
-      yourTspAmount: '储蓄的TSP数量',
-      balanceOfTsp: 'TSP 余额',
-      tspMinlingFee: '挖矿手续费',
-      totalDepositTsp: 'TSP储蓄总量',
-      confirmDeposit: '确认储蓄',
-      tspIsCirculatingSP: '备注：TSP是流通的SP',
-      addTspDeposit: '增加储蓄',
-      minusTspDeposit: '减少储蓄',
-      cancelTspDeposit: '取消储蓄',
-      confirmAddTspDeposit: '确认增加储蓄',
-      confirmMinusTspDeposit: '确认减少储蓄',
-      confirmCancelTspDeposit: '确认取消储蓄',
-      notEnoughFee: '手续费不足',
-      approveNutbox: '授权Nutbox'
+      tspMine: 'TSP Stake',
+      yourTspAmount: 'TSP Staked',
+      balanceOfTsp: 'TSP Balance',
+      tspMinlingFee: 'Fee',
+      totalDepositTsp: 'Total deposited TSP',
+      confirmDeposit: 'Confirm',
+      addTspDeposit: 'Stake',
+      minusTspDeposit: 'Unstake',
+      notEnoughFee: 'Insufficient fee',
     },
     tspLp: {
-      tspLPBalance: 'S-TSP-TRX 余额',
-      yourTSPLPAmount: '储蓄的S-TSP-TRX',
-      totalDepositTspLP:"S-TSP-TRX储蓄总量",
-      totalTSP: 'TSP总量',
+      tspLPBalance: 'S-TSP-TRX Balance',
+      yourTSPLPAmount: 'S-TSP-TRX Staked',
+      totalDepositTspLP:"Total deposited S-TSP-TRX",
+      totalTSP: 'Total TSP',
     },
     pnutLp: {
-      pnutLPBalance: 'S-PNUT-TRX 余额',
-      yourPNUTLPAmount: '储蓄的S-PNUT-TRX',
-      totalDepositPnutLP:'S-PNUT-TRX储蓄总量'
+      pnutLPBalance: 'S-PNUT-TRX Balance',
+      yourPNUTLPAmount: 'S-PNUT-TRX Staked',
+      totalDepositPnutLP:'Total deposited S-PNUT-TRX'
     }
   },
   liquidStaking: {
-    liquidStaking: '质押资产流动',
+    liquidStaking: 'Liquid Stading',
     tsp: {
-      tsptosteemintro: '转换的STEEM将在33-40天内陆续返还'
+      tspIsCirculatingSP: 'TSP is the equivalent of SP, TSP can enjoy the same staking reward of SP, and TSP can be traded',
+      tsptosteemintro: 'The withdrawn TSP will be returned to your Steem account in around 33~40 days.'
     }
   },
   vote:{
     vote:"Vote post",
-    title:"支付PNUT,获得nutbox.mine点赞",
-    link:"帖子链接",
-    payPnut:"支付PNUT",
-    linkPlaceholder:"请填写需要点赞的帖子链接",
-    pnutPlaceholder:"请填写支付金额",
-    transfer:"转账",
-    voteRate:"点赞比例：{lowerPnutAmount}PNUT对应10%点赞",
+    title:"Pay PNUT,get nutbox.mine's vote",
+    link:"Post link",
+    payPnut:"Pay PNUT",
+    linkPlaceholder:"Input post link",
+    pnutPlaceholder:"Input PNUT amount",
+    transfer:"Transfer",
+    voteRate:"Vote rate：{lowerPnutAmount}PNUT for 10% vote",
   },
   nps: {
-    nps: '提案改善',
-    pass: '已通过',
-    pending: '待审核'
+    nps: 'Proposal',
+    pass: 'Passed',
+    pending: 'Pending'
   },
   error: {
     error: 'Error!',
@@ -133,38 +128,15 @@ module.exports = {
     needkeychain: 'Please install Steem Keychain',
     needtronlink: 'Please install TronLink',
     insufficientEnerge: 'Not enough energy',
-    unlockWallet: 'Please unlock tronlink'
+    transferFail: 'Transfer fail',
+    unlockKeychain: 'Please unlock Steem-keychain',
+    unlockWallet: 'Please unlock tronlink',
+    steemLoginFail: 'Steem login fail',
+    illegalTronAddress: 'Invalid tron address',
+    inputError: 'Input wrong value',
+    inputOverflow: 'Input overflow',
+    inputOutOfRange: "Please input value between {lowerPnutAmount}-{uperPnutAmount}",
+    inputLinkIllegal:"Please input correct link",
+    notEnoughFee: 'Insufficient fee',
   },
-  tsp: {
-    tspMine: 'Mining by TSP',
-    yourTspAmount: 'TSP for mining',
-    balanceOfTsp: 'TSP Balance',
-    tspMinlingFee: 'Deposit Fee',
-    totalDepositTsp: 'Total Deposit TSP',
-    tsptosteemintro: 'The withdrawn TSP will be returned to your Steem account in around 33~40 days.',
-    confirmDeposit: 'Confirm Deposit',
-    tspIsCirculatingSP: 'Note：TSP is circulating SP',
-    addTspDeposit: 'Increase Deposit',
-    minusTspDeposit: 'Decrease Deposit',
-    cancelTspDeposit: 'Cancel Deposit',
-    confirmAddTspDeposit: 'Confirm Increase Deposit',
-    confirmMinusTspDeposit: 'Confirm Decrease Deposit',
-    confirmCancelTspDeposit: 'Confirm Cancel Deposit',
-    notEnoughFee: 'Not Enough Fee',
-    approveNutbox: 'Approve Nutbox',
-
-    tspLPMine: 'Mining by TSP-LP',
-    tspLPBalance: 'Balance of TSP-LP',
-    yourTSPLPAmount: 'TSP-LP for mining',
-    LPData: 'TSP liquid Pool Data',
-    totalLP: 'total TSP-LP',
-    totalTSP: 'total TSP',
-    addTspLPDeposit: 'Increase Deposit',
-    minusTspLPDeposit: 'Decrease Deposit',
-    cancelTspLPDeposit: 'Cancel Deposit',
-    confirmAddTspLPDeposit: 'Confirm Increase Deposit',
-    confirmMinusTspLPDeposit: 'Confirm Decrease Deposit',
-    confirmCancelTspLPDeposit: 'Confirm Cancel Deposit'
-
-  }
 }
