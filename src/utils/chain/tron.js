@@ -68,7 +68,6 @@ console.log('param',params);
     params,
     tronweb.address.toHex(user)
   );
-  console.log(28984,transaction);
   if (
     !result ||
     result["result"] !== true
@@ -81,13 +80,10 @@ console.log('param',params);
   // add memo
   let trans = await tronweb.transactionBuilder.addUpdateData(transaction, memo, 'utf8');
   trans.__payload__ = transaction.__payload__
-  console.log('add memo',trans);
   // Sign transaction
   const signedTx = await tronweb.trx.sign(trans,tronweb.defaultPrivateKey);
-  console.log(23521,signedTx);
   // Broadcast transaction
   const {txid}= await tronweb.trx.sendRawTransaction(signedTx);
-  console.log('txid',txid);
   // Validate transaction
   if (
     txid &&

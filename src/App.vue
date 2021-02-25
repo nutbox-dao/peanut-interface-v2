@@ -57,40 +57,55 @@
           </div>
 
           <div class="settings">
-            <b-dd id="steem-node" :text="$t('message.changeSteemNode')" size="sm" dropup no-caret>
-              <b-dropdown-item v-for="item in steemUrls" :key="item">
+            <b-dd
+              id="steem-node"
+              :text="$t('message.changeSteemNode')"
+              size="sm"
+              dropup
+              no-caret
+            >
+              <b-dropdown-item v-for="item in steemUrls" :key="item" @click="selectNode(item)">
                 <b-icon
                   :icon="item == currentSteemNode ? 'check' : 'blank'"
                   aria-hidden="true"
+                  style="font-size: 20px"
                 ></b-icon>
-                <span style="font-size:14px">{{ item }}</span>
+                <span style="font-size: 14px">{{ item }}</span>
               </b-dropdown-item>
             </b-dd>
 
-            <b-dd id='language' :text="$t('message.language')" size="sm" dropup no-caret>
-              <b-dropdown-item>
+            <b-dd
+              id="language"
+              :text="$t('message.language')"
+              size="sm"
+              dropup
+              no-caret
+            >
+              <b-dropdown-item @click="setenlang">
                 <b-icon
+                style="font-size: 20px"
                   :icon="lang == 'en' ? 'check' : 'blank'"
                   aria-hidden="true"
                 ></b-icon>
-                <span style="font-size:14px">{{ $t('message.en') }}</span>
+                <span style="font-size: 14px">{{ $t("message.en") }}</span>
               </b-dropdown-item>
-                            <b-dropdown-item>
+              <b-dropdown-item @click="setzhlang">
                 <b-icon
-                  :icon="lang == 'cn' ? 'check' : 'blank'"
+                style="font-size: 20px"
+                  :icon="lang == 'zh' ? 'check' : 'blank'"
                   aria-hidden="true"
                 ></b-icon>
-                <span style="font-size:14px">{{ $t('message.zh') }}</span>
+                <span style="font-size: 14px">{{ $t("message.zh") }}</span>
               </b-dropdown-item>
-                            <b-dropdown-item>
+              <b-dropdown-item @click="setkrlang">
                 <b-icon
+                style="font-size: 20px"
                   :icon="lang == 'kr' ? 'check' : 'blank'"
                   aria-hidden="true"
                 ></b-icon>
-                <span style="font-size:14px">{{ $t('message.kr') }}</span>
+                <span style="font-size: 14px">{{ $t("message.kr") }}</span>
               </b-dropdown-item>
             </b-dd>
-
           </div>
         </div>
       </b-nav>
@@ -113,6 +128,7 @@ import {
   TRON_LINK_ADDR_NOT_FOUND,
   STEEM_API_URLS,
   STEEM_CONF_KEY,
+  LOCALE_KEY,
 } from "./config";
 import TipMessage from "./components/ToolsComponents/TipMessage";
 import { mapState, mapGetters } from "vuex";
@@ -127,7 +143,7 @@ export default {
       steemUrls: STEEM_API_URLS,
       steemNodeKey: STEEM_CONF_KEY,
       currentSteemNode: window.localStorage.getItem(STEEM_CONF_KEY),
-      lang:'en'
+      lang: "en",
     };
   },
   computed: {
@@ -136,6 +152,28 @@ export default {
   },
   components: {
     TipMessage,
+  },
+  methods: {
+    setzhlang() {
+      this.lang = "zh";
+      localStorage.setItem(LOCALE_KEY, this.lang);
+      this.$i18n.locale = "zh";
+    },
+    setenlang() {
+      this.lang = "en";
+      localStorage.setItem(LOCALE_KEY, this.lang);
+      this.$i18n.locale = "en";
+    },
+    setkrlang() {
+      this.lang = "kr";
+      localStorage.setItem(LOCALE_KEY, this.lang);
+      this.$i18n.locale = "kr";
+    },
+    selectNode(node) {
+      this.currentSteemNode = node;
+      window.localStorage.setItem(this.steemNodeKey, node);
+      this.$router.go(0);
+    },
   },
   async mounted() {
     var store = this.$store;
@@ -294,10 +332,11 @@ h3 {
     justify-content: space-around;
   }
   .settings {
+    margin-top: 10px;
     width: 100%;
     display: flex;
-    justify-content: space-around;
     align-content: center;
+    justify-content: space-between;
   }
 }
 .left .bottom a {
