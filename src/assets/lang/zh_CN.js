@@ -108,7 +108,13 @@ module.exports = {
   },
   vote:{
     vote:"点赞帖子",
-    title:"支付PNUT,获得nutbox.mine点赞"
+    title:"支付PNUT,获得nutbox.mine点赞",
+    link:"帖子链接",
+    payPnut:"支付PNUT",
+    linkPlaceholder:"请填写需要点赞的帖子链接",
+    pnutPlaceholder:"请填写支付金额",
+    transfer:"转账",
+    voteRate:"点赞比例：{lowerPnutAmount}PNUT对应10%点赞",
   },
   nps: {
     nps: '提案改善',
@@ -138,6 +144,9 @@ module.exports = {
     illegalTronAddress: '无效的波场地址',
     inputError: '输入值无效',
     inputOverflow: '输入超过最大值',
+    inputOutOfRange: "请输入{lowerPnutAmount}-{uperPnutAmount}的值",
+    inputLinkIllegal:"请输入正确的链接",
+    transferFail:"转账失败",
     notEnoughFee: '手续费不足'
   }
 

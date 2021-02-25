@@ -102,7 +102,7 @@ import {
   getTronLinkAddr,
 } from "../../utils/chain/tron";
 import { mapState, mapGetters, mapActions, mapMutations } from "vuex";
-import { TRON_CONTRACT_CALL_PARAMS } from "../../config";
+import { TRON_CONTRACT_CALL_PARAMS,TRON_LINK_ADDR_NOT_FOUND} from "../../config";
 
 export default {
   name: "FarmBox",

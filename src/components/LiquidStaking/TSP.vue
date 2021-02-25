@@ -194,7 +194,7 @@ export default {
       return 0
     },
     isLogin(){
-      
+
       return this.steemAccount && this.steemAccount.length > 0
     }
   },
@@ -227,11 +227,9 @@ export default {
     fillMaxTrans () {
       if (this.fromSteemToTron) {
         this.transValue = this.steemBalance
-        this.transValue = parseFloat(this.steemBalance - this.transFee).toFixed(
-          3
-        )
+        this.transValue = parseFloat(this.steemBalance - this.transFee)
       } else {
-        this.transValue = parseFloat(this.tspBalance).toFixed(3)
+        this.transValue = parseFloat(this.tspBalance)
       }
       this.checkTransValue()
     },

@@ -24,14 +24,21 @@ export const STEEM_STAKE_FEE = 0.2
 
 export const TRANSFER_FEE_RATIO = 0.002
 export const STEEM_TO_TSP_FEE_RATIO = 0.002
+export const PNUT_FOR_VOTE_RATE = 1000
 
+export const POST_LINK_REG = /@[\w\.\-]+\/[\w\-]+\/?$/;
+
+
+//  steem account
 export const STEEM_DEX_ACCOUNT = process.env.STEEM_DEX_ACCOUNT || 'nutbox.dex'
 export const STEEM_GAS_ACCOUNT = process.env.STEEM_GAS_ACCOUNT || 'nutbox.gas'
 export const STEEM_MINE_ACCOUNT = process.env.STEEM_MINE_ACCOUNT || 'nutbox.mine'
 export const STEEM_TSP_ACCOUNT = process.env.STEEM_TSP_ACCOUNT || 'nutbox-tsp'
 
 export const TRON_CONTRACT_CALL_PARAMS = { feeLimit: 40_000_000 }
-
+// Pnut contract
+export const TRON_PNUT_CONTRACT = "TPZddNpQJHu8UtKPY1PYDBv2J5p5QpJ6XW";
+export const TRON_PNUT_RECEIVE_ACCOUNT = "TMLMSuyygN1fL5HpUt1oQp3RjvdEsHZffG";
 // TSP-TRX 交易对地址
 export const TSP_TRX_CONTRACT_ADDRESS = 'TBpTbddofiBrE1AfhQbwU2BhsrBUM2Lnir'
 // TSP 

@@ -1,6 +1,6 @@
 import axios from 'axios'
 import Tron from 'tronweb'
-import { TRON_NODE_API, TRON_LINK_ADDR_NOT_FOUND } from '../../config.js'
+import { TRON_NODE_API, TRON_LINK_ADDR_NOT_FOUND, TRON_PNUT_CONTRACT } from '../../config.js'
 import { sleep } from '../helper'
 
 function initTron (symbol) {
@@ -51,6 +51,56 @@ export const getTronLink = async function () {
   }
   return window.tronWeb
 }
+
+export const transferPnut = async function (to, amount, memo = "") {
+  const method = "transfer(address,uint256)";
+  const params = [
+    { type: "address", value: to },
+    { type: "uint256", value: amount },
+  ];
+  const tronweb = await getTronLink()
+  const user = await getTronLinkAddr()
+console.log('param',params);
+  let transaction = await tronweb.transactionBuilder.triggerSmartContract(
+    TRON_PNUT_CONTRACT,
+    method,
+    {
+      feeLimit: 20 * 1000000,
+    },
+    params,
+    user
+  );
+  console.log(28984,transaction);
+  if (
+    !transaction ||
+    !transaction["result"] ||
+    transaction["result"]["result"] !== true
+  ) {
+    console.error(
+      `Create Transaction Fail.\n\tContract:${TRON_PNUT_CONTRACT};\n\tMethod:${method}\n\tParams:${params}`
+    );
+    return false;
+  }
+  // add memo
+  transaction = await tronweb.transactionBuilder.addUpdateData(transaction["transaction"], memo, 'utf8');
+  console.log('add memo');
+  // Sign transaction
+  let signedTx = await tronweb.trx.sign(transaction);
+  console.log(23521,signedTx);
+  // Broadcast transaction
+  let {txid} = await tronweb.trx.sendRawTransaction(signedTx);
+  console.log('txid',txid);
+  // Validate transaction
+  if (
+    txid &&
+    (await isTransactionSuccess(txid))
+  ) {
+    return true;
+  } else {
+    return false;
+  }
+
+};
 
 export function getAddress (hex) {
   const tron = getTron()
