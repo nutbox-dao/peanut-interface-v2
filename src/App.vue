@@ -210,10 +210,10 @@ export default {
 </script>
 
 <style lang="scss">
-$blue: #f4a921;
+$blue: #FFDB1B;
 :root {
   --yellow-background: #f5ecd8;
-  --primary: #f4a921;
+  --primary: #FFDB1B;
 }
 
 @import "~bootstrap/scss/bootstrap.scss";
@@ -224,7 +224,7 @@ body {
   margin: 0;
 }
 #app {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+  font-family:PingFangSC-Medium, PingFang SC, -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
     "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue";
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -276,14 +276,18 @@ h3 {
 }
 
 .left {
-  background-color: #fefefe;
-  padding-top: 64px;
+  background-color: #FFFFFF;
+  padding-top: 55px;
+  padding-left: 12px;
   width: 240px;
   position: relative;
-  box-shadow: 0 0 16px #eee;
+
+box-shadow: 4px 0px 48px 0px rgba(0, 0, 0, 0.04);
+border-radius: 50px;
+box-sizing: border-box;
 }
 .right {
-  background-color: #fefefa;
+  background-color: #F6F7F9;
   flex: 1;
   height: 100vh;
   max-height: 100vh;
@@ -292,14 +296,16 @@ h3 {
 }
 
 .left .nav-item {
-  height: 60px;
-  font-size: 1.1rem;
+  height: 48px;
   text-align: left;
   box-sizing: border-box;
 }
 
 .left .nav-item:hover {
-  background-color: var(--yellow-background) !important;
+
+background: linear-gradient(270deg, rgba(227, 229, 232, 0) 0%, rgba(227, 229, 232, 0.4) 100%)!important;
+font-weight: 500;
+color: #242629;
 }
 
 .left .nav-item .b-icon {
@@ -308,14 +314,22 @@ h3 {
 
 .left .nav-link {
   height: 100%;
-  line-height: 44px;
-  color: var(--primary) !important;
-  padding-left: 24px;
+
+font-size: 14px;
+font-family: PingFangSC-Regular, PingFang SC;
+font-weight: 400;
+color: #BDBFC2;
+line-height: 14px;
+  padding-left: 36px;
 }
 
 .left .active {
-  background-color: var(--yellow-background) !important;
+background: linear-gradient(270deg, rgba(255, 219, 27, 0) 0%, rgba(255, 219, 27, 0.2) 100%)!important;
   border-radius: 0px;
+  border-left: 6px solid var(--primary);
+  padding-left: 30px;
+font-weight: 500 !important;
+color: #242629 !important;
 }
 
 .left .bottom {
