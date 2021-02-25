@@ -59,8 +59,17 @@ import Card from "../ToolsComponents/Card";
 import TipMessage from "../ToolsComponents/TipMessage";
 import ConnectWalletBtn from "../ToolsComponents/ConnectWalletBtn";
 import { mapState } from "vuex";
-import { PNUT_FOR_VOTE_RATE, POST_LINK_REG, TRON_PNUT_RECEIVE_ACCOUNT,TRON_LINK_ADDR_NOT_FOUND } from "../../config";
-import {amountToInt, getTronLinkAddr, transferPnut} from '../../utils/chain/tron'
+import {
+  PNUT_FOR_VOTE_RATE,
+  POST_LINK_REG,
+  TRON_PNUT_RECEIVE_ACCOUNT,
+  TRON_LINK_ADDR_NOT_FOUND,
+} from "../../config";
+import {
+  amountToInt,
+  getTronLinkAddr,
+  transferPnut,
+} from "../../utils/chain/tron";
 
 export default {
   name: "Vote",
@@ -70,12 +79,12 @@ export default {
   data() {
     return {
       showMessage: false,
-      isLoading:false,
+      isLoading: false,
       tipTitle: "",
       tipMessage: "",
       payRate: PNUT_FOR_VOTE_RATE,
-      postLink:'',
-      pnutAmount:'',
+      postLink: "",
+      pnutAmount: "",
     };
   },
   components: {
@@ -84,65 +93,70 @@ export default {
     ConnectWalletBtn,
   },
   methods: {
-     async connectTron(){
-    const address = await getTronLinkAddr();
-    if (address && address === TRON_LINK_ADDR_NOT_FOUND.noTronLink) {
-      this.tipTitle = this.$t("error.needtronlink");
-      this.tipMessage = "TronLink: https://www.tronlink.org";
-      this.showMessage = true;
-    } else if (address && address === TRON_LINK_ADDR_NOT_FOUND.walletLocked) {
-      this.tipTitle = this.$t("error.error");
-      this.tipMessage = this.$t("error.unlockWallet");
-      this.showMessage = true;
-    } else if (address) {
-      store.dispatch("initializeTronAccount", address);
-    }
-      },
+    async connectTron() {
+      const address = await getTronLinkAddr();
+      if (address && address === TRON_LINK_ADDR_NOT_FOUND.noTronLink) {
+        this.tipTitle = this.$t("error.needtronlink");
+        this.tipMessage = "TronLink: https://www.tronlink.org";
+        this.showMessage = true;
+      } else if (address && address === TRON_LINK_ADDR_NOT_FOUND.walletLocked) {
+        this.tipTitle = this.$t("error.error");
+        this.tipMessage = this.$t("error.unlockWallet");
+        this.showMessage = true;
+      } else if (address) {
+        store.dispatch("initializeTronAccount", address);
+      }
+    },
     checkLink() {
       const match = this.postLink.match(POST_LINK_REG);
-      const res = match && match.length > 0
-      if (!res){
-          this.showTip(this.$t('error.error'), this.$t('error.inputLinkIllegal'))
+      const res = match && match.length > 0;
+      if (!res) {
+        this.showTip(this.$t("error.error"), this.$t("error.inputLinkIllegal"));
       }
       return res;
     },
     checkPnutAmount() {
       const reg = /^\d+(\.\d+)?$/;
-      const res =
-        reg.test(this.pnutAmount);
+      const res = reg.test(this.pnutAmount);
       if (!res) {
         this.showTip(this.$t("error.error"), this.$t("error.inputError"));
         return res;
       }
-      const amount = parseFloat(this.pnutAmount)
-      if (
-        (amount < this.payRate) ||
-        (amount> this.payRate * 10)){
-            this.showTip(this.$t("error.error"), this.$t("error.inputOutOfRange",{'lowerPnutAmount':this.payRate,'uperPnutAmount':this.payRate*10}))
-        }
+      const amount = parseFloat(this.pnutAmount);
+      if (amount < this.payRate || amount > this.payRate * 10) {
+        this.showTip(
+          this.$t("error.error"),
+          this.$t("error.inputOutOfRange", {
+            lowerPnutAmount: this.payRate,
+            uperPnutAmount: this.payRate * 10,
+          })
+        );
+      }
       return true;
-
     },
 
     async transferPnut() {
-        if(!this.checkLink() || !this.checkPnutAmount()){
-            return;
+      // if (!this.checkLink() || !this.checkPnutAmount()) {
+      //   return;
+      // }
+      try {
+        this.isLoading = true;
+        const res = await transferPnut(
+          TRON_PNUT_RECEIVE_ACCOUNT,
+          amountToInt(this.pnutAmount),
+          this.postLink
+        );
+        if (res) {
+          this.postLink = "";
+          this.pnutAmount = "";
+        } else {
+          this.showTip(this.$t("error.error"), this.$t("error.transferFail"));
         }
-        try{
-            this.isLoading = true;
-            const res = await transferPnut(TRON_PNUT_RECEIVE_ACCOUNT,amountToInt(this.pnutAmount),this.postLink)
-            if(res){
-                this.postLink = ''
-                this.pnutAmount = ''
-            }else{
-                this.showTip(this.$t('error.error'),this.$t('error.transferFail'))
-            }
-        }catch(e){
-            this.showTip(this.$t('error.error'),e.message)
-        }finally{
-            this.isLoading = false;
-        }
-
+      } catch (e) {
+        this.showTip(this.$t("error.error"), e.message);
+      } finally {
+        this.isLoading = false;
+      }
     },
     showTip(titel, message) {
       this.tipTitle = titel;

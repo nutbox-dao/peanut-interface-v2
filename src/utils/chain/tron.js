@@ -61,20 +61,19 @@ export const transferPnut = async function (to, amount, memo = "") {
   const tronweb = await getTronLink()
   const user = await getTronLinkAddr()
 console.log('param',params);
-  let transaction = await tronweb.transactionBuilder.triggerSmartContract(
+  const {result,transaction} = await tronweb.transactionBuilder.triggerSmartContract(
     TRON_PNUT_CONTRACT,
     method,
     {
-      feeLimit: 20 * 1000000,
+      feeLimit: 10_000_000,
     },
     params,
     user
   );
   console.log(28984,transaction);
   if (
-    !transaction ||
-    !transaction["result"] ||
-    transaction["result"]["result"] !== true
+    !result ||
+    result["result"] !== true
   ) {
     console.error(
       `Create Transaction Fail.\n\tContract:${TRON_PNUT_CONTRACT};\n\tMethod:${method}\n\tParams:${params}`
@@ -82,14 +81,15 @@ console.log('param',params);
     return false;
   }
   // add memo
-  transaction = await tronweb.transactionBuilder.addUpdateData(transaction["transaction"], memo, 'utf8');
-  console.log('add memo');
+  const trans = await tronweb.transactionBuilder.addUpdateData(transaction, memo, 'utf8');
+  console.log('add memo',trans);
   // Sign transaction
-  let signedTx = await tronweb.trx.sign(transaction);
+  const signedTx = await tronweb.trx.sign(trans);
   console.log(23521,signedTx);
   // Broadcast transaction
-  let {txid} = await tronweb.trx.sendRawTransaction(signedTx);
-  console.log('txid',txid);
+  const broadcastTx= await tronweb.trx.sendRawTransaction(signedTx);
+  console.log('txid',broadcastTx);
+  return false;
   // Validate transaction
   if (
     txid &&
@@ -99,7 +99,7 @@ console.log('param',params);
   } else {
     return false;
   }
-
+  
 };
 
 export function getAddress (hex) {

@@ -624,6 +624,7 @@ export default new Vuex.Store({
       dispatch
     }, tronAddress) {
       commit('saveTronAddress', tronAddress)
+      return;
       dispatch('getTron')
       dispatch('getTsteem')
       dispatch('getTsp')
