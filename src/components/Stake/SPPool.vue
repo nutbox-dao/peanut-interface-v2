@@ -16,7 +16,7 @@
             <span :class="pendingPnut > 0 ? 'token-number' : 'token-number-none'">
               {{ pendingPnut | amountForm }}
             </span>
-            <b-button variant="primary" @click="withdrawPnut">
+            <b-button variant="primary" @click="withdrawPnut" :disabled="pendingPnut <= 0 || isLoading">
               {{ $t("message.withdraw") }}
             </b-button>
           </div>
@@ -32,8 +32,8 @@
               {{ delegatedSp | amountForm }}
             </span>
             <div>
-            <b-button class="minus-btn op-btn" @click="minusDelegate">-</b-button>
-            <b-button class="op-btn" @click="addDelegate">+</b-button>
+            <b-button class="minus-btn op-btn" @click="minusDelegate" :disabled="isLoading">-</b-button>
+            <b-button class="op-btn" @click="addDelegate" :disabled="isLoading">+</b-button>
             </div>
           </div>
           <div class="op-bottom" v-if="!delegated && isLogin">
@@ -102,7 +102,7 @@ export default {
       tipTitle: "",
       showMessage: false,
       pendingPnut: "0.000000",
-      loading: false,
+      isLoading: false,
       showSteemLogin: false,
       withdrawLoading: false,
       showChangeDelegateMask: false,
@@ -142,7 +142,7 @@ export default {
     ChangeDelegateMask,
   },
   methods: {
-    ...mapActions(["getVests", "getSteem", "getPnut", "getDelegatedSp"]),
+    ...mapActions(["getVests", "getSteem", "getPnut", "getDelegatedSp","getTotalDelegatedSP"]),
     ...mapMutations([
       "saveSteemBalance",
       "saveVestsBalance",
@@ -175,7 +175,7 @@ export default {
 
     async withdrawPnut() {
       try {
-        this.loading = true;
+        this.isLoading = true;
         this.withdrawLoading = true;
         const pnutPool = await getContract("PNUT_POOL");
         const res = await pnutPool
@@ -196,7 +196,7 @@ export default {
       } catch (e) {
         this.showTip(this.$t("error.error"), e.message);
       } finally {
-        this.loading = false;
+        this.isLoading = false;
         this.withdrawLoading = false;
       }
     },
@@ -215,6 +215,7 @@ export default {
     if (this.tronAddress && this.tronAddress.length > 0) {
       // this.getPnut();
       this.getDelegatedSp();
+      this.getTotalDelegatedSP();
       // 设置定时器以更新当前收益
       const timer = setInterval(this.getPendingPeanut, 3000);
       // 通过$once来监听定时器，在beforeDestroy钩子时被清除。

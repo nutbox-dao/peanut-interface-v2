@@ -27,7 +27,7 @@ export const retryMethod = async function (func, retries = 5, interval = 1) {
       } catch (e) {
         setTimeout(async () => {
           if (retries > 0) {
-            console.log('retry method', retries)
+            // console.log('retry method', retries)
             await exc(retries - 1)
           } else {
             reject(e)

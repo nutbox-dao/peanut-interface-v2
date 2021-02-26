@@ -63,7 +63,7 @@ module.exports = {
     connectTron:"链接波场钱包"
   },
   stake: {
-    stake: '质押'
+    stake: '质押挖矿'
   },
   farm: {
     farm: '流动性挖矿',

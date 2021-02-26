@@ -53,9 +53,8 @@ export default {
   }
   .farm-box {
     display: flex;
-    align-content: left;
     flex-wrap: wrap;
-    justify-content: space-between;
+    align-content: left;
   }
 }
 </style>

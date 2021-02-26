@@ -378,12 +378,14 @@ background: #FFEB75 !important;
   bottom: 30px;
   box-sizing: border-box;
   background-color: #fefefe;
+  border-top:1px solid var(--dividers);
 
   .links {
     width: 100%;
     display: flex;
     align-content: center;
     justify-content: space-around;
+    margin-top: 19px;
   }
   .settings {
     margin-top: 10px;

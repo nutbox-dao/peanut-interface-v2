@@ -1,62 +1,79 @@
 <template>
   <div class="stake">
     <Card>
-        <div class="title">
-          <img :src="logo[symbol]" alt="" />
-          <span>
-            {{ title[symbol] }}
+      <div class="title-box">
+        <img :src="logo[symbol]" alt="" />
+        <span class="title">
+          {{ title[symbol] }}
+        </span>
+      </div>
+      <div class="pending-box">
+        <p class="info-title">
+          <span class="info-token">PNUT</span>
+          <span class="info-desc">EARNED</span>
+        </p>
+        <div class="pending-input">
+          <span :class="pendingPnut > 0 ? 'token-number' : 'token-number-none'">
+            {{ pendingPnut | amountForm }}
           </span>
+          <b-button
+            variant="primary"
+            @click="withdrawPnut"
+            :disabled="pendingPnut <= 0 || isLoading"
+          >
+            {{ $t("message.withdraw") }}
+          </b-button>
         </div>
-        <div class="pending-box">
-          <p>
-            {{ $t("message.pnutprofits") }}
-          </p>
-          <div>
-            <span>
-              {{ pendingPnut | amountForm }}
-            </span>
-            <b-button
-              variant="primary"
-              @click="withdrawPnut"
-              :disabled="pendingPnut <= 0 || isLoading"
-            >
-              {{ $t("message.withdraw") }}
-            </b-button>
-          </div>
-        </div>
-        <div class="op-box">
-          <p>
-            {{ depositedDesc[symbol] }}
-          </p>
+      </div>
+      <div class="op-box">
+        <p class="info-title">
+          <span class="info-token">{{ token[symbol] }}</span>
+          <span class="info-desc">STAKED</span>
+        </p>
 
-          <ConnectWalletBtn
-            v-if="!isConnected"
-            @tronLogin="showTronLinkInfo"
-            type="TRON"
-          />
-          <div v-if="!approved">
-            <b-button
-              variant="primary"
-              @click="approveContract"
+        <ConnectWalletBtn
+          class="op-bottom"
+          v-if="!isConnected"
+          @tronLogin="showTronLinkInfo"
+          type="TRON"
+        />
+        <div class="op-bottom" v-if="!approved">
+          <b-button
+            variant="primary"
+            @click="approveContract"
+            :disabled="isLoading"
+            style="width: 272px;"
+          >
+            {{ $t("message.approveContract") }}
+          </b-button>
+        </div>
+        <div class="op-bottom" v-if="!deposited && isConnected && approved">
+          <span class="token-number-none"> 0 </span>
+          <b-button variant="primary" @click="addDeposit" :disabled="isLoading">
+            {{ $t("stake.stake") }}
+          </b-button>
+        </div>
+        <div class="op-bottom" v-if="deposited && isConnected && approved">
+          <span
+            :class="depositedBalance > 0 ? 'token-number' : 'token-number-none'"
+            >{{ depositedBalance | amountForm }}</span
+          >
+          <div>
+            <button
+              class="minus-btn op-btn"
+              @click="minusDeposit"
               :disabled="isLoading"
             >
-              {{ $t("message.approveContract") }}
-            </b-button>
-          </div>
-          <div v-if="!deposited && isConnected && approved">
-            <span> 0</span>
-            <b-button variant="primary" @click="addDeposit" :disabled="isLoading">
-              {{ $t("stake.stake") }}
-            </b-button>
-          </div>
-          <div v-if="deposited && isConnected && approved">
-            <span>{{ depositedBalance | amountForm }}</span>
-            <button @click="minusDeposit" :disabled="isLoading">-</button>
-            <button @click="addDeposit" :disabled="isLoading">+</button>
+              -
+            </button>
+            <button class="op-btn" @click="addDeposit" :disabled="isLoading">
+              +
+            </button>
           </div>
         </div>
+      </div>
       <!--手续费-->
-      <p class="fee">
+      <p class="fee apy">
         <span>APY</span>
         <span>{{ apy }}</span>
       </p>
@@ -100,7 +117,10 @@ import {
   getTronLinkAddr,
 } from "../../utils/chain/tron";
 import { mapState, mapGetters, mapActions, mapMutations } from "vuex";
-import { TRON_CONTRACT_CALL_PARAMS,TRON_LINK_ADDR_NOT_FOUND} from "../../config";
+import {
+  TRON_CONTRACT_CALL_PARAMS,
+  TRON_LINK_ADDR_NOT_FOUND,
+} from "../../config";
 
 export default {
   name: "FarmBox",
@@ -117,6 +137,7 @@ export default {
       depositedDesc: {},
       totalDepositedDesc: {},
       logo: {},
+      token:{},
       tspPendingPnut: 0,
       tspLpPendingPnut: 0,
       pnutLpPendingPnut: 0,
@@ -127,7 +148,7 @@ export default {
       isLoading: false,
       isApproving: false,
       isWithdrawing: false,
-      isAddStake:true,
+      isAddStake: true,
     };
   },
   props: {
@@ -182,7 +203,7 @@ export default {
         return this.depositedPnutLp > 0;
       }
     },
-    totalDeposited(){
+    totalDeposited() {
       if (this.symbol === "TSP_POOL") {
         return this.totalDepositedTsp;
       } else if (this.symbol === "TSP_LP_POOL") {
@@ -216,7 +237,7 @@ export default {
       "getTsp",
       "getDepositedTsp",
       "getTspLp",
-      'getDepositedTspLp',
+      "getDepositedTspLp",
       "getPnutLp",
       "getDepositedPnutLp",
       "getTotalDepositedTsp",
@@ -260,39 +281,40 @@ export default {
       }
     },
     minusDeposit() {
-        this.isAddStake = false;
-        this.showChangeDepositMask = true;
+      this.isAddStake = false;
+      this.showChangeDepositMask = true;
     },
     addDeposit() {
-        this.isAddStake = true;
-        this.showChangeDepositMask = true;
+      this.isAddStake = true;
+      this.showChangeDepositMask = true;
     },
     async withdrawPnut() {
-        try {
-        this.isLoading = true
-        this.isWithdrawing = true
-        const contract = await getContract(this.symbol)
-        const res = await contract.withdrawPeanuts().send(TRON_CONTRACT_CALL_PARAMS)
+      try {
+        this.isLoading = true;
+        this.isWithdrawing = true;
+        const contract = await getContract(this.symbol);
+        const res = await contract
+          .withdrawPeanuts()
+          .send(TRON_CONTRACT_CALL_PARAMS);
         if (res && (await isTransactionSuccess(res))) {
-          this.savePnutBalanceInt(this.pnutBalanceInt - amountToInt(-parseFloat(this.pendingPnut)))
+          this.savePnutBalanceInt(
+            this.pnutBalanceInt - amountToInt(-parseFloat(this.pendingPnut))
+          );
         } else {
           if (res && (await isInsufficientEnerge(res))) {
             this.showTip(
-              this.$t('error.error'),
-              this.$t('error.insufficientEnerge')
-            )
+              this.$t("error.error"),
+              this.$t("error.insufficientEnerge")
+            );
           } else {
-            this.showTip(
-              this.$t('error.error'),
-              this.$t('error.withdrawFail')
-            )
+            this.showTip(this.$t("error.error"), this.$t("error.withdrawFail"));
           }
         }
       } catch (e) {
-        this.showTip(this.$t('error.error'), e.message)
+        this.showTip(this.$t("error.error"), e.message);
       } finally {
-        this.isLoading = false
-        this.isWithdrawing = false
+        this.isLoading = false;
+        this.isWithdrawing = false;
       }
     },
 
@@ -348,6 +370,12 @@ export default {
       TSP_LP_POOL: "TSP-TRX LP",
       PNUT_LP_POOL: "PNUT-TRX LP",
     };
+
+    this.token = {
+      TSP_POOL: "TSP",
+      TSP_LP_POOL: "S-TSP-TRX",
+      PNUT_LP_POOL: "S-PNUT-TRX",
+    },
     this.depositedDesc = {
       TSP_POOL: this.$t("farm.tsp.yourTspAmount"),
       TSP_LP_POOL: this.$t("farm.tspLp.yourTSPLPAmount"),
@@ -369,17 +397,17 @@ export default {
         this.getTsp();
         this.getDepositedTsp();
         this.getTotalDepositedTsp();
-        this.getApprovedTSP()
+        this.getApprovedTSP();
       } else if (this.symbol === "TSP_LP_POOL") {
         this.getTspLp();
         this.getDepositedTspLp();
         this.getTotalDepositedTspLp();
-        this.getApprovedTSPLP()
+        this.getApprovedTSPLP();
       } else if (this.symbol === "PNUT_LP_POOL") {
         this.getPnutLp();
         this.getDepositedPnutLp();
         this.getTotalDepositedPnutLp();
-        this.getApprovedPNUTLP()
+        this.getApprovedPNUTLP();
       }
       // 设置定时器以更新当前收益
       const timer = setInterval(this.getPendingPeanut, 3000);

@@ -63,10 +63,10 @@ module.exports = {
     connectTron:"Connect tron-link"
   },
   stake: {
-    stake: 'Stake'
+    stake: 'Staking Mint'
   },
   farm: {
-    farm: 'Farm',
+    farm: 'Farming',
     tsp: {
       tspMine: 'TSP Stake',
       yourTspAmount: 'TSP Staked',
@@ -91,7 +91,7 @@ module.exports = {
     }
   },
   liquidStaking: {
-    liquidStaking: 'Liquid Stading',
+    liquidStaking: 'Liquid Staking',
     tsp: {
       tspIsCirculatingSP: 'TSP is the equivalent of SP, TSP can enjoy the same staking reward of SP, and TSP can be traded',
       tsptosteemintro: 'The withdrawn TSP will be returned to your Steem account in around 33~40 days.'
