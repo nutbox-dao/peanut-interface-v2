@@ -1,28 +1,43 @@
 <template>
-    <div class='card'>
-        <slot/>
-    </div>
+  <div class="card">
+    <div class="left-bar"></div>
+    <slot />
+  </div>
 </template>
 
 <script>
 export default {
-  name: 'Card'
-}
+  name: "Card",
+};
 </script>
 
 <style lang="less" scoped>
-.card{
-    background-color: white;
-    box-shadow: rgba(0, 0, 0, 0.06) 0px 1px 10px, rgba(0, 0, 0, 0.03) 0px 2px 4px,
-    rgba(0, 0, 0, 0.03) 3px 8px 12px, rgba(0, 0, 0, 0.01) 3px 12px 16px;
-    border-radius: 16px;
-    display: block;
-    z-index: 1;
-    box-sizing: border-box;
-    padding:1.5rem 1rem 1.5rem 1rem;
+.card {
+  display: block;
+  z-index: 1;
+  box-sizing: border-box;
+  padding: 24px 24px;
+
+  background: #ffffff;
+  box-shadow: 0px 2px 20px 0px rgba(0, 0, 0, 0.02);
+  border-radius: 28px;
+  border: 1px solid rgba(227, 229, 232, 0.5);
+  box-sizing: border-box;
 }
-.card:hover{
-    box-shadow: rgba(0, 0, 0, 0.08) 0px 3px 30px, rgba(0, 0, 0, 0.04) 0px 4px 8px,
-    rgba(0, 0, 0, 0.04) 3px 16px 24px, rgba(0, 0, 0, 0.01) 3px 24px 32px;
+.left-bar { 
+  position: relative;
+  float: left;
+  width:4px;
+  height:20px;
+  background:var(--primary);
+  left:0;
+  top:18px;
+  margin-left: -24px;
+}
+.card:hover {
+    padding: 23px 23px;
+  border: 2px solid #ffdb1b;
+  box-shadow: 0px 2px 20px 0px #ffe973;
+  box-sizing: border-box;
 }
 </style>

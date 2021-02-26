@@ -8,7 +8,7 @@
             <span class="title">
               {{ name }}
             </span>
-            <span style="font-size: 14px; color: #999">
+            <span style="font-size: 12px; color: var(--secondary-text)">
               {{ desc }}
             </span>
           </div>
@@ -78,9 +78,9 @@ export default {
     padding: 0;
     display: flex;
     .icon {
-      width: 48px;
-      height: 48px;
-      margin-right: 10px;
+      width: 56px;
+      height: 56px;
+      margin-right: 8px;
     }
     .balance-right {
       display: flex;
@@ -91,7 +91,8 @@ export default {
         text-align: left;
       }
       .title {
-        font-size: 18px;
+        font-size: 20px;
+        font-weight: 600;
       }
       .balance-name {
         display: flex;

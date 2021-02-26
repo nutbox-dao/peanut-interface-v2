@@ -1,20 +1,6 @@
 <template>
   <div class="steem-wallet">
     <div class="steem-wallet">
-      <!-- 用户名 -->
-      <b-dropdown
-      v-if="steemAccount && steemAccount.trim().length > 0"
-        :text="steemAccount"
-        size="lg"
-        lazy
-        block
-        variant="outline-primary"
-        menu-class="w-100"
-      >
-        <b-dropdown-item-btn @click="logout" size="lg" variant="primary">{{
-          $t("message.logout")
-        }}</b-dropdown-item-btn>
-      </b-dropdown>
       <div class="balance-box">
         <BalanceView
           name="STEEM"
@@ -64,10 +50,6 @@ export default {
     async changeAccount(account) {
       this.$store.commit("saveSteemAccount", account);
       console.log(account);
-    },
-    logout() {
-      this.$store.commit("clearSteemAccount");
-      
     },
   },
   components: {

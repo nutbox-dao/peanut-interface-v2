@@ -126,19 +126,14 @@ export default {
 
 <style lang="less" scoped>
 .tron {
-  // display: flex;
-  // align-items: center;
-  // justify-content: space-evenly;
-  // flex-wrap: wrap;
+  margin-top: 20px;
   .balance-box {
     display: flex;
-    // justify-content: space-between;
     align-content: left;
+    // z-index: 1;
+    // justify-content: space-between;
     flex-wrap: wrap;
-    span {
-      font-size: 20px;
-    }
-    > div {
+    >div{
       margin-top: 24px;
       margin-right: 24px;
     }

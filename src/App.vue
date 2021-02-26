@@ -13,7 +13,7 @@
                   : $t("wallet.wallet")
               }}
             </p>
-            <p style="font-size: 14px; font-weight: 300">
+            <p style="font-size: 12px; font-weight: 400; color: var(--disable)">
               {{ pnutBalance | amountForm }}
             </p>
           </div>
@@ -64,7 +64,11 @@
               dropup
               no-caret
             >
-              <b-dropdown-item v-for="item in steemUrls" :key="item" @click="selectNode(item)">
+              <b-dropdown-item
+                v-for="item in steemUrls"
+                :key="item"
+                @click="selectNode(item)"
+              >
                 <b-icon
                   :icon="item == currentSteemNode ? 'check' : 'blank'"
                   aria-hidden="true"
@@ -83,7 +87,7 @@
             >
               <b-dropdown-item @click="setenlang">
                 <b-icon
-                style="font-size: 20px"
+                  style="font-size: 20px"
                   :icon="lang == 'en' ? 'check' : 'blank'"
                   aria-hidden="true"
                 ></b-icon>
@@ -91,7 +95,7 @@
               </b-dropdown-item>
               <b-dropdown-item @click="setzhlang">
                 <b-icon
-                style="font-size: 20px"
+                  style="font-size: 20px"
                   :icon="lang == 'zh' ? 'check' : 'blank'"
                   aria-hidden="true"
                 ></b-icon>
@@ -99,7 +103,7 @@
               </b-dropdown-item>
               <b-dropdown-item @click="setkrlang">
                 <b-icon
-                style="font-size: 20px"
+                  style="font-size: 20px"
                   :icon="lang == 'kr' ? 'check' : 'blank'"
                   aria-hidden="true"
                 ></b-icon>
@@ -189,7 +193,7 @@ export default {
       this.tipMessage = this.$t("error.unlockWallet");
       this.showMessage = true;
     } else if (address) {
-      store.dispatch("getPnut")
+      store.dispatch("getPnut");
     }
     watchWallet((address) => {
       if (address && address === TRON_LINK_ADDR_NOT_FOUND.noTronLink) {
@@ -210,10 +214,20 @@ export default {
 </script>
 
 <style lang="scss">
-$blue: #FFDB1B;
+$blue: #ffdb1b;
 :root {
   --yellow-background: #f5ecd8;
-  --primary: #FFDB1B;
+  --primary: #ffdb1b;
+  --primary-text: #242629;
+  --secondary-text: #717376;
+  --disable: #bdbfc2;
+  --dividers: #e3e5e8;
+  --background: #f6f7f9;
+  --error: #ff5040;
+  --success: #50bf00;
+  --link: #408fff;
+  --warning: #ff9500;
+  --backgroud-state: #b37012;
 }
 
 @import "~bootstrap/scss/bootstrap.scss";
@@ -224,21 +238,27 @@ body {
   margin: 0;
 }
 #app {
-  font-family:PingFangSC-Medium, PingFang SC, -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue";
+  font-family: PingFangSC-Medium, PingFang SC, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans",
+    "Droid Sans", "Helvetica Neue";
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
+  color:  var(--primary-text);
   height: 100%;
   display: flex;
   align-items: left;
+  background-color: var(--background);
 }
 h3 {
-  margin-top: 64px;
+  margin-top: 56px;
   text-align: left;
   display: block;
   width: 100%;
+  height: 36px;
+  font-size: 36px;
+  font-weight: 500;
+  line-height: 36px;
 }
 .mask {
   z-index: 2000;
@@ -254,6 +274,16 @@ h3 {
   -webkit-box-pack: center;
   justify-content: center;
   background-color: rgba(0, 0, 0, 0.3);
+}
+
+.btn-primary {
+  border-radius:16px !important;
+box-shadow: 0px 8px 12px -4px #FFEC88;
+border:0px !important;
+}
+
+.btn-primary:hover{
+background: #FFEB75 !important;
 }
 
 .menu .nav-link {
@@ -276,18 +306,16 @@ h3 {
 }
 
 .left {
-  background-color: #FFFFFF;
+  background-color: #ffffff;
   padding-top: 55px;
   padding-left: 12px;
   width: 240px;
   position: relative;
-
-box-shadow: 4px 0px 48px 0px rgba(0, 0, 0, 0.04);
-border-radius: 50px;
-box-sizing: border-box;
+  box-shadow: 4px 0px 48px 0px rgba(0, 0, 0, 0.06);
+  border-radius: 0px 24px 24px 0px;
+  // border-radius: 50px;
 }
 .right {
-  background-color: #F6F7F9;
   flex: 1;
   height: 100vh;
   max-height: 100vh;
@@ -302,41 +330,50 @@ box-sizing: border-box;
 }
 
 .left .nav-item:hover {
-
-background: linear-gradient(270deg, rgba(227, 229, 232, 0) 0%, rgba(227, 229, 232, 0.4) 100%)!important;
-font-weight: 500;
-color: #242629;
+  background: linear-gradient(
+    270deg,
+    rgba(227, 229, 232, 0) 0%,
+    rgba(227, 229, 232, 0.4) 100%
+  ) !important;
+  font-weight: 500;
+  color: #242629;
 }
 
 .left .nav-item .b-icon {
-  margin-right: 6px;
+  margin-right: 12px;
 }
 
 .left .nav-link {
   height: 100%;
 
-font-size: 14px;
-font-family: PingFangSC-Regular, PingFang SC;
-font-weight: 400;
-color: #BDBFC2;
-line-height: 14px;
+  font-size: 14px;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: #bdbfc2;
+  line-height: 14px;
   padding-left: 36px;
 }
 
 .left .active {
-background: linear-gradient(270deg, rgba(255, 219, 27, 0) 0%, rgba(255, 219, 27, 0.2) 100%)!important;
+  background: linear-gradient(
+    270deg,
+    rgba(255, 219, 27, 0) 0%,
+    rgba(255, 219, 27, 0.2) 100%
+  ) !important;
   border-radius: 0px;
-  border-left: 6px solid var(--primary);
-  padding-left: 30px;
-font-weight: 500 !important;
-color: #242629 !important;
+  border-left: 3px solid var(--primary);
+  padding-left: 33px;
+  font-weight: 500 !important;
+  color: #242629 !important;
 }
 
 .left .bottom {
   position: absolute;
   padding: 0 20px;
-  width: 100%;
+  margin-left: -12px;
+  width: 240px;
   bottom: 30px;
+  box-sizing: border-box;
   background-color: #fefefe;
 
   .links {

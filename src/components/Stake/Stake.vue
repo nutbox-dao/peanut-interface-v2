@@ -3,7 +3,7 @@
     <h3>
       {{ this.$t("stake.stake") }}
     </h3>
-    <div class="nav"></div>
+    <!-- <div class="nav"></div> -->
     <div class="stake-box">
       <SPPool />
       <FarmBox symbol="TSP_POOL" />
