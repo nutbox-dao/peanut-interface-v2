@@ -1,7 +1,6 @@
 <template>
   <div class="stake">
     <Card>
-      <div class="stake-box">
         <div class="title">
           <img :src="logo[symbol]" alt="" />
           <span>
@@ -56,7 +55,6 @@
             <button @click="addDeposit" :disabled="isLoading">+</button>
           </div>
         </div>
-      </div>
       <!--手续费-->
       <p class="fee">
         <span>APY</span>

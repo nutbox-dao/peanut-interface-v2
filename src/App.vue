@@ -277,9 +277,12 @@ h3 {
 }
 
 .btn-primary {
+  font-size: 16px;
   border-radius:16px !important;
 box-shadow: 0px 8px 12px -4px #FFEC88;
 border:0px !important;
+padding:12px 24px;
+font-weight: 600;
 }
 
 .btn-primary:hover{

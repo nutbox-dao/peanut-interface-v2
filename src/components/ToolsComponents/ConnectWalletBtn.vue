@@ -44,8 +44,8 @@ export default {
     z-index: 999;
 }
 button {
-    margin-top: 16px;
-    width: 90%;
-    height: 40px;
+    margin-top: 24px;
+    width: 272px;
+    height: 48px;
 }
 </style>

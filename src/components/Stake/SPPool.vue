@@ -1,19 +1,19 @@
 <template>
   <div class="stake">
     <Card>
-      <div class="stake-box">
-        <div class="title">
+        <div class="title-box">
           <img :src="spLogo" alt="" />
-          <span>
+          <span class="title">
             {{ $t("message.delegatemine") }}
           </span>
         </div>
         <div class="pending-box">
-          <p>
-            {{ $t("message.pnutprofits") }}
+          <p class="info-title">
+            <span class='info-token'>PNUT</span>
+            <span class="info-desc">EARNED</span>
           </p>
-          <div>
-            <span>
+          <div class="pending-input">
+            <span :class="pendingPnut > 0 ? 'token-number' : 'token-number-none'">
               {{ pendingPnut | amountForm }}
             </span>
             <b-button variant="primary" @click="withdrawPnut">
@@ -21,44 +21,54 @@
             </b-button>
           </div>
         </div>
+
         <div class="op-box">
-          <p>
-            {{ $t("message.yourspdelegate") }}
+          <p class="info-title">
+            <span class='info-token'>STEEM POWER</span>
+            <span class="info-desc">DELEGATED</span>
           </p>
-          <div v-if="delegated && isLogin">
-            <span>
+          <div class="op-bottom" v-if="delegated && isLogin">
+            <span :class="delegatedSp> 0 ? 'token-number' : 'token-number-none'">
               {{ delegatedSp | amountForm }}
             </span>
-            <button @click="minusDelegate">-</button>
-            <button @click="addDelegate">+</button>
+            <div>
+            <b-button class="minus-btn op-btn" @click="minusDelegate">-</b-button>
+            <b-button class="op-btn" @click="addDelegate">+</b-button>
+            </div>
           </div>
-          <div v-if="!delegated && isLogin">
-            <span> 0 </span>
-            <b-button @click="delegate">
+          <div class="op-bottom" v-if="!delegated && isLogin">
+            <span class="token-number-none"> 0 </span>
+            <b-button variant="primary" @click="delegate">
               {{ $t("message.delegatemine") }}
             </b-button>
           </div>
-          <ConnectWalletBtn v-if="!isLogin" @steemLogin="showSteemLogin=true"/>
+          <ConnectWalletBtn
+          class="op-bottom"
+            v-if="!isLogin"
+            @steemLogin="showSteemLogin = true"
+          />
         </div>
-      </div>
-      <!--手续费-->
-      <p class="fee">
+      <!--apy-->
+      <p class="fee apy">
         <span>APY</span>
         <span>{{ apy }}</span>
       </p>
-
+      <!-- total staked -->
       <p class="fee">
         <span>
           {{ $t("message.sptotaldelegate") }}
         </span>
         <span>
-          {{totalDelegatedSp | amountForm}}
+          {{ totalDelegatedSp | amountForm }}
         </span>
       </p>
-
     </Card>
     <Login v-if="showSteemLogin" @hideMask="showSteemLogin = false" />
-    <ChangeDelegateMask :operate="operate" v-if="showChangeDelegateMask" @hideMask="showChangeDelegateMask=false"/>
+    <ChangeDelegateMask
+      :operate="operate"
+      v-if="showChangeDelegateMask"
+      @hideMask="showChangeDelegateMask = false"
+    />
     <TipMessage
       :showMessage="tipMessage"
       :title="tipTitle"
@@ -71,7 +81,7 @@
 <script>
 import Card from "../ToolsComponents/Card";
 import TipMessage from "../ToolsComponents/TipMessage";
-import ChangeDelegateMask from './ChangeDelegateMask'
+import ChangeDelegateMask from "./ChangeDelegateMask";
 import Login from "../Login";
 import { getContract } from "../../utils/chain/contract";
 import ConnectWalletBtn from "../ToolsComponents/ConnectWalletBtn";
@@ -82,9 +92,7 @@ import {
   isInsufficientEnerge,
 } from "../../utils/chain/tron";
 import { mapState, mapGetters, mapActions, mapMutations } from "vuex";
-import {
-  TRON_CONTRACT_CALL_PARAMS,
-} from "../../config";
+import { TRON_CONTRACT_CALL_PARAMS } from "../../config";
 
 export default {
   name: "SPPool",
@@ -95,11 +103,12 @@ export default {
       showMessage: false,
       pendingPnut: "0.000000",
       loading: false,
-      showSteemLogin:false,
+      showSteemLogin: false,
       withdrawLoading: false,
-      showChangeDelegateMask:false,
-      operate:"add",
-      spLogo: "https://coin.top/production/upload/logo/TW2EWoRUJfwH9nMTfLxSL9JPLZeusUtTfR.jpeg?t=1608343575484",
+      showChangeDelegateMask: false,
+      operate: "add",
+      spLogo:
+        "https://coin.top/production/upload/logo/TW2EWoRUJfwH9nMTfLxSL9JPLZeusUtTfR.jpeg?t=1608343575484",
     };
   },
   computed: {
@@ -111,7 +120,12 @@ export default {
       "vestsBalance",
       "apy",
     ]),
-    ...mapGetters(["spBalance", "pnutBalance", "delegatedSp","totalDelegatedSp"]),
+    ...mapGetters([
+      "spBalance",
+      "pnutBalance",
+      "delegatedSp",
+      "totalDelegatedSp",
+    ]),
 
     delegated() {
       return this.delegatedSp && this.delegatedSp > 0;
@@ -125,7 +139,7 @@ export default {
     TipMessage,
     ConnectWalletBtn,
     Login,
-    ChangeDelegateMask
+    ChangeDelegateMask,
   },
   methods: {
     ...mapActions(["getVests", "getSteem", "getPnut", "getDelegatedSp"]),
@@ -146,8 +160,8 @@ export default {
     },
 
     delegate() {
-      this.operate = 'add'
-      this.showChangeDelegateMask = true
+      this.operate = "add";
+      this.showChangeDelegateMask = true;
     },
 
     addDelegate() {
@@ -155,8 +169,8 @@ export default {
     },
 
     minusDelegate() {
-      this.operate = 'minus'
-      this.showChangeDelegateMask = true
+      this.operate = "minus";
+      this.showChangeDelegateMask = true;
     },
 
     async withdrawPnut() {

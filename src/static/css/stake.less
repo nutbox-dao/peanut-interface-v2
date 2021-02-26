@@ -1,31 +1,124 @@
-.stake{
-    display:flex;
+.stake {
+    display: flex;
     align-items: center;
-    justify-content:space-around;
-    .card{
-        margin-top:40px;
-        width:320px;
-        height: 340px;
-        img{
-            widows: 48px;
-            height: 48px;
-        }
-        input{
-            margin-bottom: 1rem;
-        }
-        .pending-pnut{
+    align-content: center;
+    justify-content: space-around;
+    margin-right: 24px;
+
+    .card {
+        margin-top: 40px;
+        width: 320px;
+        height: 360px;
+
+        .title-box {
             display: flex;
-            justify-content: space-between;
-            margin-top: 1rem;
-            span{
-                padding:0px 10px;
+            align-content: left;
+            align-items: center;
+
+            img {
+                width: 56px;
+                height: 56px;
+            }
+
+            .title {
+                margin-left: 8px;
+
+                font-size: 20px;
+                font-family: PingFangSC-Semibold, PingFang SC;
+                font-weight: 600;
+                color: var(--primary-text);
+                line-height: 24px;
             }
         }
-        .op-box{
-            height: 80px;
+
+        .info-title {
+            text-align: left;
+            margin: 0px;
+            line-height: 12px;
+
+            .info-token {
+                font-size: 12px;
+                color: var(--secondary-text);
+                margin-right: 3px;
+            }
+
+            .info-desc {
+                font-size: 12px;
+                color: var(--disable)
+            }
         }
+
+        .token-number {
+            font-size: 24px;
+            color: var(--primary-text);
+        }
+
+        .token-number-none {
+            font-size: 24px;
+            color: var(--disable);
+        }
+
+        .pending-box {
+            margin-top: 20px;
+
+            .pending-input {
+                margin-top: 8px;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+            }
+        }
+
+        .op-box {
+            margin-top: 20px;
+
+            .op-bottom {
+                margin-top: 8px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+
+                .op-btn {
+                    width: 48px;
+                    height: 48px;
+                    background: #E3E5E8;
+                    border-radius: 16px;
+                    border: 0 !important;
+                    color: #7a7c80;
+                    font-size: 24px;
+                }
+
+                .op-btn:hover {
+                    background: #d3d5d8;
+                }
+
+                .minus-btn {
+                    margin-right: 12px;
+                }
+            }
+        }
+
+        .fee {
+            height: 14px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--disable);
+            line-height: 14px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .apy {
+            margin-top: 34px
+        }
+
+        /deep/ .login-btn {
+            margin-top: 0 !important;
+        }
+
     }
-    .fee{
+
+    .fee {
         width: 100%;
         text-align: center;
         font-size: 14px;
