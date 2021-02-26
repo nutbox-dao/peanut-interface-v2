@@ -80,7 +80,7 @@
 
             <b-dd
               id="language"
-              :text="$t('message.language')"
+              :text="lang.toUpperCase()"
               size="sm"
               dropup
               no-caret
@@ -220,7 +220,7 @@ $blue: #ffdb1b;
   --primary: #ffdb1b;
   --primary-text: #242629;
   --secondary-text: #717376;
-  --disable: #bdbfc2;
+  --disable: #BDBFC2;
   --dividers: #e3e5e8;
   --background: #f6f7f9;
   --error: #ff5040;
@@ -283,6 +283,7 @@ box-shadow: 0px 8px 12px -4px #FFEC88;
 border:0px !important;
 padding:12px 24px;
 font-weight: 600;
+color:var(--primary-text) !important;
 }
 
 .btn-primary:hover{
@@ -315,7 +316,8 @@ background: #FFEB75 !important;
   width: 240px;
   position: relative;
   box-shadow: 4px 0px 48px 0px rgba(0, 0, 0, 0.06);
-  border-radius: 0px 24px 24px 0px;
+  border-radius: 0px 4vh 4vh 0px;
+  overflow: hidden;
   // border-radius: 50px;
 }
 .right {
@@ -352,7 +354,7 @@ background: #FFEB75 !important;
   font-size: 14px;
   font-family: PingFangSC-Regular, PingFang SC;
   font-weight: 400;
-  color: #bdbfc2;
+  color: var(--disable);
   line-height: 14px;
   padding-left: 36px;
 }

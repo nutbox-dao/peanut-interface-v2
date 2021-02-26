@@ -133,7 +133,7 @@ export default {
           this.$t("error.error"),
           this.$t("error.inputOutOfRange", {
             lowerPnutAmount: this.payRate,
-            uperPnutAmount: this.payRate * 10,
+            upperPnutAmount: this.payRate * 10,
           })
         );
       }

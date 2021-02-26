@@ -136,7 +136,7 @@ module.exports = {
     illegalTronAddress: '无效的波场地址',
     inputError: '输入值无效',
     inputOverflow: '输入超过最大值',
-    inputOutOfRange: "请输入{lowerPnutAmount}-{uperPnutAmount}的值",
+    inputOutOfRange: "请输入{lowerPnutAmount}-{upperPnutAmount}的值",
     inputLinkIllegal:"请输入正确的链接",
     transferFail:"转账失败",
     notEnoughFee: '手续费不足',

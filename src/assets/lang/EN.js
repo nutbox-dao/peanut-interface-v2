@@ -136,7 +136,7 @@ module.exports = {
     illegalTronAddress: 'Invalid tron address',
     inputError: 'Input wrong value',
     inputOverflow: 'Input overflow',
-    inputOutOfRange: "Please input value between {lowerPnutAmount}-{uperPnutAmount}",
+    inputOutOfRange: "Please input value between {lowerPnutAmount}-{upperPnutAmount}",
     inputLinkIllegal:"Please input correct link",
     notEnoughFee: 'Insufficient fee',
     insufficentPnut:"Insufficent PNUT"
