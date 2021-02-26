@@ -317,7 +317,6 @@ background: #FFEB75 !important;
   position: relative;
   box-shadow: 4px 0px 48px 0px rgba(0, 0, 0, 0.06);
   border-radius: 0px 4vh 4vh 0px;
-  overflow: hidden;
   // border-radius: 50px;
 }
 .right {
@@ -379,7 +378,7 @@ background: #FFEB75 !important;
   width: 240px;
   bottom: 30px;
   box-sizing: border-box;
-  background-color: #fefefe;
+  background-color: rgba(0, 0, 0, 0.0);
   border-top:1px solid var(--dividers);
 
   .links {
