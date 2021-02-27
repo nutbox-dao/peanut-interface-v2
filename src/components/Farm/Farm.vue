@@ -6,7 +6,7 @@
     <div class="nav"></div>
     <div class="farm-box">
       <FarmBox symbol="PNUT_LP_POOL" />
-      <!-- <FarmBox symbol="TSP_LP_POOL" /> -->
+      <FarmBox symbol="TSP_LP_POOL" />
     </div>
   </div>
 </template>

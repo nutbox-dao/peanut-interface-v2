@@ -412,7 +412,7 @@ export default new Vuex.Store({
           const pnutLpBalance = await getBalanceOfToken(pnutLpAddr, context.state.tronAddress)
           context.commit('savePnutLpBalanceInt', pnutLpBalance || 0)
         } catch (e) {
-          console.error('Get Pnut_Lp Fail:', e)
+          // console.error('Get Pnut_Lp Fail:', e)
           throw e
         }
       }).catch((e) => {
@@ -476,7 +476,7 @@ export default new Vuex.Store({
           amount = amount.pnutLpAmount
           context.commit('saveDepositedPnutLpInt', amount || 0)
         } catch (e) {
-          console.error('Get Deposited PNUT_LP Fail:', e.message)
+          // console.error('Get Deposited PNUT_LP Fail:', e.message)
           throw e
         }
       }).catch((e) => {
@@ -536,7 +536,7 @@ export default new Vuex.Store({
           let amount = await contract.totalDepositedPnutLp().call()
           context.commit('saveTotalDepositedPnutLpInt', amount || 0)
         } catch (e) {
-          console.error('Get Total Deposited PNUT LP Fail:', e.message)
+          // console.error('Get Total Deposited PNUT LP Fail:', e.message)
           throw e
         }
       }).catch((e) => {
@@ -611,7 +611,7 @@ export default new Vuex.Store({
           const amount = tx && tx.constant_result && tx.constant_result[0] && tron.toDecimal('0x' + tx.constant_result[0])
           context.commit('saveApprovedPNUTLP', intToAmount(amount) > 1e6)
         } catch (e) {
-          console.error('Get ApprovedPNUTLP Fail:', e.message)
+          // console.error('Get ApprovedPNUTLP Fail:', e.message)
           throw e
         }
       }).catch((e) => {
