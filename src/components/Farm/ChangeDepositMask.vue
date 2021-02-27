@@ -46,7 +46,7 @@ import {
 } from "../../utils/chain/tron";
 import { mapState, mapGetters, mapActions, mapMutations } from "vuex";
 import { TRON_CONTRACT_CALL_PARAMS } from "../../config";
-import {getContract} from '../../utils/chain/contract'
+import { getContract } from "../../utils/chain/contract";
 export default {
   name: "ChangeDepositMask",
   data() {
@@ -56,8 +56,9 @@ export default {
       tipTitle: "",
       showMessage: false,
       inputValue: "",
-      saveTokenMethod:{},
-      saveStakedMethod:{},
+      saveTokenMethod: {},
+      saveStakedMethod: {},
+      getTotalStakedMethod: {},
     };
   },
   components: {
@@ -65,7 +66,15 @@ export default {
     TipMessage,
   },
   computed: {
-    ...mapState(["tronAddress"]),
+    ...mapState([
+      "tronAddress",
+      "tspBalanceInt",
+      "depositedTspInt",
+      "tspLpBalanceInt",
+      "depositedTspLpInt",
+      "pnutLpBalanceInt",
+      "depositedPnutLpInt",
+    ]),
     ...mapGetters([
       "tspBalance",
       "depositedTsp",
@@ -73,13 +82,6 @@ export default {
       "depositedTspLp",
       "pnutLpBalance",
       "depositedPnutLp",
-
-      "tspBalanceInt",
-      "depositedTspInt",
-      "tspLpBalanceInt",
-      "depositedTspLpInt",
-      "pnutLpBalanceInt",
-      "depositedPnutLpInt",
     ]),
 
     tokenBalance() {
@@ -130,7 +132,10 @@ export default {
     },
   },
   methods: {
-    ...mapActions(["getTsp", "getDepositedTsp"]),
+    ...mapActions(["getTsp", "getDepositedTsp", "getPnut",
+      "getTotalDepositedTsp",
+      "getTotalDepositedTspLp",
+      "getTotalDepositedPnutLp",]),
     ...mapMutations([
       "saveTspBalanceInt",
       "saveDepositedTspInt",
@@ -183,12 +188,15 @@ export default {
           .send(TRON_CONTRACT_CALL_PARAMS);
         if (res && (await isTransactionSuccess(res))) {
           this.saveTokenMethod[this.symbol](this.tokenBalanceInt - depositInt);
-          if (this.stakedBalanceInt > 0){
-              this.saveStakedMethod[this.symbol](this.stakedBalanceInt - (-depositInt))
-          }else{
+          if (this.stakedBalanceInt > 0) {
+            this.saveStakedMethod[this.symbol](
+              this.stakedBalanceInt - (-depositInt)
+            );
+          } else {
             this.saveStakedMethod[this.symbol](depositInt);
           }
-          this.$emit('hideMask')
+          await this.getTotalStakedMethod[this.symbol]();
+          this.$emit("hideMask");
         } else {
           if (res && (await isInsufficientEnerge(res))) {
             this.showTip(
@@ -212,27 +220,26 @@ export default {
       }
       try {
         this.isLoading = true;
-        const minusInt = amountToInt(parseFloat(this.inputValue))
-        const contract = await getContract(this.symbol)
+        const minusInt = amountToInt(parseFloat(this.inputValue));
+        const contract = await getContract(this.symbol);
         const res = await contract
           .withdraw(minusInt)
-          .send(TRON_CONTRACT_CALL_PARAMS)
+          .send(TRON_CONTRACT_CALL_PARAMS);
         if (res && (await isTransactionSuccess(res))) {
-            this.saveTokenMethod[this.symbol](this.tokenBalanceInt - (-minusInt))
-            this.saveStakedMethod[this.symbol](this.stakedBalanceInt - minusInt)
-            await this.getPnut();
-            this.$emit('hideMask')
+          this.saveTokenMethod[this.symbol](this.tokenBalanceInt - (-minusInt));
+          this.saveStakedMethod[this.symbol](this.stakedBalanceInt - minusInt);
+          // await this.getPnut();
+          // await this.saveTotalStakedMethod[this.symbol]();
+          await Promise.all([this.getPnut(),this.getTotalStakedMethod[this.symbol]()])
+          this.$emit("hideMask");
         } else {
           if (res && (await isInsufficientEnerge(res))) {
             this.showTip(
-              this.$t('error.error'),
-              this.$t('error.insufficientEnerge')
-            )
+              this.$t("error.error"),
+              this.$t("error.insufficientEnerge")
+            );
           } else {
-            this.showTip(
-              this.$t('error.error'),
-              this.$t('error.depositFail')
-            )
+            this.showTip(this.$t("error.error"), this.$t("error.depositFail"));
           }
         }
       } catch (e) {
@@ -257,16 +264,21 @@ export default {
   },
 
   mounted() {
-      this.saveTokenMethod = {
-          TSP_POOL:this.saveTspBalanceInt,
-          TSP_LP_POOL:this.saveTspLpBalanceInt,
-          PNUT_LP_POOL:this.savePnutLpBalanceInt
-      },
-      this.saveStakedMethod = {
-          TSP_POOL:this.saveDepositedTspInt,
-          TSP_LP_POOL:this.saveDepositedTspLpInt,
-          PNUT_LP_POOL:this.saveDepositedPnutLpInt
-      }
+    this.saveTokenMethod = {
+      TSP_POOL: this.saveTspBalanceInt,
+      TSP_LP_POOL: this.saveTspLpBalanceInt,
+      PNUT_LP_POOL: this.savePnutLpBalanceInt,
+    },
+    this.saveStakedMethod = {
+      TSP_POOL: this.saveDepositedTspInt,
+      TSP_LP_POOL: this.saveDepositedTspLpInt,
+      PNUT_LP_POOL: this.saveDepositedPnutLpInt,
+    },
+    this.getTotalStakedMethod = {
+      TSP_POOL: this.getTotalDepositedTsp,
+      TSP_LP_POOL: this.getTotalDepositedTspLp,
+      PNUT_LP_POOL: this.getTotalDepositedPnutLp,
+    };
   },
 };
 </script>

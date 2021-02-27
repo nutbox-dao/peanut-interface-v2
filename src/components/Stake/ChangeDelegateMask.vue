@@ -88,7 +88,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions(["getVests", "getSteem", "getPnut", "getDelegatedSp"]),
+    ...mapActions(["getVests", "getSteem", "getPnut", "getDelegatedSp", "getTotalDelegatedSP"]),
     ...mapMutations([
       "saveSteemBalance",
       "saveVestsBalance",
@@ -169,9 +169,8 @@ export default {
           this.tronAddress
         );
         if (res.success === true) {
-          this.getVests();
-          this.getSteem();
           this.saveDelegatedVestsInt(amountToInt(parseFloat(amount)));
+          await Promise.all([this.getVests(),this.getSteem(), this.getTotalDelegatedSP()])
           this.$emit('hideMask')
         } else {
           this.showTip(this.$t("error.delegateerror"), res.message);

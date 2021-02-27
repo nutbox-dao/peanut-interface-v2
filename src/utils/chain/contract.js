@@ -15,25 +15,6 @@ const CONTRACT_JSON_NAME_LIST = {
   PNUT_TRX: 'PnutTrxToken.json',
 }
 
-var contractAdd = {
-  PNUT: '',
-  TSBD: '',
-  TSTEEM: '',
-  TSP: '',
-  PNUT_POOL: '',
-  TSP_LP_POOL: '',
-  PNUT_LP_POOL: '',
-  TSP_POOL: '',
-  PNUT_TRX: ''
-}
-
-export const getContractAddress = async function (symbol) {
-  if (contractAdd[symbol] && contractAdd[symbol].length > 0) {
-    return contractAdd[symbol]
-  }
-  return
-}
-
 export const getAbiAndContractAddress = async function (symbol) {
   symbol = symbol.toUpperCase()
   const tronweb = getTron()
@@ -52,7 +33,6 @@ export const getContract = async function (symbol) {
   const tronLink = await getTronLink()
   if (!tronLink) return
   const { abi, address } = await getAbiAndContractAddress(symbol)
-  contractAdd[symbol] = address
   instance = tronLink.contract(abi, address)
   store.commit('save'+symbol+'Contract', instance)
   return instance

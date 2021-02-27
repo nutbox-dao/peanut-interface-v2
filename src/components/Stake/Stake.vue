@@ -25,7 +25,12 @@ export default {
     FarmBox,
   },
   mounted() {
-    this.$store.dispatch("getPnut");
+    if (
+      this.$store.state.tronAddress &&
+      this.$store.state.tronAddress.length > 0
+    ) {
+      this.$store.dispatch("getPnut");
+    }
   },
 };
 </script>

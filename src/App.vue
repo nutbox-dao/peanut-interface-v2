@@ -208,7 +208,7 @@ export default {
         store.dispatch("initializeTronAccount", address);
       }
     });
-    storeApy();
+    // storeApy();
   },
 };
 </script>

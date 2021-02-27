@@ -10,7 +10,7 @@ module.exports = {
     cancel:'取消',
     confirm:'确认',
 
-    sptotaldelegate: 'SP代理总量',
+    sptotaldelegate: '代理总量',
     totalpnut: 'PNUT总产量',
     apy: '年化收益率',
     pnutprofits: 'PNUT收益',
@@ -72,7 +72,7 @@ module.exports = {
       yourTspAmount: '储蓄的TSP数量',
       balanceOfTsp: 'TSP 余额',
       tspMinlingFee: '挖矿手续费',
-      totalDepositTsp: 'TSP储蓄总量',
+      totalDepositTsp: '储蓄总量',
       confirmDeposit: '确认储蓄',
       addTspDeposit: '增加储蓄',
       minusTspDeposit: '减少储蓄',
@@ -81,13 +81,13 @@ module.exports = {
     tspLp: {
       tspLPBalance: 'S-TSP-TRX 余额',
       yourTSPLPAmount: '储蓄的S-TSP-TRX',
-      totalDepositTspLP:"S-TSP-TRX储蓄总量",
+      totalDepositTspLP:"储蓄总量",
       totalTSP: 'TSP总量',
     },
     pnutLp: {
       pnutLPBalance: 'S-PNUT-TRX 余额',
       yourPNUTLPAmount: '储蓄的S-PNUT-TRX',
-      totalDepositPnutLP:'S-PNUT-TRX储蓄总量'
+      totalDepositPnutLP:'储蓄总量'
     }
   },
   liquidStaking: {

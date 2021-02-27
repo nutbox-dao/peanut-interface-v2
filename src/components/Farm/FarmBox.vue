@@ -263,9 +263,11 @@ export default {
       this.isApproving = true;
       try {
         const res = await approveContract(this.symbol);
+        console.log(2314,res);
         if (res === 0) {
           this.saveApproveMethod[this.symbol](true);
         } else if (res === 1) {
+          console.log('1');
           this.showTip(this.$t("error.error"), this.$t("error.approveFail"));
         } else {
           this.showTip(
@@ -274,8 +276,10 @@ export default {
           );
         }
       } catch (e) {
+        console.log('error');
         this.showTip(this.$t("error.error"), e.message);
       } finally {
+        console.log('over');
         this.isLoading = false;
         this.isApproving = false;
       }

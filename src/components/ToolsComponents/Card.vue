@@ -18,7 +18,7 @@ export default {
   box-sizing: border-box;
   padding: 24px 24px;
 
-  background: #ffffff;
+  background: white;
   box-shadow: 0px 2px 20px 0px rgba(0, 0, 0, 0.02);
   border-radius: 28px;
   border: 1px solid rgba(227, 229, 232, 0.5);

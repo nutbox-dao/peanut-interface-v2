@@ -6,7 +6,7 @@
     <div class="nav"></div>
     <div class="farm-box">
       <FarmBox symbol="PNUT_LP_POOL" />
-      <FarmBox symbol="TSP_LP_POOL" />
+      <!-- <FarmBox symbol="TSP_LP_POOL" /> -->
     </div>
   </div>
 </template>
@@ -22,7 +22,12 @@ export default {
     return {};
   },
   mounted() {
-    this.$store.dispatch("getPnut");
+    if (
+      this.$store.state.tronAddress &&
+      this.$store.state.tronAddress.length > 0
+    ) {
+      this.$store.dispatch("getPnut");
+    }
   },
 };
 </script>

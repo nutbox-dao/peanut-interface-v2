@@ -8,9 +8,9 @@ module.exports = {
     spbalance: 'SP Balance',
     yourspdelegate: 'Delegated SP',
     cancel: "Cancel",
-    comfirm: "Confrim",
+    confirm: "Confirm",
 
-    sptotaldelegate: 'Total Delegated SP',
+    sptotaldelegate: 'Total Delegated',
     totalpnut: 'Total PNUT',
     apy: 'APY',
     pnutprofits: 'Your Mined PNUT',
@@ -72,7 +72,7 @@ module.exports = {
       yourTspAmount: 'TSP Staked',
       balanceOfTsp: 'TSP Balance',
       tspMinlingFee: 'Fee',
-      totalDepositTsp: 'Total deposited TSP',
+      totalDepositTsp: 'Total Deposited',
       confirmDeposit: 'Confirm',
       addTspDeposit: 'Stake',
       minusTspDeposit: 'Unstake',
@@ -81,13 +81,13 @@ module.exports = {
     tspLp: {
       tspLPBalance: 'S-TSP-TRX Balance',
       yourTSPLPAmount: 'S-TSP-TRX Staked',
-      totalDepositTspLP:"Total deposited S-TSP-TRX",
+      totalDepositTspLP:"Total Deposited",
       totalTSP: 'Total TSP',
     },
     pnutLp: {
       pnutLPBalance: 'S-PNUT-TRX Balance',
       yourPNUTLPAmount: 'S-PNUT-TRX Staked',
-      totalDepositPnutLP:'Total deposited S-PNUT-TRX'
+      totalDepositPnutLP:'Total Deposited'
     }
   },
   liquidStaking: {
@@ -99,14 +99,14 @@ module.exports = {
   },
   vote:{
     upvote:"Upvote",
-    vote:"Vote post",
-    title:"Pay PNUT,get nutbox.mine's vote",
+    vote:"Upvote post",
+    title:"Pay PNUT,get nutbox.mine's upvote",
     link:"Post link",
     payPnut:"Pay PNUT",
     linkPlaceholder:"Input post link",
     pnutPlaceholder:"Input PNUT amount",
     transfer:"Transfer",
-    voteRate:"Vote rate：{lowerPnutAmount} PNUT for 10% vote",
+    voteRate:"Vote rate：{lowerPnutAmount} PNUT for 10% upvote",
   },
   nps: {
     nps: 'Goverance',
