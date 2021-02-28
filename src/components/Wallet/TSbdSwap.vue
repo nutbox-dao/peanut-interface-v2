@@ -314,5 +314,4 @@ export default {
 
 <style lang="less" scoped>
 @import "../../static/css/swap.less";
-
 </style>

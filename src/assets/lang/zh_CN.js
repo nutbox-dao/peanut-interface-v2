@@ -60,7 +60,8 @@ module.exports = {
     wallet: '钱包',
     swap: '跨链转账',
     connectSteem:"链接Steem钱包",
-    connectTron:"链接波场钱包"
+    connectTron:"链接波场钱包",
+    swapSubTitle:"及时、安全的将资产转移到波场网络",
   },
   stake: {
     stake: '质押挖矿'
