@@ -2,30 +2,20 @@
   <transition name="fade">
     <div class="mask" @click.self="hideMask">
       <div class="login">
-        <Card>
-          <h4>{{ this.$t("message.userlogin") }}</h4>
-          <div class="input">
-            <img src="../static/images/keychain.png" alt="" />
-            <b-input
-              class="mb-2 mr-sm-2 mb-sm-0 user"
-              :placeholder="$t('message.steemAccoutPlaceHolder')"
-              v-model="steemAccount"
-            ></b-input>
-          </div>
-          <b-button
-            variant="outline-primary"
-            @click="login"
-            :disabled="isLoging"
-          >
-            <b-spinner
-              small
-              type="grow"
-              v-show="isLoging"
-              variant="primary"
-            ></b-spinner>
-            {{ this.loginBtnText }}
-          </b-button>
-        </Card>
+        <p>{{ this.$t("message.userlogin") }}</p>
+          <b-input
+            class="mb-2 mr-sm-2 mb-sm-0 input"
+            :placeholder="$t('message.steemAccoutPlaceHolder')"
+            v-model="steemAccount"
+          ></b-input>
+        <b-button variant="primary" class="login-btn" @click="login" :disabled="isLoging">
+          <b-spinner
+            small
+            type="grow"
+            v-show="isLoging"
+          ></b-spinner>
+          {{ this.loginBtnText }}
+        </b-button>
       </div>
       <TipMessage
         :showMessage="tipMessage"
@@ -39,7 +29,6 @@
 </template>
 
 <script>
-import Card from "./ToolsComponents/Card";
 import TipMessage from "./ToolsComponents/TipMessage";
 
 export default {
@@ -57,7 +46,6 @@ export default {
     };
   },
   components: {
-    Card,
     TipMessage,
   },
   methods: {
@@ -116,18 +104,25 @@ export default {
 <style lang="less" scoped>
 .login {
   margin-top: -15%;
+  width: 492px;
+  height: 252px;
+  background: white;
+  box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.05);
+  border-radius: 28px;
+  padding: 24px;
+  p{
+  font-size: 20px;
+  }
 }
 .input {
-  margin-top: 2rem;
-  margin-bottom: 2rem;
-  width: 480px;
-  min-width: 320px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  .user {
-    flex: 1;
-    margin-left: 20px;
-  }
+  width: 444px;
+  height: 48px;
+  background: #f6f7f9;
+  border-radius: 16px;
+  border: 1px solid #e3e5e8;
+  margin-top: 42px;
+}
+.login-btn{
+  width: 100%;margin-top: 24px;
 }
 </style>
