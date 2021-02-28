@@ -1,129 +1,141 @@
 <template>
   <div class="swap-field">
-    <Card>
-      <div class="box">
-        <div class="round-box">
-          <div class="box-title-container">
-            <span>from</span>
-            <span>{{ $t("message.balance") + ": " + fromTokenBalance }} </span>
-          </div>
-          <div class="box-content-container">
-            <input
-              class="mb-2 mr-sm-2 mb-sm-0 user input"
-              placeholder="0.0"
-              v-model="transValue"
-              @keyup="checkTransValue"
-              inputmode="decimal"
-              pattern="^[0-9]*[.,]?[0-9]*$"
-              spellcheck="false"
-              value
-            />
-            <div style="display: flex; align-content: center">
-              <button class="maxBtn" @click="fillMaxTrans">Max</button>
-              <img
-                class="coin-icon"
-                src="../../static/images/steem.svg"
-                alt=""
-                v-if="fromSteemToTron"
-              />
-              <img
-                class="coin-icon"
-                src="../../static/images/tsp.svg"
-                alt=""
-                v-else
-              />
-              <span style="margin-left: 8px; line-height: 24px">
-                {{ fromSteemToTron ? "STEEM" : "TSP" }}
-              </span>
-            </div>
-          </div>
-        </div>
-
-        <div class="pink-arrow-box">
-          <div style="margin: 0 auto">
-            <img class="pink-arrow" src="../../static/images/down-arrow.svg" />
-          </div>
-        </div>
-
-        <div class="round-box">
-          <div class="box-title-container">
-            <span>to</span>
-            <span>{{ $t("message.balance") + ": " + toTokenBalance }} </span>
-          </div>
-          <div class="box-content-container">
-            <input
-              class="mb-2 mr-sm-2 mb-sm-0 user input"
-              placeholder="0.0"
-              v-model="transValue"
-              @keyup="checkTransValue"
-              inputmode="decimal"
-              pattern="^[0-9]*[.,]?[0-9]*$"
-              spellcheck="false"
-              value
-            />
-            <div style="display: flex; align-content: center">
-              <img
-                class="coin-icon"
-                src="../../static/images/tsp.svg"
-                alt=""
-                v-if="fromSteemToTron"
-              />
-              <img
-                class="coin-icon"
-                src="../../static/images/steem.svg"
-                alt=""
-                v-else
-              />
-              <span style="margin-left: 8px; line-height: 24px">
-                {{ fromSteemToTron ? "TSP" : "STEEM" }}
-              </span>
-            </div>
-          </div>
-        </div>
-
-        <div class="confirm-box">
-          <button
-            class="confirm-btn"
-            v-if="isLogin"
-            @click="trans"
-            :disabled="!canTransFlag"
-          >
-            <b-spinner
-              small
-              type="grow"
-              v-show="isLoading"
-              variant="primary"
-              style="margin-right: 8px"
-            ></b-spinner>
-            {{ $t("message.confirmconvert") }}
-          </button>
-          <ConnectWalletBtn
-            v-else
-            type="STEEM"
-            @steemLogin="showSteemLogin = true"
+    <div class="box">
+      <div class="title-box">
+        <p class="title">
+          <span>{{ this.fromSteemToTron ? "STEEM" : "TSP" }}</span>
+          <img
+            style="margin: 0 8px 4px 8px"
+            src="../../static/images/left-arrow.svg"
+            alt=""
           />
-        </div>
-
-        <!--手续费-->
-        <p class="tip" v-show="fromSteemToTron">
-          {{ $t("message.servicecharge") }}：
-          {{ parseFloat(transferRatio * 100).toFixed(2) }}%，{{
-            $t("message.atleastcharge")
-          }}
-          {{ transferFee }} STEEM
+          <span>{{ this.fromSteemToTron ? "TSP" : "STEEM" }}</span>
         </p>
-        <!-- 兑换率 -->
-        <p class="tip" v-if="fromSteemToTron">
-          {{ $t("message.convertrate") }}： 1 STEEM = 1 TSP
-        </p>
-        <p class="tip" v-else>
-          {{ $t("message.convertrate") }}： 1 TSP = 1 STEEM<br />
-        </p>
-        <p class="tip" v-show="!fromSteemToTron">
-          {{ $t("liquidStaking.tsp.tsptosteemintro") }}
+        <p class="sub-title">
+          {{ $t("liquidStaking.tsp.tspIsCirculatingSP") }}
         </p>
       </div>
-    </Card>
+    </div>
+    <div class="line"></div>
+      <div class="round-box">
+        <div class="box-title-container">
+          <span>from</span>
+          <span>{{ $t("message.balance") + ": " + fromTokenBalance }} </span>
+        </div>
+        <div class="box-content-container">
+          <input
+            class="mb-2 mr-sm-2 mb-sm-0 user input"
+            placeholder="0.0"
+            v-model="transValue"
+            @keyup="checkTransValue"
+            inputmode="decimal"
+            pattern="^[0-9]*[.,]?[0-9]*$"
+            spellcheck="false"
+            value
+          />
+          <div class="token-box">
+            <button class="maxBtn" @click="fillMaxTrans">Max</button>
+            <img
+              class="coin-icon"
+              src="../../static/images/steem.svg"
+              alt=""
+              v-if="fromSteemToTron"
+            />
+            <img
+              class="coin-icon"
+              src="../../static/images/tsp.svg"
+              alt=""
+              v-else
+            />
+            <span>
+              {{ fromSteemToTron ? "STEEM" : "TSP" }}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div class="icon-box">
+          <span class="pink-arrow" src="../../static/images/down-arrow.svg" />
+      </div>
+
+      <div class="round-box">
+        <div class="box-title-container">
+          <span>to</span>
+          <span>{{ $t("message.balance") + ": " + toTokenBalance }} </span>
+        </div>
+        <div class="box-content-container">
+          <input
+            class="mb-2 mr-sm-2 mb-sm-0 user input"
+            placeholder="0.0"
+            v-model="transValue"
+            @keyup="checkTransValue"
+            inputmode="decimal"
+            pattern="^[0-9]*[.,]?[0-9]*$"
+            spellcheck="false"
+            value
+          />
+          <div class="token-box">
+            <img
+              class="coin-icon"
+              src="../../static/images/tsp.svg"
+              alt=""
+              v-if="fromSteemToTron"
+            />
+            <img
+              class="coin-icon"
+              src="../../static/images/steem.svg"
+              alt=""
+              v-else
+            />
+            <span>
+              {{ fromSteemToTron ? "TSP" : "STEEM" }}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div class="confirm-box">
+        <b-button
+        variant="primary"
+          class="confirm-btn"
+          v-if="isLogin"
+          @click="trans"
+          :disabled="!canTransFlag"
+        >
+          <b-spinner
+            small
+            type="grow"
+            v-show="isLoading"
+            style="margin-right: 8px"
+          ></b-spinner>
+          {{ $t("message.confirmconvert") }}
+        </b-button>
+        <b-button variant="primary" class="connectSteem" v-else @click="showSteemLogin=true">
+        {{$t('wallet.connectSteem')}}
+        </b-button>
+      </div>
+
+      <!--手续费-->
+      <div class="tip">
+        <p v-show="fromSteemToTron">
+        {{ $t("message.servicecharge") }}：
+        {{ parseFloat(transferRatio * 100).toFixed(2) }}%，{{
+          $t("message.atleastcharge")
+        }}
+        {{ transferFee }} STEEM
+      </p>
+      <!-- 兑换率 -->
+      <p v-if="fromSteemToTron">
+        {{ $t("message.convertrate") }}： 1 STEEM = 1 TSP
+      </p>
+      <p v-else>
+        {{ $t("message.convertrate") }}： 1 TSP = 1 STEEM<br />
+      </p>
+      <p v-show="!fromSteemToTron">
+        {{ $t("liquidStaking.tsp.tsptosteemintro") }}
+      </p>
+      </div>
+
     <Login v-if="showSteemLogin" @hideMask="showSteemLogin = false" />
     <TipMessage
       :showMessage="tipMessage"
@@ -135,7 +147,6 @@
 </template>
 
 <script>
-import Card from "../ToolsComponents/Card";
 import TipMessage from "../ToolsComponents/TipMessage";
 import Login from "../Login";
 import ConnectWalletBtn from "../ToolsComponents/ConnectWalletBtn";
@@ -159,7 +170,6 @@ import { formatBalance } from "../../utils/helper";
 export default {
   name: "TSP",
   components: {
-    Card,
     TipMessage,
     ConnectWalletBtn,
     Login,
@@ -339,9 +349,5 @@ export default {
 </script>
 
 <style lang="less" scoped>
-// .swap-field {
-//     display: flex;
-//     justify-content:space-around;
-// }
 @import "../../static/css/swap.less";
 </style>

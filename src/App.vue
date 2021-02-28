@@ -324,6 +324,7 @@ background: #FFEB75 !important;
   height: 100vh;
   max-height: 100vh;
   min-height: 100vh;
+  min-width: 640px;
   overflow-y: overlay;
 }
 

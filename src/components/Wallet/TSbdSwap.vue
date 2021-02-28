@@ -95,7 +95,6 @@
             small
             type="grow"
             v-show="isLoading"
-            variant="primary"
             style="margin-right: 8px"
           ></b-spinner>
           {{ $t("message.confirmconvert") }}
