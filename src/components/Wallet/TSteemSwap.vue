@@ -22,7 +22,7 @@
             spellcheck="false"
             value
           />
-          <div style="display: flex; align-content: center">
+          <div class="token-box">
             <button class="maxBtn" @click="fillMaxTrans">Max</button>
             <img
               class="coin-icon"
@@ -36,17 +36,18 @@
               alt=""
               v-else
             />
-            <span style="margin-left: 8px; line-height: 24px">
+            <span>
               {{ fromSteemToTron ? "STEEM" : "TSTEEM" }}
             </span>
           </div>
         </div>
       </div>
 
-      <div class="pink-arrow-box">
-        <div style="margin: 0 auto" @click="changeTransOrder">
-          <img class="pink-arrow" src="../../static/images/pink-arrow.svg" />
-        </div>
+      <div class="icon-box">
+        <span
+          @click="changeTransOrder"
+          class="exchange-icon"
+        />
       </div>
 
       <div class="round-box">
@@ -66,7 +67,7 @@
             spellcheck="false"
             value
           />
-          <div style="display: flex; align-content: center">
+          <div class="token-box">
             <img
               class="coin-icon"
               src="../../static/images/tsteem.svg"
@@ -79,7 +80,7 @@
               alt=""
               v-else
             />
-            <span style="margin-left: 8px; line-height: 24px">
+            <span>
               {{ fromSteemToTron ? "TSTEEM" : "STEEM" }}
             </span>
           </div>
@@ -87,9 +88,10 @@
       </div>
 
       <div class="confirm-box">
-        <button
+        <b-button
           v-if="steemAccount && steemAccount.length > 0"
           class="confirm-btn"
+          variant="primary"
           @click="trans"
           :disabled="!canTransFlag"
         >
@@ -101,26 +103,31 @@
             style="margin-right: 8px"
           ></b-spinner>
           {{ $t("message.confirmconvert") }}
-        </button>
-        <ConnectWalletBtn class="connectSteem" type="STEEM"> </ConnectWalletBtn>
+        </b-button>
+        <b-button variant="primary" v-else class="connectSteem" @click="showSteemLogin=true">
+          {{ $t('wallet.connectSteem') }}
+        </b-button>
       </div>
 
       <!--手续费-->
-      <p class="tip" v-show="fromSteemToTron">
-        {{ $t("message.servicecharge") }}：
-        {{ parseFloat(transferRatio * 100).toFixed(2) }}%，{{
-          $t("message.atleastcharge")
-        }}
-        {{ transferFee }} STEEM
-      </p>
-      <!-- 兑换率 -->
-      <p class="tip" v-if="fromSteemToTron">
-        {{ $t("message.convertrate") }}： 1 STEEM = 1 TSTEEM
-      </p>
-      <p class="tip" v-else>
-        {{ $t("message.convertrate") }}： 1 TSTEEM = 1 STEEM<br />
-      </p>
+      <div class="tip">
+        <p v-show="fromSteemToTron">
+          {{ $t("message.servicecharge") }}：
+          {{ parseFloat(transferRatio * 100).toFixed(2) }}%，{{
+            $t("message.atleastcharge")
+          }}
+          {{ transferFee }} STEEM
+        </p>
+        <!-- 兑换率 -->
+        <p v-if="fromSteemToTron">
+          {{ $t("message.convertrate") }}： 1 STEEM = 1 TSTEEM
+        </p>
+        <p v-else>
+          {{ $t("message.convertrate") }}： 1 TSTEEM = 1 STEEM<br />
+        </p>
+      </div>
     </div>
+    <Login v-if="showSteemLogin" @hideMask="showSteemLogin=false"/>
     <TipMessage
       :showMessage="tipMessage"
       :title="tipTitle"
@@ -131,9 +138,8 @@
 </template>
 
 <script>
-import Card from "../ToolsComponents/Card";
 import TipMessage from "../ToolsComponents/TipMessage";
-import ConnectWalletBtn from "../ToolsComponents/ConnectWalletBtn";
+import Login from '../Login'
 
 import { mapState, mapGetters, mapActions, mapMutations } from "vuex";
 import {
@@ -155,9 +161,8 @@ import { formatBalance } from "../../utils/helper";
 export default {
   name: "TSteemSwap",
   components: {
-    Card,
     TipMessage,
-    ConnectWalletBtn,
+    Login
   },
   data() {
     return {
@@ -178,16 +183,16 @@ export default {
     ...mapGetters(["tsteemBalance"]),
     fromTokenBalance() {
       if (this.fromSteemToTron) {
-        return formatBalance(this.steemBalance) + " STEEM";
+        return formatBalance(this.steemBalance);
       } else {
-        return formatBalance(this.tsteemBalance) + " TSTEEM";
+        return formatBalance(this.tsteemBalance);
       }
     },
     toTokenBalance() {
       if (!this.fromSteemToTron) {
-        return formatBalance(this.steemBalance) + " STEEM";
+        return formatBalance(this.steemBalance);
       } else {
-        return formatBalance(this.tsteemBalance) + " TSTEEM";
+        return formatBalance(this.tsteemBalance);
       }
     },
     transFee() {

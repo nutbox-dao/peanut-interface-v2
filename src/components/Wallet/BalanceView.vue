@@ -87,11 +87,12 @@ export default {
       flex: 1;
       align-content: center;
       justify-content: space-between;
+      margin-top: 6px;
       span {
         text-align: left;
       }
       .title {
-        font-size: 20px;
+        font-size: 16px;
         font-weight: 600;
       }
       .balance-name {
