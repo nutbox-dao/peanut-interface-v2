@@ -262,6 +262,7 @@ h3 {
 }
 .spinner-grow{
   margin-bottom: 2px;
+  margin-right: 8px;
 }
 input {
   border: none;
