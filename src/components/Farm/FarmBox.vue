@@ -214,13 +214,18 @@ export default {
       }
     },
     pendingPnut() {
+      let pnut = 0;
       if (this.symbol === "TSP_POOL") {
-        return this.tspPendingPnut;
+        pnut = this.tspPendingPnut;
       } else if (this.symbol === "TSP_LP_POOL") {
-        return this.tspLpPendingPnut;
+        pnut = this.tspLpPendingPnut;
       } else if (this.symbol === "PNUT_LP_POOL") {
-        return this.pnutLpPendingPnut;
+        pnut = this.pnutLpPendingPnut;
       }
+      if (parseFloat(pnut) === 0){
+        return null;
+      }
+      return pnut;
     },
     approved() {
       if (this.symbol === "TSP_POOL") {
