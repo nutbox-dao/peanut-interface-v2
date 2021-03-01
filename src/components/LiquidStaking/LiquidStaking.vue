@@ -26,12 +26,16 @@ export default {
 .liquid-staking {
   padding: 0px 40px 64px;
   .exchange-box {
-    padding-top: 36px;
+    padding-top: 76px;
+    justify-content: center;
+    align-content: center;
+    display: flex;
   }
   .tsp-exchange {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
+    justify-content: center;
+    align-content: center;
     max-width: 1100px;
   }
 }
