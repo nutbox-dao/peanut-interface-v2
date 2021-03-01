@@ -42,8 +42,7 @@
             $t("message.confirm")
           }}</b-button>
         </div>
-        <p class="getToken">{{ $t("stake.getSp") }} 
-          <img src="../../static/images/link.svg" alt="">
+        <p @click="getSp" class="getToken">{{ $t("stake.getSp") }} 
         </p>
         <p class="fee">{{ $t("message.delegatecharge") }}： {{ fee }} STEEM</p>
       </div>
@@ -219,6 +218,9 @@ export default {
         this.$t("error.notEnoughFee")
       );
       return false;
+    },
+    getSp(){
+      window.open("https://steemit.com/", "_blank");
     },
     showTip(title, message) {
       this.tipTitle = title;

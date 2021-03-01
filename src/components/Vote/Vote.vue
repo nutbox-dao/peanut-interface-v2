@@ -1,8 +1,11 @@
 <template>
   <div id="vote">
     <h3>
-      {{ $t("vote.title") }}
+      {{ $t("vote.upvote") }}
     </h3>
+    <h5>
+      {{$t("vote.title")}}
+    </h5>
     <div class="nav"></div>
     <div class="vote-container">
       <div class="vote-box">
@@ -152,7 +155,7 @@ export default {
             upperPnutAmount: this.payRate * 10,
           })
         );
-        // return false;
+        return false;
       }
       return true;
     },
@@ -197,6 +200,10 @@ export default {
 <style lang="scss" scoped>
 #vote {
   padding: 0px 40px 64px;
+  h5 {
+    text-align:left;
+    margin-top: 12px;
+  }
   .nav {
     display: flex;
     align-items: left;

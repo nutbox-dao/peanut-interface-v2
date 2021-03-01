@@ -182,6 +182,7 @@ export default {
   async mounted() {
     var store = this.$store;
     store.dispatch("setVestsToSteem");
+    this.lang = localStorage.getItem(LOCALE_KEY)
 
     const address = await getTronLinkAddr();
     if (address && address === TRON_LINK_ADDR_NOT_FOUND.noTronLink) {

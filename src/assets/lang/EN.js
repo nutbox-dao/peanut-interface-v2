@@ -60,13 +60,20 @@ module.exports = {
     wallet: 'Wallet',
     swap: 'Cross chain transfer',
     connectSteem:"Connect Steem-Keychain",
-    connectTron:"Connect tron-link"
+    connectTron:"Connect tron-link",
+    swapSubTitle:"The sofr, fast and most secure way to bring cross-chain assets to Tron chain."
   },
   stake: {
-    stake: 'Staking Mint'
+    stake: 'Staking Mint',
+    creaseDelegation: "Delegate",
+    increaseDelegation: "Undelegate",
+    getSp: "Get SP",
+    get: "Get",
   },
   farm: {
     farm: 'Farming',
+    stake: "Stake",
+    unStake: "Unstake",
     tsp: {
       tspMine: 'TSP Stake',
       yourTspAmount: 'TSP Staked',
@@ -138,6 +145,7 @@ module.exports = {
     inputOverflow: 'Input overflow',
     inputOutOfRange: "Please input value between {lowerPnutAmount}-{upperPnutAmount}",
     inputLinkIllegal:"Please input correct link",
+    transferFail: "Transfer Fail",
     notEnoughFee: 'Insufficient fee',
     insufficentPnut:"Insufficent PNUT"
   },

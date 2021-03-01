@@ -17,107 +17,109 @@
       </div>
     </div>
     <div class="line"></div>
-      <div class="round-box">
-        <div class="box-title-container">
-          <span>from</span>
-          <span>{{ $t("message.balance") + ": " + fromTokenBalance }} </span>
-        </div>
-        <div class="box-content-container">
-          <input
-            class="mb-2 mr-sm-2 mb-sm-0 user input"
-            placeholder="0.0"
-            v-model="transValue"
-            @keyup="checkTransValue"
-            inputmode="decimal"
-            pattern="^[0-9]*[.,]?[0-9]*$"
-            spellcheck="false"
-            value
+    <div class="round-box">
+      <div class="box-title-container">
+        <span>from</span>
+        <span>{{ $t("message.balance") + ": " + fromTokenBalance }} </span>
+      </div>
+      <div class="box-content-container">
+        <input
+          class="mb-2 mr-sm-2 mb-sm-0 user input"
+          placeholder="0.0"
+          v-model="transValue"
+          @keyup="checkTransValue"
+          inputmode="decimal"
+          pattern="^[0-9]*[.,]?[0-9]*$"
+          spellcheck="false"
+          value
+        />
+        <div class="token-box">
+          <button class="maxBtn" @click="fillMaxTrans">Max</button>
+          <img
+            class="coin-icon"
+            src="../../static/images/steem.svg"
+            alt=""
+            v-if="fromSteemToTron"
           />
-          <div class="token-box">
-            <button class="maxBtn" @click="fillMaxTrans">Max</button>
-            <img
-              class="coin-icon"
-              src="../../static/images/steem.svg"
-              alt=""
-              v-if="fromSteemToTron"
-            />
-            <img
-              class="coin-icon"
-              src="../../static/images/tsp.svg"
-              alt=""
-              v-else
-            />
-            <span>
-              {{ fromSteemToTron ? "STEEM" : "TSP" }}
-            </span>
-          </div>
+          <img
+            class="coin-icon"
+            src="../../static/images/tsp.svg"
+            alt=""
+            v-else
+          />
+          <span>
+            {{ fromSteemToTron ? "STEEM" : "TSP" }}
+          </span>
         </div>
       </div>
+    </div>
 
       <div class="icon-box">
-          <span class="pink-arrow" src="../../static/images/down-arrow.svg" />
+        <span
+          class="exchange-icon"
+        />
       </div>
-
-      <div class="round-box">
-        <div class="box-title-container">
-          <span>to</span>
-          <span>{{ $t("message.balance") + ": " + toTokenBalance }} </span>
-        </div>
-        <div class="box-content-container">
-          <input
-            class="mb-2 mr-sm-2 mb-sm-0 user input"
-            placeholder="0.0"
-            v-model="transValue"
-            @keyup="checkTransValue"
-            inputmode="decimal"
-            pattern="^[0-9]*[.,]?[0-9]*$"
-            spellcheck="false"
-            value
+      
+    <div class="round-box">
+      <div class="box-title-container">
+        <span>to</span>
+        <span>{{ $t("message.balance") + ": " + toTokenBalance }} </span>
+      </div>
+      <div class="box-content-container">
+        <input
+          class="mb-2 mr-sm-2 mb-sm-0 user input"
+          placeholder="0.0"
+          v-model="transValue"
+          @keyup="checkTransValue"
+          inputmode="decimal"
+          pattern="^[0-9]*[.,]?[0-9]*$"
+          spellcheck="false"
+          value
+        />
+        <div class="token-box">
+          <img
+            class="coin-icon"
+            src="../../static/images/tsp.svg"
+            alt=""
+            v-if="fromSteemToTron"
           />
-          <div class="token-box">
-            <img
-              class="coin-icon"
-              src="../../static/images/tsp.svg"
-              alt=""
-              v-if="fromSteemToTron"
-            />
-            <img
-              class="coin-icon"
-              src="../../static/images/steem.svg"
-              alt=""
-              v-else
-            />
-            <span>
-              {{ fromSteemToTron ? "TSP" : "STEEM" }}
-            </span>
-          </div>
+          <img
+            class="coin-icon"
+            src="../../static/images/steem.svg"
+            alt=""
+            v-else
+          />
+          <span>
+            {{ fromSteemToTron ? "TSP" : "STEEM" }}
+          </span>
         </div>
       </div>
+    </div>
 
-      <div class="confirm-box">
-        <b-button
+    <div class="confirm-box">
+      <b-button
         variant="primary"
-          class="confirm-btn"
-          v-if="isLogin"
-          @click="trans"
-          :disabled="!canTransFlag"
-        >
-          <b-spinner
-            small
-            type="grow"
-            v-show="isLoading"
-            style="margin-right: 8px"
-          ></b-spinner>
-          {{ $t("message.confirmconvert") }}
-        </b-button>
-        <b-button variant="primary" class="connectSteem" v-else @click="showSteemLogin=true">
-        {{$t('wallet.connectSteem')}}
-        </b-button>
-      </div>
+        class="confirm-btn"
+        v-if="isLogin"
+        @click="trans"
+        :disabled="!canTransFlag"
+      >
+        <b-spinner small type="grow" v-show="isLoading"></b-spinner>
+        {{ $t("message.confirmconvert") }}
+      </b-button>
+      <b-button
+        variant="primary"
+        class="connectSteem"
+        v-else
+        @click="showSteemLogin = true"
+      >
+        {{ $t("wallet.connectSteem") }}
+      </b-button>
+    </div>
 
-      <!--手续费-->
-      <div class="tip">
-        <p v-show="fromSteemToTron">
+    <!--手续费-->
+    <div class="tip">
+      <p v-show="fromSteemToTron">
         {{ $t("message.servicecharge") }}：
         {{ parseFloat(transferRatio * 100).toFixed(2) }}%，{{
           $t("message.atleastcharge")
@@ -128,13 +130,11 @@
       <p v-if="fromSteemToTron">
         {{ $t("message.convertrate") }}： 1 STEEM = 1 TSP
       </p>
-      <p v-else>
-        {{ $t("message.convertrate") }}： 1 TSP = 1 STEEM<br />
-      </p>
+      <p v-else>{{ $t("message.convertrate") }}： 1 TSP = 1 STEEM<br /></p>
       <p v-show="!fromSteemToTron">
         {{ $t("liquidStaking.tsp.tsptosteemintro") }}
       </p>
-      </div>
+    </div>
 
     <Login v-if="showSteemLogin" @hideMask="showSteemLogin = false" />
     <TipMessage
@@ -349,5 +349,12 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.exchange-icon {
+  background-image: url("../../static/images/down-arrow.svg") !important;
+}
+
+.exchange-icon:hover {
+  background-image: url("../../static/images/down-arrow.svg") !important;
+}
 @import "../../static/css/swap.less";
 </style>

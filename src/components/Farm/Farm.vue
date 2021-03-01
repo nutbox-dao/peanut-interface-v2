@@ -59,7 +59,8 @@ export default {
   .farm-box {
     display: flex;
     flex-wrap: wrap;
-    align-content: left;
+    align-content: center;
+    justify-content: center;
   }
 }
 </style>

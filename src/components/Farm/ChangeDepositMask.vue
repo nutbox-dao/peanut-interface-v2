@@ -15,7 +15,7 @@
               isAddStake ? $t("farm.stake") : $t("farm.unStake")
             }}</span>
             <span
-              >{{ $t("message.balance") }}:{{
+              >{{ $t("message.balance") }}: {{
                 (isAddStake ? tokenBalance : stakedBalance) | amountForm
               }}</span
             >
@@ -41,8 +41,7 @@
             >{{ $t("message.confirm") }}
           </b-button>
         </div>
-        <p class="getToken">{{ $t("stake.get") + " " + token[symbol] }} 
-          <img src="../../static/images/link.svg" alt="">
+        <p @click="getToken" class="getToken">{{ $t("stake.get") + " " + token[symbol] }} 
         </p>
       </div>
       <TipMessage
@@ -275,6 +274,16 @@ export default {
         this.showTip(this.$t("error.error"), e.message);
       } finally {
         this.isLoading = false;
+      }
+    },
+
+    getToken(){
+      if (this.symbol === "TSP_POOL") {
+        this.$router.push('liquid-staking/tsp')
+      } else if (this.symbol === "TSP_LP_POOL") {
+        window.open("https://justswap.org/#/home?tokenAddress=TW2EWoRUJfwH9nMTfLxSL9JPLZeusUtTfR&type=swap", "_blank")
+      } else if (this.symbol === "PNUT_LP_POOL") {
+        window.open("https://justswap.org/#/home?tokenAddress=TPZddNpQJHu8UtKPY1PYDBv2J5p5QpJ6XW&type=swap", "_blank")
       }
     },
 
