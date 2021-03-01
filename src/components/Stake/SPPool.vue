@@ -113,7 +113,7 @@ export default {
       tipMessage: "",
       tipTitle: "",
       showMessage: false,
-      pendingPnut: "0.000000",
+      pendingPnut: '',
       isLoading: false,
       showSteemLogin: false,
       withdrawLoading: false,
@@ -173,6 +173,10 @@ export default {
         const nutPool = await getContract("PNUT_POOL");
         if (!nutPool) return;
         const s = await nutPool.getPendingPeanuts().call();
+        if (parseInt(s) === 0){
+          this.pendingPnut = null;
+          return;
+        }
         this.pendingPnut = intToAmount(s);
       } catch (e) {}
     },
