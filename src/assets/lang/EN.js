@@ -118,7 +118,8 @@ module.exports = {
   nps: {
     nps: 'Goverance',
     pass: 'Passed',
-    pending: 'Pending'
+    pending: 'Pending',
+    unpass: 'Unpass',
   },
   error: {
     error: 'Error!',

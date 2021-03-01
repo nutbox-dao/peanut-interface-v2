@@ -42,12 +42,11 @@
             font-size: 14px;
             font-weight: 600;
             line-height: 24px;
-            width: 54px;
-            height: 24px;
+            padding: 0px 6px;
           "
         >
           <!--{{ new Date(item.timestamp+'Z') | timeFormat}} -->
-          {{ item.status == "pass" ? $t("nps.pass") : $t("nps.pending") }}
+          {{ statusDesc(item.status) }}
         </p>
       </div>
     </div>
@@ -74,7 +73,17 @@ export default {
   components: {
     Card,
   },
-  methods: {},
+  methods: {
+    statusDesc(status) {
+      if (status === "pass") {
+        return this.$t("nps.pass");
+      } else if (status === "pending") {
+        return this.$t("nps.pending");
+      } else if (status === "unpass") {
+        return this.$t("nps.unpass");
+      }
+    },
+  },
   async mounted() {
     const res = await getProposal();
     this.proposalList = res;
@@ -130,6 +139,12 @@ export default {
       border-radius: 8px;
       border: 1px solid rgba(255, 219, 38, 0.3);
       color: var(--warning);
+    }
+    .unpass {
+      background: rgba(255, 91, 77, 0.05);
+      border-radius: 8px;
+      border: 1px solid rgba(255, 91, 77, 0.3);
+      color: var(--error);
     }
   }
 }
