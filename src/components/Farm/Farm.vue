@@ -3,7 +3,7 @@
     <h3>
       {{ this.$t("farm.farm") }}
     </h3>
-    <div class="nav"></div>
+    <!-- <div class="nav"></div> -->
     <div class="farm-box">
       <FarmBox symbol="PNUT_LP_POOL" />
       <FarmBox symbol="TSP_LP_POOL" />

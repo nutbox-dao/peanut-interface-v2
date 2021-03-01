@@ -4,14 +4,17 @@
       {{ $t("vote.title") }}
     </h3>
     <div class="nav"></div>
-    <div class="vote-box">
-      <Card>
-        <div class="title">
+    <div class="vote-container">
+      <div class="vote-box">
+        <p class="title">
+          {{ $t("vote.vote") }}
+        </p>
+        <div style="display: flex">
           <img
+            class="logo"
             src="https://coin.top/production/upload/logo/TPZddNpQJHu8UtKPY1PYDBv2J5p5QpJ6XW.jpeg?t=1603183073762"
             alt=""
           />
-          <h5>{{ $t("vote.vote") }}</h5>
         </div>
         <div class="link-input">
           <p>{{ $t("vote.link") }}</p>
@@ -23,13 +26,10 @@
         </div>
         <div class="pnut-input">
           <p>{{ $t("vote.payPnut") }}</p>
-          <div v-if="tronAddress && tronAddress.length > 0">
-            <input
-              type="text"
-              v-model="pnutAmount"
-              :placeholder="$t('vote.pnutPlaceholder')"
-            />
+          <div class="input-area" v-if="tronAddress && tronAddress.length > 0">
+            <input type="text" v-model="pnutAmount" placeholder="0" />
             <b-button
+              class="transfer-btn"
               variant="primary"
               @click="transferPnut"
               :disabled="isLoading"
@@ -37,13 +37,19 @@
               {{ $t("vote.transfer") }}
             </b-button>
           </div>
-          <ConnectWalletBtn type="TRON" @tronLogin="connectTron">
-          </ConnectWalletBtn>
+          <b-button
+            class="login-btn"
+            variant="primary"
+            @click="connectTron"
+            v-else
+          >
+            {{ $t("wallet.connectTron") }}
+          </b-button>
         </div>
         <p class="get-vote-info">
           {{ $t("vote.voteRate", { lowerPnutAmount: payRate }) }}
         </p>
-      </Card>
+      </div>
     </div>
     <TipMessage
       :showMessage="tipMessage"
@@ -55,7 +61,6 @@
 </template>
 
 <script>
-import Card from "../ToolsComponents/Card";
 import TipMessage from "../ToolsComponents/TipMessage";
 import ConnectWalletBtn from "../ToolsComponents/ConnectWalletBtn";
 import { mapGetters, mapState } from "vuex";
@@ -75,7 +80,7 @@ export default {
   name: "Vote",
   computed: {
     ...mapState(["tronAddress"]),
-    ...mapGetters(['pnutBalance'])
+    ...mapGetters(["pnutBalance"]),
   },
   data() {
     return {
@@ -89,7 +94,6 @@ export default {
     };
   },
   components: {
-    Card,
     TipMessage,
     ConnectWalletBtn,
   },
@@ -124,9 +128,9 @@ export default {
         return res;
       }
       const amount = parseFloat(this.pnutAmount);
-      if (parseFloat(this.pnutBalance) < amount){
-        this.showTip(this.$t('error.error',this.$t('error.insufficentPnut')))
-        return false
+      if (parseFloat(this.pnutBalance) < amount) {
+        this.showTip(this.$t("error.error", this.$t("error.insufficentPnut")));
+        return false;
       }
       if (amount < this.payRate || amount > this.payRate * 10) {
         this.showTip(
@@ -199,15 +203,82 @@ export default {
       border-bottom: 2px solid var(--primary);
     }
   }
-  .vote-box {
+  .vote-container {
     display: flex;
     align-content: center;
     align-items: center;
-    justify-content: space-around;
-    padding-top: 20px;
+    justify-content: center;
+    padding-top: 66px;
+    .vote-box {
+      margin: 0;
+      width: 492px;
+      height: 392px;
+      padding: 24px;
+      background: #ffffff;
+      box-shadow: 0px 2px 20px 0px rgba(0, 0, 0, 0.02);
+      border-radius: 28px;
+      border: 1px solid rgba(227, 229, 232, 0.5);
+      .title {
+        font-family: PingFangSC-Semibold, PingFang SC;
+        font-weight: 600;
+        margin: 0;
+        color: var(--primary-text);
+        line-height: 24px;
+        font-size: 28px;
+        text-align: left;
+      }
+      .logo {
+        margin: 36px 0 0 0;
+        width: 56px;
+        height: 56px;
+        text-align: left;
+      }
+      .link-input {
+        margin-top: 20px;
+        p {
+          text-align: left;
+          font-size: 12px;
+          font-weight: 600;
+          color: var(--secondary-text);
+          line-height: 12px;
+        }
+        input {
+          width: 100%;
+          height: 48px;
+          background: var(--background);
+          border-radius: 16px;
+          border: none;
+          padding-left: 16px;
+        }
+      }
+      .pnut-input {
+        margin: 26px 0 0 0;
+        p {
+          text-align: left;
+          font-size: 12px;
+          font-weight: 600;
+          color: var(--secondary-text);
+          line-height: 12px;
+          margin-bottom: 8px;
+        }
+        .input-area {
+          display: flex;
+          justify-content: space-between;
+          input {
+            font-size: 24px;
+            font-family: DINAlternate-Bold, DINAlternate;
+          }
+          .transfer-btn {
+            width: 246px;
+          }
+        }
+      }
+    }
   }
   .get-vote-info {
     font-size: 14px;
+    margin-top: 32px;
+    color: var(--disable)
   }
 }
 </style>

@@ -220,7 +220,7 @@ $blue: #ffdb1b;
   --primary: #ffdb1b;
   --primary-text: #242629;
   --secondary-text: #717376;
-  --disable: #BDBFC2;
+  --disable: #bdbfc2;
   --dividers: #e3e5e8;
   --background: #f6f7f9;
   --error: #ff5040;
@@ -244,7 +244,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color:  var(--primary-text);
+  color: var(--primary-text);
   height: 100%;
   display: flex;
   align-items: left;
@@ -259,6 +259,13 @@ h3 {
   font-size: 36px;
   font-weight: 500;
   line-height: 36px;
+}
+input {
+  border: none;
+  outline: none;
+}
+input::-webkit-input-placeholder {
+  color: var(--disable);
 }
 .mask {
   z-index: 2000;
@@ -278,16 +285,16 @@ h3 {
 
 .btn-primary {
   font-size: 16px;
-  border-radius:16px !important;
-box-shadow: 0px 8px 12px -4px #FFEC88;
-border:0px !important;
-padding:12px 24px;
-font-weight: 600;
-color:var(--primary-text) !important;
+  border-radius: 16px !important;
+  box-shadow: 0px 8px 12px -4px #ffec88;
+  border: 0px !important;
+  padding: 12px 24px;
+  font-weight: 600;
+  color: var(--primary-text) !important;
 }
 
-.btn-primary:hover{
-background: #FFEB75 !important;
+.btn-primary:hover {
+  background: #ffeb75 !important;
 }
 
 .menu .nav-link {
@@ -379,8 +386,8 @@ background: #FFEB75 !important;
   width: 240px;
   bottom: 30px;
   box-sizing: border-box;
-  background-color: rgba(0, 0, 0, 0.0);
-  border-top:1px solid var(--dividers);
+  background-color: rgba(0, 0, 0, 0);
+  border-top: 1px solid var(--dividers);
 
   .links {
     width: 100%;

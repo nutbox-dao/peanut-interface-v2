@@ -107,6 +107,13 @@ export default {
       margin: 0 10px;
       color: var(--primary-text);
       font-size: 16px;
+      -webkit-line-clamp: 3;
+      overflow: hidden;
+      word-break: break-all;
+      text-overflow: ellipsis;
+      max-height: 60px;
+      font-weight: 600;
+      line-height: 20px;
     }
     a:hover {
       color: var(--link);
