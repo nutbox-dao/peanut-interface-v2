@@ -1,28 +1,52 @@
 <template>
   <transition name="fade">
     <div class="mask" @click.self="hideMask">
-      <Card>
-        <h5>{{ operate === "add" ? "Delegate SP" : "Undelegate SP" }}</h5>
+      <div class="change-box">
+        <h5 class="title">
+          {{
+            operate === "add"
+              ? $t("stake.creaseDelegation")
+              : $t("stake.increaseDelegation")
+          }}
+        </h5>
         <div class="input-box">
-          <div class="input-title">
-            <span>Delegate</span>
+          <div class="box-title-container">
+            <span>{{
+              operate === "add"
+                ? $t("stake.creaseDelegation")
+                : $t("stake.increaseDelegation")
+            }}</span>
             <span
-              >Balance:{{ operate === "add" ? formSP : formDelegatedSP }}</span
+              >{{ $t("message.balance") }}:
+              {{ operate === "add" ? formSP : formDelegatedSP }}</span
             >
           </div>
-          <div class="input-area">
-            <input placeholder="0" type="text" v-model="delegatevalue" />
-            <b-button variant="primary" @click="fillMax">
+          <div class="box-content-container">
+            <input
+              class="input"
+              placeholder="0"
+              type="text"
+              v-model="delegatevalue"
+            />
+            <b-button class="maxBtn" variant="primary" @click="fillMax">
               {{ $t("message.max") }}
             </b-button>
           </div>
         </div>
         <div class="bottom">
-          <button @click="cancel">{{ $t("message.cancel") }}</button>
-          <button @click="confirm">{{ $t("message.confirm") }}</button>
+          <b-button class="cancel" variant="primary-line" @click="cancel">{{
+            $t("message.cancel")
+          }}</b-button>
+          <b-button class="confirm" variant="primary" @click="confirm" :disabled="isLoading">
+            <b-spinner small type="grow" v-show="isLoading"></b-spinner>{{
+            $t("message.confirm")
+          }}</b-button>
         </div>
+        <p class="getToken">{{ $t("stake.getSp") }} 
+          <img src="../../static/images/link.svg" alt="">
+        </p>
         <p class="fee">{{ $t("message.delegatecharge") }}： {{ fee }} STEEM</p>
-      </Card>
+      </div>
       <TipMessage
         :showMessage="tipMessage"
         :title="tipTitle"
@@ -34,20 +58,14 @@
 </template>
 
 <script>
-import Card from "../ToolsComponents/Card";
 import TipMessage from "../ToolsComponents/TipMessage";
 import { getContract } from "../../utils/chain/contract";
 import { formatBalance } from "../../utils/helper";
 
-import {
-  amountToInt,
-} from "../../utils/chain/tron";
+import { amountToInt } from "../../utils/chain/tron";
 import { mapState, mapGetters, mapActions, mapMutations } from "vuex";
 import { steemDelegation } from "../../utils/chain/steem";
-import {
-  STEEM_STAKE_FEE,
-  STEEM_MINE_ACCOUNT,
-} from "../../config";
+import { STEEM_STAKE_FEE, STEEM_MINE_ACCOUNT } from "../../config";
 
 export default {
   name: "ChangeDelegateMask",
@@ -78,7 +96,6 @@ export default {
     },
   },
   components: {
-    Card,
     TipMessage,
   },
   props: {
@@ -88,7 +105,13 @@ export default {
     },
   },
   methods: {
-    ...mapActions(["getVests", "getSteem", "getPnut", "getDelegatedSp", "getTotalDelegatedSP"]),
+    ...mapActions([
+      "getVests",
+      "getSteem",
+      "getPnut",
+      "getDelegatedSp",
+      "getTotalDelegatedSP",
+    ]),
     ...mapMutations([
       "saveSteemBalance",
       "saveVestsBalance",
@@ -170,8 +193,12 @@ export default {
         );
         if (res.success === true) {
           this.saveDelegatedVestsInt(amountToInt(parseFloat(amount)));
-          await Promise.all([this.getVests(),this.getSteem(), this.getTotalDelegatedSP()])
-          this.$emit('hideMask')
+          await Promise.all([
+            this.getVests(),
+            this.getSteem(),
+            this.getTotalDelegatedSP(),
+          ]);
+          this.$emit("hideMask");
         } else {
           this.showTip(this.$t("error.delegateerror"), res.message);
         }
@@ -204,17 +231,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.card {
-    width: 420px;
-    margin-top: -20%;
-  }
-  .fee {
-    width: 100%;
-    text-align: center;
-    font-size: 14px;
-    color: gray;
-    margin-top: 1rem;
-    margin-bottom: 0;
-  }
-
+@import "../../static/css/changeDepositMask.less";
 </style>

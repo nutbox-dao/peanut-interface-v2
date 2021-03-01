@@ -64,10 +64,16 @@ module.exports = {
     swapSubTitle:"及时、安全的将资产转移到波场网络",
   },
   stake: {
-    stake: '质押挖矿'
+    stake: '质押挖矿',
+    creaseDelegation: "增加代理",
+    increaseDelegation: "减少代理",
+    getSp: "获取 SP",
+    get:'获取',
   },
   farm: {
     farm: '流动性挖矿',
+    stake:"储蓄",
+    unStake: "减少储蓄",
     tsp: {
       tspMine: 'TSP挖矿',
       yourTspAmount: '储蓄的TSP数量',
