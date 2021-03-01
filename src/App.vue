@@ -194,6 +194,7 @@ export default {
       this.tipMessage = this.$t("error.unlockWallet");
       this.showMessage = true;
     } else if (address) {
+      store.commit('saveTronAddress', address);
       store.dispatch("getPnut");
     }
     watchWallet((address) => {
@@ -209,7 +210,7 @@ export default {
         store.dispatch("initializeTronAccount", address);
       }
     });
-    // storeApy();
+    storeApy();
   },
 };
 </script>
@@ -329,7 +330,6 @@ input::-webkit-input-placeholder {
   position: relative;
   box-shadow: 4px 0px 48px 0px rgba(0, 0, 0, 0.06);
   border-radius: 0px 4vh 4vh 0px;
-  // border-radius: 50px;
 }
 .right {
   flex: 1;
@@ -338,6 +338,7 @@ input::-webkit-input-placeholder {
   min-height: 100vh;
   min-width: 640px;
   overflow-y: overlay;
+  background-color: var(--background);
 }
 
 .left .nav-item {

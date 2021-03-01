@@ -51,7 +51,7 @@
         <div class="op-bottom" v-if="!delegated && isLogin">
           <span class="token-number-none"> 0 </span>
           <b-button variant="primary" @click="delegate">
-            {{ $t("message.delegatemine") }}
+            {{ $t("stake.creaseDelegation") }}
           </b-button>
         </div>
         <ConnectWalletBtn

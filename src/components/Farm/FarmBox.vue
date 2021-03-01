@@ -21,7 +21,7 @@
             @click="withdrawPnut"
             :disabled="pendingPnut <= 0 || isLoading"
           >
-            <b-spinner small type="grow" v-show="isLoading"></b-spinner>
+            <b-spinner small type="grow" v-show="isWithdrawing"></b-spinner>
             {{ $t("message.withdraw") }}
           </b-button>
         </div>
@@ -38,13 +38,14 @@
           @tronLogin="showTronLinkInfo"
           type="TRON"
         />
-        <div class="op-bottom" v-if="!approved">
+        <div class="op-bottom" v-if="!approved && isConnected">
           <b-button
             variant="primary"
             @click="approveContract"
             :disabled="isLoading"
             style="width: 272px"
           >
+          <b-spinner small type="grow" v-show="isApproving"></b-spinner>
             {{ $t("message.approveContract") }}
           </b-button>
         </div>
@@ -81,7 +82,7 @@
 
       <p class="fee">
         <span>
-          {{ totalDepositedDesc[symbol] }}
+          {{ totalDepositedDesc }}
         </span>
         <span>
           {{ totalDeposited | amountForm }}
@@ -136,7 +137,6 @@ export default {
       saveApproveMethod: {},
       title: {},
       depositedDesc: {},
-      totalDepositedDesc: {},
       logo: {},
       token: {},
       tspPendingPnut: 0,
@@ -231,6 +231,16 @@ export default {
         return this.approvedPnutLp;
       }
     },
+
+    totalDepositedDesc() {
+      if (this.symbol === "TSP_POOL") {
+        return this.$t("farm.tsp.totalDepositTsp");
+      } else if (this.symbol === "TSP_LP_POOL") {
+        return this.$t("farm.tspLp.totalDepositTspLP");
+      } else if (this.symbol === "PNUT_LP_POOL") {
+        return this.$t("farm.pnutLp.totalDepositPnutLP");
+      }
+    },
   },
   methods: {
     ...mapActions([
@@ -264,11 +274,9 @@ export default {
       this.isApproving = true;
       try {
         const res = await approveContract(this.symbol);
-        console.log(2314, res);
         if (res === 0) {
           this.saveApproveMethod[this.symbol](true);
         } else if (res === 1) {
-          console.log("1");
           this.showTip(this.$t("error.error"), this.$t("error.approveFail"));
         } else {
           this.showTip(
@@ -277,10 +285,8 @@ export default {
           );
         }
       } catch (e) {
-        console.log("error");
         this.showTip(this.$t("error.error"), e.message);
       } finally {
-        console.log("over");
         this.isLoading = false;
         this.isApproving = false;
       }
@@ -335,6 +341,7 @@ export default {
         this.showMessage = true;
       } else if (address) {
         this.$store.dispatch("initializeTronAccount", address);
+        this.$router.go(0);
       }
     },
     async getPendingPeanut() {
@@ -386,11 +393,6 @@ export default {
         TSP_LP_POOL: this.$t("farm.tspLp.yourTSPLPAmount"),
         PNUT_LP_POOL: this.$t("farm.pnutLp.yourPNUTLPAmount"),
       });
-    this.totalDepositedDesc = {
-      TSP_POOL: this.$t("farm.tsp.totalDepositTsp"),
-      TSP_LP_POOL: this.$t("farm.tspLp.totalDepositTspLP"),
-      PNUT_LP_POOL: this.$t("farm.pnutLp.totalDepositPnutLP"),
-    };
     this.saveApproveMethod = {
       TSP_POOL: this.saveApprovedTSP,
       TSP_LP_POOL: this.saveApprovedTSPLP,

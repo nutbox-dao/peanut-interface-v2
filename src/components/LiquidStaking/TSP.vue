@@ -307,17 +307,14 @@ export default {
     async tspToSteem() {
       try {
         const contract = await getContract("TSP");
-        let amount = parseFloat(this.transValue).toFixed(3);
-        amount = amountToInt(amount);
+        const amount = parseFloat(this.transValue);
+        const amountInt = amountToInt(amount);
         const res = await contract
-          .tspToSteem(this.steemAccount, amount)
+          .tspToSteem(this.steemAccount, amountInt)
           .send(TRON_CONTRACT_CALL_PARAMS);
         if (res && (await isTransactionSuccess(res))) {
           this.saveTspBalanceInt(
             amountToInt(parseFloat(this.tspBalance) - parseFloat(amount))
-          );
-          this.saveSteemBalance(
-            parseFloat(this.steemBalance) + parseFloat(amount)
           );
         } else {
           if (res && (await isInsufficientEnerge(res))) {

@@ -234,7 +234,6 @@ export default {
     .vote-box {
       margin: 0;
       width: 492px;
-      height: 392px;
       padding: 24px;
       background: #ffffff;
       box-shadow: 0px 2px 20px 0px rgba(0, 0, 0, 0.02);
@@ -301,6 +300,7 @@ export default {
   .get-vote-info {
     font-size: 14px;
     margin-top: 24px;
+    margin-bottom: 0px;
     text-align: left;
     color: var(--disable)
   }
