@@ -21,6 +21,7 @@
             @click="withdrawPnut"
             :disabled="pendingPnut <= 0 || isLoading"
           >
+            <b-spinner small type="grow" v-show="isLoading"></b-spinner>
             {{ $t("message.withdraw") }}
           </b-button>
         </div>
@@ -42,7 +43,7 @@
             variant="primary"
             @click="approveContract"
             :disabled="isLoading"
-            style="width: 272px;"
+            style="width: 272px"
           >
             {{ $t("message.approveContract") }}
           </b-button>
@@ -137,7 +138,7 @@ export default {
       depositedDesc: {},
       totalDepositedDesc: {},
       logo: {},
-      token:{},
+      token: {},
       tspPendingPnut: 0,
       tspLpPendingPnut: 0,
       pnutLpPendingPnut: 0,
@@ -263,11 +264,11 @@ export default {
       this.isApproving = true;
       try {
         const res = await approveContract(this.symbol);
-        console.log(2314,res);
+        console.log(2314, res);
         if (res === 0) {
           this.saveApproveMethod[this.symbol](true);
         } else if (res === 1) {
-          console.log('1');
+          console.log("1");
           this.showTip(this.$t("error.error"), this.$t("error.approveFail"));
         } else {
           this.showTip(
@@ -276,10 +277,10 @@ export default {
           );
         }
       } catch (e) {
-        console.log('error');
+        console.log("error");
         this.showTip(this.$t("error.error"), e.message);
       } finally {
-        console.log('over');
+        console.log("over");
         this.isLoading = false;
         this.isApproving = false;
       }
@@ -375,16 +376,16 @@ export default {
       PNUT_LP_POOL: "PNUT-TRX LP",
     };
 
-    this.token = {
+    (this.token = {
       TSP_POOL: "TSP",
       TSP_LP_POOL: "S-TSP-TRX",
       PNUT_LP_POOL: "S-PNUT-TRX",
-    },
-    this.depositedDesc = {
-      TSP_POOL: this.$t("farm.tsp.yourTspAmount"),
-      TSP_LP_POOL: this.$t("farm.tspLp.yourTSPLPAmount"),
-      PNUT_LP_POOL: this.$t("farm.pnutLp.yourPNUTLPAmount"),
-    };
+    }),
+      (this.depositedDesc = {
+        TSP_POOL: this.$t("farm.tsp.yourTspAmount"),
+        TSP_LP_POOL: this.$t("farm.tspLp.yourTSPLPAmount"),
+        PNUT_LP_POOL: this.$t("farm.pnutLp.yourPNUTLPAmount"),
+      });
     this.totalDepositedDesc = {
       TSP_POOL: this.$t("farm.tsp.totalDepositTsp"),
       TSP_LP_POOL: this.$t("farm.tspLp.totalDepositTspLP"),

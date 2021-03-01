@@ -34,6 +34,11 @@
               @click="transferPnut"
               :disabled="isLoading"
             >
+            <b-spinner
+            small
+            type="grow"
+            v-show="isTransfering"
+          ></b-spinner>
               {{ $t("vote.transfer") }}
             </b-button>
           </div>
@@ -43,6 +48,11 @@
             @click="connectTron"
             v-else
           >
+          <b-spinner
+            small
+            type="grow"
+            v-show="isLoging"
+          ></b-spinner>
             {{ $t("wallet.connectTron") }}
           </b-button>
         </div>
@@ -91,6 +101,8 @@ export default {
       payRate: PNUT_FOR_VOTE_RATE,
       postLink: "",
       pnutAmount: "",
+      isLogin:false,
+      isTransfering:false,
     };
   },
   components: {
@@ -140,6 +152,7 @@ export default {
             upperPnutAmount: this.payRate * 10,
           })
         );
+        // return false;
       }
       return true;
     },
@@ -150,6 +163,7 @@ export default {
       }
       try {
         this.isLoading = true;
+        this.isTransfering = true;
         const res = await transferPnut(
           TRON_PNUT_RECEIVE_ACCOUNT,
           amountToInt(this.pnutAmount),
@@ -165,6 +179,7 @@ export default {
         this.showTip(this.$t("error.error"), e.message);
       } finally {
         this.isLoading = false;
+        this.isTransfering =false;
       }
     },
     showTip(titel, message) {
@@ -270,6 +285,7 @@ export default {
           }
           .transfer-btn {
             width: 246px;
+            box-sizing: border-box;
           }
         }
       }
@@ -277,7 +293,8 @@ export default {
   }
   .get-vote-info {
     font-size: 14px;
-    margin-top: 32px;
+    margin-top: 24px;
+    text-align: left;
     color: var(--disable)
   }
 }

@@ -260,6 +260,9 @@ h3 {
   font-weight: 500;
   line-height: 36px;
 }
+.spinner-grow{
+  margin-bottom: 2px;
+}
 input {
   border: none;
   outline: none;

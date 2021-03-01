@@ -1,53 +1,65 @@
 <template>
   <div class="stake">
     <Card>
-        <div class="title-box">
-          <img :src="spLogo" alt="" />
-          <span class="title">
-            {{ $t("message.delegatemine") }}
+      <div class="title-box">
+        <img :src="spLogo" alt="" />
+        <span class="title">
+          {{ $t("message.delegatemine") }}
+        </span>
+      </div>
+      <div class="pending-box">
+        <p class="info-title">
+          <span class="info-token">PNUT</span>
+          <span class="info-desc">EARNED</span>
+        </p>
+        <div class="pending-input">
+          <span :class="pendingPnut > 0 ? 'token-number' : 'token-number-none'">
+            {{ pendingPnut | amountForm }}
           </span>
+          <b-button
+            variant="primary"
+            @click="withdrawPnut"
+            :disabled="pendingPnut <= 0 || isLoading"
+          >
+            <b-spinner small type="grow" v-show="isLoading"></b-spinner>
+            {{ $t("message.withdraw") }}
+          </b-button>
         </div>
-        <div class="pending-box">
-          <p class="info-title">
-            <span class='info-token'>PNUT</span>
-            <span class="info-desc">EARNED</span>
-          </p>
-          <div class="pending-input">
-            <span :class="pendingPnut > 0 ? 'token-number' : 'token-number-none'">
-              {{ pendingPnut | amountForm }}
-            </span>
-            <b-button variant="primary" @click="withdrawPnut" :disabled="pendingPnut <= 0 || isLoading">
-              {{ $t("message.withdraw") }}
-            </b-button>
-          </div>
-        </div>
+      </div>
 
-        <div class="op-box">
-          <p class="info-title">
-            <span class='info-token'>STEEM POWER</span>
-            <span class="info-desc">DELEGATED</span>
-          </p>
-          <div class="op-bottom" v-if="delegated && isLogin">
-            <span :class="delegatedSp> 0 ? 'token-number' : 'token-number-none'">
-              {{ delegatedSp | amountForm }}
-            </span>
-            <div>
-            <b-button class="minus-btn op-btn" @click="minusDelegate" :disabled="isLoading">-</b-button>
-            <b-button class="op-btn" @click="addDelegate" :disabled="isLoading">+</b-button>
-            </div>
+      <div class="op-box">
+        <p class="info-title">
+          <span class="info-token">STEEM POWER</span>
+          <span class="info-desc">DELEGATED</span>
+        </p>
+        <div class="op-bottom" v-if="delegated && isLogin">
+          <span :class="delegatedSp > 0 ? 'token-number' : 'token-number-none'">
+            {{ delegatedSp | amountForm }}
+          </span>
+          <div>
+            <b-button
+              class="minus-btn op-btn"
+              @click="minusDelegate"
+              :disabled="isLoading"
+              >-</b-button
+            >
+            <b-button class="op-btn" @click="addDelegate" :disabled="isLoading"
+              >+</b-button
+            >
           </div>
-          <div class="op-bottom" v-if="!delegated && isLogin">
-            <span class="token-number-none"> 0 </span>
-            <b-button variant="primary" @click="delegate">
-              {{ $t("message.delegatemine") }}
-            </b-button>
-          </div>
-          <ConnectWalletBtn
-          class="op-bottom"
-            v-if="!isLogin"
-            @steemLogin="showSteemLogin = true"
-          />
         </div>
+        <div class="op-bottom" v-if="!delegated && isLogin">
+          <span class="token-number-none"> 0 </span>
+          <b-button variant="primary" @click="delegate">
+            {{ $t("message.delegatemine") }}
+          </b-button>
+        </div>
+        <ConnectWalletBtn
+          class="op-bottom"
+          v-if="!isLogin"
+          @steemLogin="showSteemLogin = true"
+        />
+      </div>
       <!--apy-->
       <p class="fee apy">
         <span>APY</span>
@@ -142,7 +154,13 @@ export default {
     ChangeDelegateMask,
   },
   methods: {
-    ...mapActions(["getVests", "getSteem", "getPnut", "getDelegatedSp","getTotalDelegatedSP"]),
+    ...mapActions([
+      "getVests",
+      "getSteem",
+      "getPnut",
+      "getDelegatedSp",
+      "getTotalDelegatedSP",
+    ]),
     ...mapMutations([
       "saveSteemBalance",
       "saveVestsBalance",
