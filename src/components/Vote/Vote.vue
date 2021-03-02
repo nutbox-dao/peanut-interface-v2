@@ -13,10 +13,8 @@
           {{ $t("vote.vote") }}
         </p>
         <div style="display: flex">
-          <img
-            class="logo"
-            src="https://coin.top/production/upload/logo/TPZddNpQJHu8UtKPY1PYDBv2J5p5QpJ6XW.jpeg?t=1603183073762"
-            alt=""
+          <span
+            class="upvote-icon"
           />
         </div>
         <div class="link-input">
@@ -203,6 +201,8 @@ export default {
   h5 {
     text-align:left;
     margin-top: 12px;
+    font-size:16px;
+    font-weight: 300;
   }
   .nav {
     display: flex;
@@ -237,6 +237,9 @@ export default {
       padding: 24px;
       background: #ffffff;
       box-shadow: 0px 2px 20px 0px rgba(0, 0, 0, 0.02);
+      background-image: url('../../static/images/upvote-back.svg');
+      background-position: right top;
+      background-repeat: no-repeat;
       border-radius: 28px;
       border: 1px solid rgba(227, 229, 232, 0.5);
       .title {
@@ -248,11 +251,15 @@ export default {
         font-size: 28px;
         text-align: left;
       }
-      .logo {
+      .upvote-icon {
         margin: 36px 0 0 0;
         width: 56px;
         height: 56px;
-        text-align: left;
+        border: 1px solid var(--primary);
+        border-radius: 28px;
+        background-image: url('../../static/images/upvote-hover.svg');
+        background-repeat: no-repeat;
+        background-position: center center;
       }
       .link-input {
         margin-top: 20px;
