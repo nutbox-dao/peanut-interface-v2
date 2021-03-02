@@ -4,7 +4,7 @@
       <img src="./static/images/logo.svg" alt="nutbox" class="logo" />
       <b-nav pills vertical align="center" class="menu">
         <b-nav-item to="/wallet">
-          <b-icon icon="person-fill"></b-icon>
+          <p class="wallet-icon my-icon" />
           <div style="padding: 0">
             <p>
               {{
@@ -19,27 +19,27 @@
           </div>
         </b-nav-item>
         <b-nav-item to="/stake" router-tag="div">
-          <b-icon icon="nut-fill"></b-icon>
+          <p class="stake-icon my-icon" />
           {{ $t("stake.stake") }}
         </b-nav-item>
         <b-nav-item to="/farm">
-          <b-icon icon="hammer"></b-icon>
+          <p class="farming-icon my-icon" />
           {{ $t("farm.farm") }}
         </b-nav-item>
         <b-nav-item to="/liquid-staking">
-          <b-icon icon="tools"></b-icon>
+          <p class="liquid-staking-icon my-icon" />
           {{ $t("liquidStaking.liquidStaking") }}
         </b-nav-item>
         <b-nav-item to="/get-vote">
-          <b-icon icon="tools"></b-icon>
+          <p class="upvote-icon my-icon" />
           {{ $t("vote.upvote") }}
         </b-nav-item>
         <b-nav-item href="https://blog.nutbox.io/" target="_blank">
-          <b-icon icon="inbox-fill"></b-icon>
+          <p class="blog-icon my-icon" />
           {{ $t("message.blog") }}
         </b-nav-item>
         <b-nav-item to="/nps">
-          <b-icon icon="pencil-fill"></b-icon>
+          <p class="nps-icon my-icon" />
           {{ $t("nps.nps") }}
         </b-nav-item>
 
@@ -182,7 +182,7 @@ export default {
   async mounted() {
     var store = this.$store;
     store.dispatch("setVestsToSteem");
-    this.lang = localStorage.getItem(LOCALE_KEY)
+    this.lang = localStorage.getItem(LOCALE_KEY);
 
     const address = await getTronLinkAddr();
     if (address && address === TRON_LINK_ADDR_NOT_FOUND.noTronLink) {
@@ -194,7 +194,7 @@ export default {
       this.tipMessage = this.$t("error.unlockWallet");
       this.showMessage = true;
     } else if (address) {
-      store.commit('saveTronAddress', address);
+      store.commit("saveTronAddress", address);
       store.dispatch("getPnut");
     }
     watchWallet((address) => {
@@ -262,7 +262,7 @@ h3 {
   font-weight: 500;
   line-height: 36px;
 }
-.spinner-grow{
+.spinner-grow {
   margin-bottom: 2px;
   margin-right: 8px;
 }
@@ -363,8 +363,7 @@ input::-webkit-input-placeholder {
 
 .left .nav-link {
   height: 100%;
-
-  font-size: 14px;
+  font-size: 16px;
   font-family: PingFangSC-Regular, PingFang SC;
   font-weight: 400;
   color: var(--disable);
@@ -412,5 +411,57 @@ input::-webkit-input-placeholder {
 }
 .left .bottom a {
   font-size: 1.2rem !important;
+}
+
+.my-icon {
+  width: 24px;
+  height: 24px;
+  margin: 0px 12px 0px 0px !important;
+}
+
+.wallet-icon {
+  background-image: url("./static/images/wallet.svg");
+}
+.stake-icon {
+  background-image: url("./static/images/stake.svg");
+}
+.farming-icon {
+  background-image: url("./static/images/farming.svg");
+}
+.liquid-staking-icon {
+  background-image: url("./static/images/swap.svg");
+}
+.upvote-icon {
+  background-image: url("./static/images/upvote.svg");
+}
+.blog-icon {
+  background-image: url("./static/images/blog.svg");
+}
+.nps-icon {
+  background-image: url("./static/images/nps.svg");
+}
+
+.active {
+  .wallet-icon {
+    background-image: url("./static/images/wallet-hover.svg");
+  }
+  .stake-icon {
+    background-image: url("./static/images/stake-hover.svg");
+  }
+  .farming-icon {
+    background-image: url("./static/images/farming-hover.svg");
+  }
+  .liquid-staking-icon {
+    background-image: url("./static/images/swap-hover.svg");
+  }
+  .upvote-icon {
+    background-image: url("./static/images/upvote-hover.svg");
+  }
+  .blog-icon {
+    background-image: url("./static/images/blog-hover.svg");
+  }
+  .nps-icon {
+    background-image: url("./static/images/nps-hover.svg");
+  }
 }
 </style>

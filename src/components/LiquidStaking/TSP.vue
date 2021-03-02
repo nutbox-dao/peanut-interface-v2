@@ -119,7 +119,7 @@
 
     <!--手续费-->
     <div class="tip">
-      <p v-show="fromSteemToTron">
+      <p v-if="fromSteemToTron">
         {{ $t("message.servicecharge") }}：
         {{ parseFloat(transferRatio * 100).toFixed(2) }}%，{{
           $t("message.atleastcharge")
@@ -131,7 +131,7 @@
         {{ $t("message.convertrate") }}： 1 STEEM = 1 TSP
       </p>
       <p v-else>{{ $t("message.convertrate") }}： 1 TSP = 1 STEEM<br /></p>
-      <p v-show="!fromSteemToTron">
+      <p v-if="!fromSteemToTron">
         {{ $t("liquidStaking.tsp.tsptosteemintro") }}
       </p>
     </div>

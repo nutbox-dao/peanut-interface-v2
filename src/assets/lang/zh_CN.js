@@ -14,7 +14,7 @@ module.exports = {
     totalpnut: 'PNUT总产量',
     apy: '年化收益率',
     pnutprofits: 'PNUT收益',
-    withdraw: '收割',
+    withdraw: '收获',
     balance: '余额',
     approveContract:"授权合约",
     max:'最大',

@@ -44,7 +44,7 @@ export const approveContract = async function (symbol) {
   const pool = APPROVE_TOKEN_CONTRACT_PAIR[symbol][1]
   try {
     const user = await getTronLinkAddr()
-    if (user === TRON_LINK_ADDR_NOT_FOUND.noTronLink || user === TRON_LINK_ADDR_NOT_FOUND.walletLocked) return;
+    if (user === TRON_LINK_ADDR_NOT_FOUND.noTronLink || user === TRON_LINK_ADDR_NOT_FOUND.walletLocked) return 1;
     const approveInt = amountToInt(TRC20_APPROVE_AMOUNT)
     const tronLink = await getTronLink()
     const params = [
