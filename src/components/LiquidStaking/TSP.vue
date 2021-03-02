@@ -56,6 +56,7 @@
 
       <div class="icon-box">
         <span
+        @click="changeTransOrder"
           class="exchange-icon"
         />
       </div>
@@ -174,12 +175,6 @@ export default {
     ConnectWalletBtn,
     Login,
   },
-  props: {
-    fromSteemToTron: {
-      type: Boolean,
-      default: true,
-    },
-  },
   data() {
     return {
       canTransFlag: false,
@@ -191,6 +186,7 @@ export default {
       tipTitle: "",
       showMessage: false,
       showSteemLogin: false,
+      fromSteemToTron: true,
     };
   },
   computed: {
@@ -271,6 +267,12 @@ export default {
         this.tspToSteem();
       }
     },
+    
+    changeTransOrder() {
+      this.fromSteemToTron = !this.fromSteemToTron;
+      this.transValue = "";
+      this.checkTransValue();
+    },
 
     async steemToTsp() {
       try {
@@ -346,12 +348,5 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.exchange-icon {
-  background-image: url("../../static/images/down-arrow.svg") !important;
-}
-
-.exchange-icon:hover {
-  background-image: url("../../static/images/down-arrow.svg") !important;
-}
 @import "../../static/css/swap.less";
 </style>

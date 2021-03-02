@@ -99,6 +99,7 @@ module.exports = {
   },
   liquidStaking: {
     liquidStaking: '质押资产流动',
+    title: "TSP 质押与赎回",
     tsp: {
       tspIsCirculatingSP: 'TSP为SP的等价物，TSP可享受SP同等的质押奖励，且TSP可交易',
       tsptosteemintro: '转换的STEEM将在33-40天内陆续返还'

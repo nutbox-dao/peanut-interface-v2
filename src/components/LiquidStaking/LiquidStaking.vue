@@ -1,10 +1,9 @@
 <template>
   <div class="liquid-staking">
-    <h3>{{ $t("liquidStaking.liquidStaking") }}</h3>
+    <h3>{{ $t("liquidStaking.title") }}</h3>
     <div class="exchange-box">
       <div class="tsp-exchange">
-        <TSP :fromSteemToTron="true"></TSP>
-        <TSP :fromSteemToTron="false"></TSP>
+        <TSP></TSP>
       </div>
     </div>
   </div>

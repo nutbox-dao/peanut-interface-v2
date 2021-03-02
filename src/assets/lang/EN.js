@@ -99,6 +99,7 @@ module.exports = {
   },
   liquidStaking: {
     liquidStaking: 'Liquid Staking',
+    title: "TSP Stake & Redeem",
     tsp: {
       tspIsCirculatingSP: 'TSP is the equivalent of SP, TSP can enjoy the same staking reward of SP, and TSP can be traded',
       tsptosteemintro: 'The withdrawn TSP will be returned to your Steem account in around 33~40 days.'
