@@ -31,7 +31,7 @@
               class="transfer-btn"
               variant="primary"
               @click="transferPnut"
-              :disabled="isLoading"
+              :disabled="isLoading || !isReady"
             >
               <b-spinner small type="grow" v-show="isTransfering"></b-spinner>
               {{ $t("vote.transfer") }}
@@ -70,6 +70,7 @@ import {
   POST_LINK_REG,
   TRON_PNUT_RECEIVE_ACCOUNT,
   TRON_LINK_ADDR_NOT_FOUND,
+  STEEM_MINE_ACCOUNT
 } from "../../config";
 import {
   amountToInt,
@@ -97,6 +98,7 @@ export default {
       pnutAmount: "",
       isLogin: false,
       isTransfering: false,
+      isReady:false,
     };
   },
   components: {
@@ -189,9 +191,16 @@ export default {
     ) {
       this.$store.dispatch("getPnut");
     }
-    let { posting_json_metadata } = await getAccountInfo("terry3t");
+    let { posting_json_metadata } = await getAccountInfo(STEEM_MINE_ACCOUNT);
     console.log("account info:", posting_json_metadata);
-    // this.payRate = account.pnut.payRate;
+    const json = JSON.parse(posting_json_metadata)
+    if (Object.keys(json).length > 0){
+      const rate = parseInt(json.config.pnut_for_upvote)
+      if (rate > 0){
+        this.payRate = rate;
+        this.isReady = true;
+      }
+    }
   },
 };
 </script>

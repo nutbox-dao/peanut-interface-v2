@@ -47,7 +47,7 @@ export default {
       }
     },
     async mounted () {
-      const { posting_json_metadata } = await getAccountInfo('terry3t');
+      const { posting_json_metadata } = await getAccountInfo(STEEM_MINE_ACCOUNT);
       console.log('account:', posting_json_metadata,typeof(posting_json_metadata));
       const obj = JSON.parse(posting_json_metadata)
       if (Object.keys(obj).length > 0){
