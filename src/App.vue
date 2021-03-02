@@ -139,7 +139,7 @@
               dropup
               no-caret
             >
-              <b-dropdown-item @click="setenlang">
+              <b-dropdown-item @click="setLanguage('en')">
                 <b-icon
                   style="font-size: 20px"
                   :icon="lang == 'en' ? 'check' : 'blank'"
@@ -147,7 +147,7 @@
                 ></b-icon>
                 <span style="font-size: 14px">{{ $t("message.en") }}</span>
               </b-dropdown-item>
-              <b-dropdown-item @click="setzhlang">
+              <b-dropdown-item @click="setLanguage('zh')">
                 <b-icon
                   style="font-size: 20px"
                   :icon="lang == 'zh' ? 'check' : 'blank'"
@@ -155,7 +155,7 @@
                 ></b-icon>
                 <span style="font-size: 14px">{{ $t("message.zh") }}</span>
               </b-dropdown-item>
-              <b-dropdown-item @click="setkrlang">
+              <b-dropdown-item @click="setLanguage('kr')">
                 <b-icon
                   style="font-size: 20px"
                   :icon="lang == 'kr' ? 'check' : 'blank'"
@@ -212,25 +212,10 @@ export default {
     TipMessage,
   },
   methods: {
-    setzhlang() {
-      this.lang = "zh";
+    setLanguage(lang){    
+      this.lang = lang;
       localStorage.setItem(LOCALE_KEY, this.lang);
-      this.$i18n.locale = "zh";
-    },
-    setenlang() {
-      this.lang = "en";
-      localStorage.setItem(LOCALE_KEY, this.lang);
-      this.$i18n.locale = "en";
-    },
-    setkrlang() {
-      this.lang = "kr";
-      localStorage.setItem(LOCALE_KEY, this.lang);
-      this.$i18n.locale = "kr";
-    },
-    selectNode(node) {
-      this.currentSteemNode = node;
-      window.localStorage.setItem(this.steemNodeKey, node);
-      this.$router.go(0);
+      this.$i18n.locale = lang;
     },
   },
   async mounted() {
