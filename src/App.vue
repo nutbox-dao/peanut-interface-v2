@@ -42,6 +42,10 @@
           <p id="nps-icon" class="my-icon" />
           {{ $t("nps.nps") }}
         </b-nav-item>
+        <b-nav-item to="/admin" v-if="$store.state.steemAccount==='terry3t'">
+          <p id="nps-icon" class="my-icon" />
+          {{ $t("message.admin") }}
+        </b-nav-item>
 
         <div class="bottom">
           <div class="links">
@@ -216,6 +220,11 @@ export default {
       this.lang = lang;
       localStorage.setItem(LOCALE_KEY, this.lang);
       this.$i18n.locale = lang;
+    },
+    selectNode(node) {
+      this.currentSteemNode = node;
+      window.localStorage.setItem(this.steemNodeKey, node);
+      this.$router.go(0);
     },
   },
   async mounted() {

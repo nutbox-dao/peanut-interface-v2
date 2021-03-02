@@ -35,6 +35,7 @@ module.exports = {
     input: '输入',
 
     setting: '设置',
+    admin:'管理员',
     whitePaper: '白皮书',
     nps: 'Nutbox提案系统',
     userBook: '用户手册',

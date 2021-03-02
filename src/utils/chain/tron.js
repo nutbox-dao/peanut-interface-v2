@@ -1,26 +1,40 @@
 import axios from 'axios'
 import Tron from 'tronweb'
-import { TRON_NODE_API, TRON_LINK_ADDR_NOT_FOUND, TRON_PNUT_CONTRACT, PNUT_LP_TOKEN_ADDRESS } from '../../config.js'
-import { sleep } from '../helper'
+import {
+  TRON_NODE_API,
+  TRON_LINK_ADDR_NOT_FOUND,
+  TRON_PNUT_CONTRACT,
+  PNUT_LP_TOKEN_ADDRESS,
+  TRONWEB_API_KEY,
+  TRON_API_KEY_ON_WEB
+} from '../../config.js'
+import {
+  sleep
+} from '../helper'
 
-function initTron (symbol) {
+function initTron(symbol) {
   const HttpProvider = Tron.providers.HttpProvider
   const fullNode = new HttpProvider(TRON_NODE_API)
   const solidityNode = new HttpProvider(TRON_NODE_API)
   const eventServer = new HttpProvider(TRON_NODE_API)
   const privateKey = null
+  let tronweb;
   if (privateKey) {
-    return new Tron(fullNode, solidityNode, eventServer, privateKey)
+    tronweb = new Tron(fullNode, solidityNode, eventServer, privateKey)
   } else {
-    return new Tron(fullNode, solidityNode, eventServer)
+    tronweb = new Tron(fullNode, solidityNode, eventServer)
   }
+  tronweb.setHeader({
+    'TRON-PRO-API-KEY': TRONWEB_API_KEY
+  })
+  return tronweb;
 }
 
-export function getTron (symbol = 'DEFAULT') {
+export function getTron(symbol = 'DEFAULT') {
   return initTron(symbol)
 }
 
-export async function getTronLinkAddr () {
+export async function getTronLinkAddr() {
   let addr = null
   const tronLink = await getTronLink()
   if (!tronLink) {
@@ -56,12 +70,20 @@ export const transferPnut = async function (to, amount, memo = "") {
   const tronweb = await getTronLink()
   const user = await getTronLinkAddr()
   const method = "transfer(address,uint256)";
-  const params = [
-    { type: "address", value: tronweb.address.toHex(to) },
-    { type: "uint256", value: amount },
+  const params = [{
+      type: "address",
+      value: tronweb.address.toHex(to)
+    },
+    {
+      type: "uint256",
+      value: amount
+    },
   ];
-console.log('param',params);
-  const {result,transaction} = await tronweb.transactionBuilder.triggerSmartContract(
+  console.log('param', params);
+  const {
+    result,
+    transaction
+  } = await tronweb.transactionBuilder.triggerSmartContract(
     tronweb.address.toHex(TRON_PNUT_CONTRACT),
     method,
     10000000, 0,
@@ -81,9 +103,11 @@ console.log('param',params);
   let trans = await tronweb.transactionBuilder.addUpdateData(transaction, memo, 'utf8');
   trans.__payload__ = transaction.__payload__
   // Sign transaction
-  const signedTx = await tronweb.trx.sign(trans,tronweb.defaultPrivateKey);
+  const signedTx = await tronweb.trx.sign(trans, tronweb.defaultPrivateKey);
   // Broadcast transaction
-  const {txid}= await tronweb.trx.sendRawTransaction(signedTx);
+  const {
+    txid
+  } = await tronweb.trx.sendRawTransaction(signedTx);
   // Validate transaction
   if (
     txid &&
@@ -93,10 +117,10 @@ console.log('param',params);
   } else {
     return false;
   }
-  
+
 };
 
-export function getAddress (hex) {
+export function getAddress(hex) {
   const tron = getTron()
   return tron.address.fromHex(hex)
 }
@@ -174,9 +198,11 @@ export const getBalanceOfToken = async function (token, user) {
   const tron = getTron()
   const balance = await tron.transactionBuilder
     .triggerConstantContract(token,
-      'balanceOf(address)',
-      {},
-      [{ type: 'address', value: user }],
+      'balanceOf(address)', {},
+      [{
+        type: 'address',
+        value: user
+      }],
       user)
   // console.log("banlanceof",balance)
   return balance && balance.constant_result && balance.constant_result[0] && tron.toDecimal('0x' + balance.constant_result[0])
@@ -186,20 +212,19 @@ export const getSupplyOfToken = async function (token) {
   const tron = getTron()
   const supply = await tron.transactionBuilder
     .triggerConstantContract(token,
-      'totalSupply()',
-      {},
+      'totalSupply()', {},
       [],
       token)
   // console.log("total supply",tron.toDecimal('0x'+supply['constant_result'][0]))
   return supply && supply.constant_result && supply.constant_result[0] && tron.toDecimal('0x' + supply.constant_result[0])
 }
 
-function runOnce (fn, context) { // 控制让函数只触发一次
+function runOnce(fn, context) { // 控制让函数只触发一次
   return function () {
     try {
       fn.apply(context || this, arguments)
     } catch (e) {
-      console.error(e)// 一般可以注释掉这行
+      console.error(e) // 一般可以注释掉这行
     } finally {
       fn = null
     }
@@ -209,7 +234,7 @@ function runOnce (fn, context) { // 控制让函数只触发一次
 // whatch the tronlink address every 5sec，if changed callback the new address
 export const watchWallet = runOnce(wa)
 
-async function wa (callback) {
+async function wa(callback) {
   try {
     const addr = await getTronLinkAddr()
     if (!addr) {
@@ -261,6 +286,7 @@ export const getPnutPrice = function () {
         page_num: 1
       }
     })
+    console.log('pnutprice:', res.data);
     const price = res.data.data['0_TPZddNpQJHu8UtKPY1PYDBv2J5p5QpJ6XW'].price
     resolve(parseFloat(price))
   })

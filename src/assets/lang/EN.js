@@ -35,6 +35,7 @@ module.exports = {
     input: 'Input',
 
     setting: 'Setting',
+    admin:'Admin',
     whitePaper: 'White Paper',
     nps: 'Nutbox Proposal System',
     userBook: 'User Handbook',

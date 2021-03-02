@@ -12,6 +12,8 @@ export const STEEM_CONF_KEY = 'steemNodeKey'
 
 export const LOCALE_KEY = 'localeLanguage'
 
+export const TRONWEB_API_KEY = process.env.TRONWEB_API_KEY || '36a6e0fc-869b-423b-9d06-c0f45a89de05'
+export const TRON_API_KEY_ON_WEB = process.env.TRON_API_KEY_ON_WEB || 'abb27a13-42f2-41ec-8abf-d68c11a88d65'
 export const TRON_NODE_API = 'https://api.trongrid.io'
 // export const TRON_NODE_API = 'https://api.shasta.trongrid.io'
 

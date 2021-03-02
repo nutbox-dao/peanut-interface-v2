@@ -10,6 +10,7 @@ import LiquidStaking from '../components/LiquidStaking/LiquidStaking'
 import TSP from '../components/LiquidStaking/TSP'
 import Nps from '../components/Nps/Nps'
 import Vote from '../components/Vote/Vote'
+import Admin from '../components/Admin/Admin'
 
 Vue.use(VueRouter)
 
@@ -67,6 +68,10 @@ const routes = [
   {
     path: '/nps',
     component: Nps
+  },
+  {
+    path:'/admin',
+    component: Admin,
   }
 ]
 

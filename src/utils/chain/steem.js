@@ -1,6 +1,6 @@
 import steem from 'steem'
 import axios from 'axios'
-import { STEEM_API_URLS, STEEM_CONF_KEY, STEEM_GAS_ACCOUNT, STEEM_STAKE_FEE } from '../../config.js'
+import { STEEM_API_URLS, STEEM_CONF_KEY, STEEM_GAS_ACCOUNT, STEEM_STAKE_FEE, STEEM_MINE_ACCOUNT } from '../../config.js'
 import { sleep } from '../helper'
 
 const steemConf = window.localStorage.getItem(STEEM_CONF_KEY) || STEEM_API_URLS[0]
@@ -186,4 +186,22 @@ export const getKeychain = async () => {
   }
   await sleep(2)
   return window.steem_keychain
+}
+
+export const updatePnutForVoteParams = async (jsonMetadata) => {
+  const op = [
+    'account_update2',
+    {
+      "account":"terry3t",
+      json_metadata:'',
+      "posting_json_metadata":jsonMetadata,
+      extensions:[]
+    }
+  ]
+  return await new Promise(resolve => {
+    steem_keychain.requestBroadcast("terry3t", [op],
+      'Active', function (response) {
+        resolve(response)
+      })
+  })
 }

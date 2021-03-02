@@ -4,7 +4,7 @@
       {{ $t("vote.upvote") }}
     </h3>
     <h5>
-      {{$t("vote.title")}}
+      {{ $t("vote.title") }}
     </h5>
     <div class="nav"></div>
     <div class="vote-container">
@@ -13,9 +13,7 @@
           {{ $t("vote.vote") }}
         </p>
         <div style="display: flex">
-          <span
-            class="upvote-icon"
-          />
+          <span class="upvote-icon" />
         </div>
         <div class="link-input">
           <p>{{ $t("vote.link") }}</p>
@@ -35,11 +33,7 @@
               @click="transferPnut"
               :disabled="isLoading"
             >
-            <b-spinner
-            small
-            type="grow"
-            v-show="isTransfering"
-          ></b-spinner>
+              <b-spinner small type="grow" v-show="isTransfering"></b-spinner>
               {{ $t("vote.transfer") }}
             </b-button>
           </div>
@@ -49,11 +43,7 @@
             @click="connectTron"
             v-else
           >
-          <b-spinner
-            small
-            type="grow"
-            v-show="isLoging"
-          ></b-spinner>
+            <b-spinner small type="grow" v-show="isLoging"></b-spinner>
             {{ $t("wallet.connectTron") }}
           </b-button>
         </div>
@@ -86,6 +76,9 @@ import {
   getTronLinkAddr,
   transferPnut,
 } from "../../utils/chain/tron";
+import {
+  getAccountInfo,
+} from "../../utils/chain/steem";
 
 export default {
   name: "Vote",
@@ -102,8 +95,8 @@ export default {
       payRate: PNUT_FOR_VOTE_RATE,
       postLink: "",
       pnutAmount: "",
-      isLogin:false,
-      isTransfering:false,
+      isLogin: false,
+      isTransfering: false,
     };
   },
   components: {
@@ -180,7 +173,7 @@ export default {
         this.showTip(this.$t("error.error"), e.message);
       } finally {
         this.isLoading = false;
-        this.isTransfering =false;
+        this.isTransfering = false;
       }
     },
     showTip(titel, message) {
@@ -189,8 +182,16 @@ export default {
       this.showMessage = true;
     },
   },
-  mounted() {
-    this.$store.dispatch("getPnut");
+  async mounted() {
+    if (
+      this.$store.state.tronAddress &&
+      this.$store.state.tronAddress.length > 0
+    ) {
+      this.$store.dispatch("getPnut");
+    }
+    let { posting_json_metadata } = await getAccountInfo("terry3t");
+    console.log("account info:", posting_json_metadata);
+    // this.payRate = account.pnut.payRate;
   },
 };
 </script>
@@ -199,9 +200,9 @@ export default {
 #vote {
   padding: 0px 40px 64px;
   h5 {
-    text-align:left;
+    text-align: left;
     margin-top: 12px;
-    font-size:16px;
+    font-size: 16px;
     font-weight: 300;
   }
   .nav {
@@ -237,7 +238,7 @@ export default {
       padding: 24px;
       background: #ffffff;
       box-shadow: 0px 2px 20px 0px rgba(0, 0, 0, 0.02);
-      background-image: url('../../static/images/upvote-back.svg');
+      background-image: url("../../static/images/upvote-back.svg");
       background-position: right top;
       background-repeat: no-repeat;
       border-radius: 28px;
@@ -257,7 +258,7 @@ export default {
         height: 56px;
         border: 1px solid var(--primary);
         border-radius: 28px;
-        background-image: url('../../static/images/upvote-hover.svg');
+        background-image: url("../../static/images/upvote-hover.svg");
         background-repeat: no-repeat;
         background-position: center center;
       }
@@ -309,7 +310,7 @@ export default {
     margin-top: 24px;
     margin-bottom: 0px;
     text-align: left;
-    color: var(--disable)
+    color: var(--disable);
   }
 }
 </style>
