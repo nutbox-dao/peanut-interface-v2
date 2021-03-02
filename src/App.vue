@@ -4,7 +4,7 @@
       <img src="./static/images/logo.svg" alt="nutbox" class="logo" />
       <b-nav pills vertical align="center" class="menu">
         <b-nav-item to="/wallet">
-          <p class="wallet-icon my-icon" />
+          <p id="wallet-icon" class="my-icon" />
           <div style="padding: 0">
             <p>
               {{
@@ -19,41 +19,93 @@
           </div>
         </b-nav-item>
         <b-nav-item to="/stake" router-tag="div">
-          <p class="stake-icon my-icon" />
+          <p id="stake-icon" class="my-icon" />
           {{ $t("stake.stake") }}
         </b-nav-item>
         <b-nav-item to="/farm">
-          <p class="farming-icon my-icon" />
+          <p id="farming-icon" class="my-icon" />
           {{ $t("farm.farm") }}
         </b-nav-item>
         <b-nav-item to="/liquid-staking">
-          <p class="liquid-staking-icon my-icon" />
+          <p id="liquid-staking-icon" class="my-icon" />
           {{ $t("liquidStaking.liquidStaking") }}
         </b-nav-item>
         <b-nav-item to="/get-vote">
-          <p class="upvote-icon my-icon" />
+          <p id="upvote-icon" class="my-icon" />
           {{ $t("vote.upvote") }}
         </b-nav-item>
         <b-nav-item href="https://blog.nutbox.io/" target="_blank">
-          <p class="blog-icon my-icon" />
+          <p id="blog-icon" class="my-icon" />
           {{ $t("message.blog") }}
         </b-nav-item>
         <b-nav-item to="/nps">
-          <p class="nps-icon my-icon" />
+          <p id="nps-icon" class="my-icon" />
           {{ $t("nps.nps") }}
         </b-nav-item>
 
         <div class="bottom">
           <div class="links">
-            <a href="https://github.com/nutbox-dao" target="_blank">
-              <b-icon icon="github"></b-icon>
+            <a
+              id="justswap-icon"
+              href="https://justswap.org/#/home?tokenAddress=TPZddNpQJHu8UtKPY1PYDBv2J5p5QpJ6XW&type=swap"
+              target="_blank"
+            >
+              <b-popover
+                target="justswap-icon"
+                triggers="hover focus"
+                placement="top"
+              >
+                Justswap
+              </b-popover>
             </a>
-            <a href="https://docs.nutbox.io/" target="_blank">
-              <b-icon icon="archive-fill"></b-icon>
+            <a
+              id="github-icon"
+              href="https://github.com/nutbox-dao"
+              target="_blank"
+            >
+              <b-popover
+                target="github-icon"
+                triggers="hover focus"
+                placement="top"
+              >
+                Github
+              </b-popover>
             </a>
-            <a href="https://discord.com/invite/zPkMuGY" target="_blank">
-              <b-icon icon="discord"></b-icon>
+            <a id="docs-icon" href="https://docs.nutbox.io/" target="_blank">
             </a>
+            <b-popover
+              target="docs-icon"
+              triggers="hover focus"
+              placement="top"
+            >
+              {{ $t("message.docs") }}
+            </b-popover>
+            <a
+              id="discord-icon"
+              href="https://discord.com/invite/zPkMuGY"
+              target="_blank"
+            >
+            </a>
+            <b-popover
+              target="discord-icon"
+              triggers="hover focus"
+              placement="top"
+            >
+              Discord
+            </b-popover>
+            <a
+              id="telegram-icon"
+              href="https://t.me/nutbox_defi"
+              target="_blank"
+            >
+            </a>
+            <b-popover
+              target="telegram-icon"
+              triggers="hover focus"
+              placement="top"
+            >
+              Telegram
+            </b-popover>
           </div>
 
           <div class="settings">
@@ -61,6 +113,7 @@
               id="steem-node"
               :text="$t('message.changeSteemNode')"
               size="sm"
+              block
               dropup
               no-caret
             >
@@ -82,6 +135,7 @@
               id="language"
               :text="lang.toUpperCase()"
               size="sm"
+              block
               dropup
               no-caret
             >
@@ -392,7 +446,6 @@ input::-webkit-input-placeholder {
   bottom: 30px;
   box-sizing: border-box;
   background-color: rgba(0, 0, 0, 0);
-  border-top: 1px solid var(--dividers);
 
   .links {
     width: 100%;
@@ -400,17 +453,46 @@ input::-webkit-input-placeholder {
     align-content: center;
     justify-content: space-around;
     margin-top: 19px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--dividers);
+    a {
+      width: 32px;
+      height: 32px;
+    }
   }
   .settings {
-    margin-top: 10px;
-    width: 100%;
+    margin-top: 23px;
+    width: 192;
+    height: 104px;
+    margin-bottom: 16px;
+    background: #f6f7f9;
+    border-radius: 16px;
+    padding: 24px 30px;
     display: flex;
-    align-content: center;
-    justify-content: space-between;
+    flex-direction: column;
+    justify-content:space-between;
+
+    #steem-node{
+      width: 100%;
+      background-image: url('./static/images/node.svg');
+      background-repeat: no-repeat;
+      background-position: center left;
+    }
+    #language{
+      width: 100%;
+      background-image: url('./static/images/lang.svg');
+      background-repeat: no-repeat;
+      background-position: center left;
+    }
+    .btn-secondary{
+      color: var(--primary-text) !important;
+      background-color: rgba(0, 0, 0, 0);
+      border: none;
+      font-size:12px;
+      text-align: left;
+      padding-left: 22px;
+    }
   }
-}
-.left .bottom a {
-  font-size: 1.2rem !important;
 }
 
 .my-icon {
@@ -419,49 +501,81 @@ input::-webkit-input-placeholder {
   margin: 0px 12px 0px 0px !important;
 }
 
-.wallet-icon {
+#wallet-icon {
   background-image: url("./static/images/wallet.svg");
 }
-.stake-icon {
+#stake-icon {
   background-image: url("./static/images/stake.svg");
 }
-.farming-icon {
+#farming-icon {
   background-image: url("./static/images/farming.svg");
 }
-.liquid-staking-icon {
+#liquid-staking-icon {
   background-image: url("./static/images/swap.svg");
 }
-.upvote-icon {
+#upvote-icon {
   background-image: url("./static/images/upvote.svg");
 }
-.blog-icon {
+#blog-icon {
   background-image: url("./static/images/blog.svg");
 }
-.nps-icon {
+#nps-icon {
   background-image: url("./static/images/nps.svg");
 }
 
 .active {
-  .wallet-icon {
+  #wallet-icon {
     background-image: url("./static/images/wallet-hover.svg");
   }
-  .stake-icon {
+  #stake-icon {
     background-image: url("./static/images/stake-hover.svg");
   }
-  .farming-icon {
+  #farming-icon {
     background-image: url("./static/images/farming-hover.svg");
   }
-  .liquid-staking-icon {
+  #liquid-staking-icon {
     background-image: url("./static/images/swap-hover.svg");
   }
-  .upvote-icon {
+  #upvote-icon {
     background-image: url("./static/images/upvote-hover.svg");
   }
-  .blog-icon {
+  #blog-icon {
     background-image: url("./static/images/blog-hover.svg");
   }
-  .nps-icon {
+  #nps-icon {
     background-image: url("./static/images/nps-hover.svg");
   }
+}
+
+#justswap-icon {
+  background-image: url("./static/images/just-swap.svg");
+}
+#github-icon {
+  background-image: url("./static/images/GitHub.svg");
+}
+#docs-icon {
+  background-image: url("./static/images/docs.svg");
+}
+#discord-icon {
+  background-image: url("./static/images/Discord.svg");
+}
+#telegram-icon {
+  background-image: url("./static/images/telegram.svg");
+}
+
+#justswap-icon:hover {
+  background-image: url("./static/images/just-swap-hover.svg");
+}
+#github-icon:hover {
+  background-image: url("./static/images/GitHub-hover.svg");
+}
+#docs-icon:hover {
+  background-image: url("./static/images/docs-hover.svg");
+}
+#discord-icon:hover {
+  background-image: url("./static/images/Discord-hover.svg");
+}
+#telegram-icon:hover {
+  background-image: url("./static/images/telegram-hover.svg");
 }
 </style>
