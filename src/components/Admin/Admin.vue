@@ -20,6 +20,7 @@ import {
   getAccountInfo,
   updatePnutForVoteParams,
 } from "../../utils/chain/steem";
+import {STEEM_MINE_ACCOUNT} from '../../config'
 import Card from '../ToolsComponents/Card'
 export default {
     name: "Admin",

@@ -42,7 +42,7 @@
           <p id="nps-icon" class="my-icon" />
           {{ $t("nps.nps") }}
         </b-nav-item>
-        <b-nav-item to="/admin" v-if="$store.state.steemAccount==='terry3t'">
+        <b-nav-item to="/admin" v-if="$store.state.steemAccount===nutboxMineAccount">
           <p id="nps-icon" class="my-icon" />
           {{ $t("message.admin") }}
         </b-nav-item>
@@ -191,6 +191,7 @@ import {
   STEEM_API_URLS,
   STEEM_CONF_KEY,
   LOCALE_KEY,
+  STEEM_MINE_ACCOUNT
 } from "./config";
 import TipMessage from "./components/ToolsComponents/TipMessage";
 import { mapState, mapGetters } from "vuex";
@@ -205,6 +206,7 @@ export default {
       steemUrls: STEEM_API_URLS,
       steemNodeKey: STEEM_CONF_KEY,
       currentSteemNode: window.localStorage.getItem(STEEM_CONF_KEY),
+      nutboxMineAccount: STEEM_MINE_ACCOUNT,
       lang: "en",
     };
   },
