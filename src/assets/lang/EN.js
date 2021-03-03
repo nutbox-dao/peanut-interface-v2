@@ -62,10 +62,10 @@ module.exports = {
     swap: 'Cross chain transfer',
     connectSteem:"Connect Steem-Keychain",
     connectTron:"Connect tron-link",
-    swapSubTitle:"The sofr, fast and most secure way to bring cross-chain assets to Tron chain."
+    swapSubTitle:"The soft, fast and most secure way to bring cross-chain assets to Tron chain."
   },
   stake: {
-    stake: 'Staking Mint',
+    stake: 'Staking Mining',
     creaseDelegation: "Delegate",
     increaseDelegation: "Undelegate",
     getSp: "Get SP",

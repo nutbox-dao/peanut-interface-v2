@@ -4,12 +4,12 @@ import {
   TRON_NODE_API,
   TRON_LINK_ADDR_NOT_FOUND,
   TRON_PNUT_CONTRACT,
-  PNUT_LP_TOKEN_ADDRESS,
   TRONWEB_API_KEY,
-  TRON_API_KEY_ON_WEB
+  PNUT_LP_TOKEN_ADDRESS
 } from '../../config.js'
 import {
-  sleep
+  sleep,
+  retryMethod
 } from '../helper'
 
 function initTron(symbol) {
@@ -208,6 +208,12 @@ export const getBalanceOfToken = async function (token, user) {
   return balance && balance.constant_result && balance.constant_result[0] && tron.toDecimal('0x' + balance.constant_result[0])
 }
 
+export const getTrxBalanceOfAccount = async function (address){
+  const tron = getTron()
+  const balance = await tron.trx.getBalance(address)
+  return balance
+}
+
 export const getSupplyOfToken = async function (token) {
   const tron = getTron()
   const supply = await tron.transactionBuilder
@@ -264,9 +270,12 @@ export const getTronPrice = function () {
       }
     })
     const arr = res.data.tickers
+    console.log('call tron price');
     for (let i = 0; i < arr.length; i++) {
       if (arr[i].target === 'USDT') {
+        console.log('tron price',parseFloat(arr[i].last));
         resolve(parseFloat(arr[i].last))
+        break;
       }
     }
     resolve(1)
@@ -275,19 +284,15 @@ export const getTronPrice = function () {
 
 export const getPnutPrice = function () {
   return new Promise(async resolve => {
-    const res = await axios.request({
-      method: 'get',
-      url: 'https://api.justswap.io/v2/allpairs',
-      headers: {
-        accept: 'application/json'
-      },
-      params: {
-        page_size: 2500,
-        page_num: 1
-      }
+    // getPNUT count of pnut-trx account
+    const pnut = await retryMethod(async () => {
+      return await getBalanceOfToken(TRON_PNUT_CONTRACT,PNUT_LP_TOKEN_ADDRESS)
     })
-    console.log('pnutprice:', res.data);
-    const price = res.data.data['0_TPZddNpQJHu8UtKPY1PYDBv2J5p5QpJ6XW'].price
-    resolve(parseFloat(price))
+    // getTron count of pnut-trx account
+    const trx = await retryMethod(async () => {
+      return await getTrxBalanceOfAccount(PNUT_LP_TOKEN_ADDRESS)
+    })
+    console.log('pnutPrice',trx/pnut);
+    resolve(trx / pnut);
   })
 }

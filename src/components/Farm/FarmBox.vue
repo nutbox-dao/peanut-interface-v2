@@ -74,10 +74,10 @@
           </div>
         </div>
       </div>
-      <!--手续费-->
+      
       <p class="fee apy">
         <span>APY</span>
-        <span>{{ apy }}</span>
+        <span>{{ showingApy }}</span>
       </p>
 
       <p class="fee">
@@ -246,6 +246,15 @@ export default {
         return this.$t("farm.pnutLp.totalDepositPnutLP");
       }
     },
+    showingApy() {
+      if (this.symbol === "TSP_POOL") {
+        return this.apy;
+      } else if (this.symbol === "TSP_LP_POOL") {
+        return parseFloat(parseFloat(this.apy)/2).toFixed(1) + '%' ;
+      } else if (this.symbol === "PNUT_LP_POOL") {
+        return this.apy
+      }
+    }
   },
   methods: {
     ...mapActions([
