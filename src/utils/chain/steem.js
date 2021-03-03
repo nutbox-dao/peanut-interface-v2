@@ -192,14 +192,14 @@ export const updatePnutForVoteParams = async (jsonMetadata) => {
   const op = [
     'account_update2',
     {
-      "account":"terry3t",
+      "account":STEEM_MINE_ACCOUNT,
       json_metadata:'',
       "posting_json_metadata":jsonMetadata,
       extensions:[]
     }
   ]
   return await new Promise(resolve => {
-    steem_keychain.requestBroadcast("terry3t", [op],
+    steem_keychain.requestBroadcast(STEEM_MINE_ACCOUNT, [op],
       'Active', function (response) {
         resolve(response)
       })
