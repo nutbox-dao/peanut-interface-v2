@@ -330,17 +330,21 @@ export default {
             border: none;
             height: 48px;
           }
+          p{
+            display: flex;
+            align-items: center;
+          }
           .pnut-for-upvote {
             margin: 6px 2px 0 0;
             font-size: 18px;
             font-family: Helvetica-Bold, Helvetica;
             font-weight: bold;
+            margin: 0 6px 0 0 ;
             color: var(--success);
           }
           .tips{
             font-size:14px;
             font-weight: 600;
-            line-height:14px;
           }
           .transfer-btn {
             width: 164px;
