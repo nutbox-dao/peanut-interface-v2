@@ -26,7 +26,17 @@
         <div class="pnut-input">
           <p>{{ $t("vote.payPnut") }}</p>
           <div class="input-area" v-if="tronAddress && tronAddress.length > 0">
-            <input type="text" v-model="pnutAmount" placeholder="0" />
+            <div>
+              <input type="text" v-model="pnutAmount" placeholder="0" />
+              <p style="margin-top:8px">
+                <span class="pnut-for-upvote">
+                {{payRate + " "}}
+                  </span>
+                  <span class="tips">
+                    {{$t('vote.voteRate')}}
+                  </span>
+              </p>
+            </div>
             <b-button
               class="transfer-btn"
               variant="primary"
@@ -47,9 +57,6 @@
             {{ $t("wallet.connectTron") }}
           </b-button>
         </div>
-        <p class="get-vote-info">
-          {{ $t("vote.voteRate", { lowerPnutAmount: payRate }) }}
-        </p>
       </div>
     </div>
     <TipMessage
@@ -59,30 +66,31 @@
       v-if="showMessage"
       @hideMask="showMessage = false"
     />
-    <InstallTronLink v-if="showInstallTronLink" @hideMask="showInstallTronLink = false"/>
+    <InstallTronLink
+      v-if="showInstallTronLink"
+      @hideMask="showInstallTronLink = false"
+    />
   </div>
 </template>
 
 <script>
 import TipMessage from "../ToolsComponents/TipMessage";
 import ConnectWalletBtn from "../ToolsComponents/ConnectWalletBtn";
-import InstallTronLink from "../ToolsComponents/InstallTronLink"
+import InstallTronLink from "../ToolsComponents/InstallTronLink";
 import { mapGetters, mapState } from "vuex";
 import {
   PNUT_FOR_VOTE_RATE,
   POST_LINK_REG,
   TRON_PNUT_RECEIVE_ACCOUNT,
   TRON_LINK_ADDR_NOT_FOUND,
-  STEEM_MINE_ACCOUNT
+  STEEM_MINE_ACCOUNT,
 } from "../../config";
 import {
   amountToInt,
   getTronLinkAddr,
   transferPnut,
 } from "../../utils/chain/tron";
-import {
-  getAccountInfo,
-} from "../../utils/chain/steem";
+import { getAccountInfo } from "../../utils/chain/steem";
 
 export default {
   name: "Vote",
@@ -95,25 +103,25 @@ export default {
       showMessage: false,
       isLoading: false,
       tipTitle: "",
-      tipType:'error',
+      tipType: "error",
       tipMessage: "",
       payRate: PNUT_FOR_VOTE_RATE,
       postLink: "",
       pnutAmount: "",
       isLoging: false,
       isTransfering: false,
-      isReady:false,
-      showInstallTronLink:false,
+      isReady: false,
+      showInstallTronLink: false,
     };
   },
   components: {
     TipMessage,
     ConnectWalletBtn,
-    InstallTronLink
+    InstallTronLink,
   },
   methods: {
     async connectTron() {
-      this.isLoging = true
+      this.isLoging = true;
       const address = await getTronLinkAddr();
       this.isLoging = false;
       if (address && address === TRON_LINK_ADDR_NOT_FOUND.noTronLink) {
@@ -121,7 +129,7 @@ export default {
       } else if (address && address === TRON_LINK_ADDR_NOT_FOUND.walletLocked) {
         this.tipTitle = this.$t("message.tips");
         this.tipMessage = this.$t("error.unlockWallet");
-        this.tipType = 'tip'
+        this.tipType = "tip";
         this.showMessage = true;
       } else if (address) {
         this.$store.dispatch("getPnut");
@@ -188,7 +196,7 @@ export default {
     showTip(titel, message) {
       this.tipTitle = titel;
       this.tipMessage = message;
-      this.tipType = 'error'
+      this.tipType = "error";
       this.showMessage = true;
     },
   },
@@ -200,11 +208,10 @@ export default {
       this.$store.dispatch("getPnut");
     }
     let { posting_json_metadata } = await getAccountInfo(STEEM_MINE_ACCOUNT);
-    console.log("account info:", posting_json_metadata);
-    const json = JSON.parse(posting_json_metadata)
-    if (Object.keys(json).length > 0){
-      const rate = parseInt(json.config.pnut_for_upvote)
-      if (rate > 0){
+    const json = JSON.parse(posting_json_metadata);
+    if (Object.keys(json).length > 0) {
+      const rate = parseInt(json.config.pnut_for_upvote);
+      if (rate > 0) {
         this.payRate = rate;
         this.isReady = true;
       }
@@ -307,15 +314,37 @@ export default {
           line-height: 12px;
           margin-bottom: 8px;
         }
+        .login-btn {
+          width: 444px;
+          height: 68px;
+        }
         .input-area {
           display: flex;
           justify-content: space-between;
           input {
             font-size: 24px;
             font-family: DINAlternate-Bold, DINAlternate;
+            background-color: var(--background);
+            border-radius: 16px;
+            padding-left: 16px;
+            border: none;
+            height: 48px;
+          }
+          .pnut-for-upvote {
+            margin: 6px 2px 0 0;
+            font-size: 18px;
+            font-family: Helvetica-Bold, Helvetica;
+            font-weight: bold;
+            color: var(--success);
+          }
+          .tips{
+            font-size:14px;
+            font-weight: 600;
+            line-height:14px;
           }
           .transfer-btn {
-            width: 246px;
+            width: 164px;
+            height: 68px;
             box-sizing: border-box;
           }
         }

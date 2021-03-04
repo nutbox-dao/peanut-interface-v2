@@ -117,7 +117,7 @@ module.exports = {
     linkPlaceholder:"Input post link",
     pnutPlaceholder:"Input PNUT amount",
     transfer:"Transfer",
-    voteRate:"Vote rate：{lowerPnutAmount} PNUT for 10% upvote",
+    voteRate:"PNUT - 10% upvote",
   },
   nps: {
     nps: 'Goverance',

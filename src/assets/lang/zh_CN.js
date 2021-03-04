@@ -117,7 +117,7 @@ module.exports = {
     linkPlaceholder:"请填写需要点赞的帖子链接",
     pnutPlaceholder:"请填写支付金额",
     transfer:"转账",
-    voteRate:"点赞比例：{lowerPnutAmount}PNUT对应10%点赞",
+    voteRate:"PNUT - 10% 点赞",
   },
   nps: {
     nps: '提案改善',
