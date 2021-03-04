@@ -236,26 +236,30 @@ export default {
 
     const address = await getTronLinkAddr();
     if (address && address === TRON_LINK_ADDR_NOT_FOUND.noTronLink) {
-      this.tipTitle = this.$t("error.needtronlink");
-      this.tipMessage = "TronLink: https://www.tronlink.org";
-      this.showMessage = true;
+      store.commit("saveTronAddress", '');
+      // this.tipTitle = this.$t("error.needtronlink");
+      // this.tipMessage = "TronLink: https://www.tronlink.org";
+      // this.showMessage = true;
     } else if (address && address === TRON_LINK_ADDR_NOT_FOUND.walletLocked) {
-      this.tipTitle = this.$t("error.error");
-      this.tipMessage = this.$t("error.unlockWallet");
-      this.showMessage = true;
+      store.commit("saveTronAddress", '');
+      // this.tipTitle = this.$t("error.error");
+      // this.tipMessage = this.$t("error.unlockWallet");
+      // this.showMessage = true;
     } else if (address) {
       store.commit("saveTronAddress", address);
       store.dispatch("getPnut");
     }
     watchWallet((address) => {
       if (address && address === TRON_LINK_ADDR_NOT_FOUND.noTronLink) {
-        this.tipTitle = this.$t("error.needtronlink");
-        this.tipMessage = "TronLink: https://www.tronlink.org";
-        this.showMessage = true;
+      store.commit("saveTronAddress", '');
+        // this.tipTitle = this.$t("error.needtronlink");
+        // this.tipMessage = "TronLink: https://www.tronlink.org";
+        // this.showMessage = true;
       } else if (address && address === TRON_LINK_ADDR_NOT_FOUND.walletLocked) {
-        this.tipTitle = this.$t("error.error");
-        this.tipMessage = this.$t("error.unlockWallet");
-        this.showMessage = true;
+      store.commit("saveTronAddress", '');
+        // this.tipTitle = this.$t("error.error");
+        // this.tipMessage = this.$t("error.unlockWallet");
+        // this.showMessage = true;
       } else if (address) {
         store.dispatch("initializeTronAccount", address);
       }

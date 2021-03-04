@@ -2,8 +2,8 @@
   <transition name="fade">
     <div class="mask" @click="hideMask">
       <div class="mask-box">
-        <div class="mask-info">
-          <h5 v-if="title && title.trim().length > 0">{{ title }}</h5>
+        <div class="mask-info" :style="iconStyle">
+          <p class="title" v-if="title && title.trim().length > 0">{{ title }}</p>
           <p class="mask-info-text">
             {{ showMessage }}
           </p>
@@ -23,6 +23,12 @@ export default {
       this.$emit('hideMask')
     }
   },
+  computed: {
+    iconStyle() {
+      const url = require('../../static/images/'+ this.type +'.svg')
+      return "background-image: url('"+ url +"');"
+    }
+  },
   props: {
     title: {
       type: String
@@ -34,6 +40,10 @@ export default {
     canDiss: {
       type: Boolean,
       default: true
+    },
+    type: {
+      type: String,
+      default: "error", // tip error message
     }
   }
 }
@@ -43,13 +53,12 @@ export default {
 
 .mask-box {
   position: relative;
-  max-width: 380px;
-  width: 100%;
+  width: 420px;
   background: rgb(255, 255, 255);
   box-shadow: rgba(0, 0, 0, 0.08) 0px 3px 30px, rgba(0, 0, 0, 0.04) 0px 4px 8px,
     rgba(0, 0, 0, 0.04) 3px 16px 24px, rgba(0, 0, 0, 0.01) 3px 24px 32px;
-  border-radius: 10px;
-  padding: 1rem;
+  border-radius: 28px;
+  padding: 24px 36px;
   display: block;
   z-index: 100;
   box-sizing: border-box;
@@ -58,6 +67,10 @@ export default {
 
 .mask-info {
   align-content: center;
+  padding-left: 40px;
+  background-repeat: no-repeat;
+  background-position: top left;
+  // background-image: url('../../static/images/error.svg');
   p {
     width: 100%;
     word-wrap: break-word;
@@ -66,7 +79,17 @@ export default {
 }
 
 .mask-info-text {
-  text-align: center;
-  width: 100%;
+  text-align: left;
+  color: var(--secondary-text);
+  margin-top: 16px;
+  line-height:16px;
+  font-size:16px;
+}
+
+.title{
+  font-size: 20px;
+  line-height: 24px;
+  color: var(--primary-text);
+  text-align: left;
 }
 </style>

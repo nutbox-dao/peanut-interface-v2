@@ -55,15 +55,18 @@
     <TipMessage
       :showMessage="tipMessage"
       :title="tipTitle"
+      :type="tipType"
       v-if="showMessage"
       @hideMask="showMessage = false"
     />
+    <InstallTronLink v-if="showInstallTronLink" @hideMask="showInstallTronLink = false"/>
   </div>
 </template>
 
 <script>
 import TipMessage from "../ToolsComponents/TipMessage";
 import ConnectWalletBtn from "../ToolsComponents/ConnectWalletBtn";
+import InstallTronLink from "../ToolsComponents/InstallTronLink"
 import { mapGetters, mapState } from "vuex";
 import {
   PNUT_FOR_VOTE_RATE,
@@ -92,29 +95,33 @@ export default {
       showMessage: false,
       isLoading: false,
       tipTitle: "",
+      tipType:'error',
       tipMessage: "",
       payRate: PNUT_FOR_VOTE_RATE,
       postLink: "",
       pnutAmount: "",
-      isLogin: false,
+      isLoging: false,
       isTransfering: false,
       isReady:false,
+      showInstallTronLink:false,
     };
   },
   components: {
     TipMessage,
     ConnectWalletBtn,
+    InstallTronLink
   },
   methods: {
     async connectTron() {
+      this.isLoging = true
       const address = await getTronLinkAddr();
+      this.isLoging = false;
       if (address && address === TRON_LINK_ADDR_NOT_FOUND.noTronLink) {
-        this.tipTitle = this.$t("error.needtronlink");
-        this.tipMessage = "TronLink: https://www.tronlink.org";
-        this.showMessage = true;
+        this.showInstallTronLink = true;
       } else if (address && address === TRON_LINK_ADDR_NOT_FOUND.walletLocked) {
-        this.tipTitle = this.$t("error.error");
+        this.tipTitle = this.$t("message.tips");
         this.tipMessage = this.$t("error.unlockWallet");
+        this.tipType = 'tip'
         this.showMessage = true;
       } else if (address) {
         this.$store.dispatch("getPnut");
@@ -181,6 +188,7 @@ export default {
     showTip(titel, message) {
       this.tipTitle = titel;
       this.tipMessage = message;
+      this.tipType = 'error'
       this.showMessage = true;
     },
   },

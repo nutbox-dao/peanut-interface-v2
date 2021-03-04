@@ -33,6 +33,7 @@ module.exports = {
     tsbdbalance: 'TSBD Balance',
     pnutbalance: 'PNUT Balance',
     input: 'Input',
+    tips: 'Tips',
 
     setting: 'Setting',
     admin:'Admin',
@@ -62,7 +63,8 @@ module.exports = {
     swap: 'Cross chain transfer',
     connectSteem:"Connect Steem-Keychain",
     connectTron:"Connect tron-link",
-    swapSubTitle:"The soft, fast and most secure way to bring cross-chain assets to Tron chain."
+    swapSubTitle:"The soft, fast and most secure way to bring cross-chain assets to Tron chain.",
+    install:"Install",
   },
   stake: {
     stake: 'Staking Mining',

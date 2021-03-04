@@ -19,22 +19,44 @@
           </div>
         </div>
       </div>
-      <ConnectWalletBtn :type="walletType" @steemLogin="showSteemLogin=true"> </ConnectWalletBtn>
+      <ConnectWalletBtn
+        :type="walletType"
+        @steemLogin="showSteemLogin = true"
+        @tronLogin="tronLogin"
+      >
+      </ConnectWalletBtn>
     </Card>
-      <Login v-if="showSteemLogin" @hideMask="showSteemLogin=false"/>
+    <Login v-if="showSteemLogin" @hideMask="showSteemLogin = false" />
+    <TipMessage
+      :showMessage="tipMessage"
+      :title="tipTitle"
+      :type="tipType"
+      v-if="showMessage"
+      @hideMask="showMessage = false"
+    />
+    <InstallTronLink v-if="showInstallTronLink" @hideMask="showInstallTronLink = false"/>
   </div>
 </template>
 
 <script>
 import Card from "../ToolsComponents/Card";
-import Login from '../Login'
+import Login from "../Login";
 import ConnectWalletBtn from "../ToolsComponents/ConnectWalletBtn";
+import TipMessage from "../ToolsComponents/TipMessage";
+import InstallTronLink from "../ToolsComponents/InstallTronLink"
+import { getTronLinkAddr } from "../../utils/chain/tron";
+import { TRON_LINK_ADDR_NOT_FOUND } from "../../config";
 
 export default {
   name: "BalanceView",
   data() {
     return {
-      showSteemLogin:false,
+      showSteemLogin: false,
+      tipType: "error",
+      tipTitle: "",
+      tipMessage: "",
+      showMessage: false,
+      showInstallTronLink:false,
     };
   },
   props: {
@@ -62,9 +84,28 @@ export default {
   components: {
     Card,
     ConnectWalletBtn,
-    Login
+    Login,
+    TipMessage,
+    InstallTronLink
   },
   methods: {
+    async tronLogin() {
+      const store = this.$store;
+      const address = await getTronLinkAddr();
+      if (address && address === TRON_LINK_ADDR_NOT_FOUND.noTronLink) {
+        store.commit("saveTronAddress", "");
+        this.showInstallTronLink = true;
+      } else if (address && address === TRON_LINK_ADDR_NOT_FOUND.walletLocked) {
+        store.commit("saveTronAddress", "");
+        this.tipTitle = this.$t("message.tips");
+        this.tipType = "tip";
+        this.tipMessage = this.$t("error.unlockWallet");
+        this.showMessage = true;
+      } else if (address) {
+        store.commit("saveTronAddress", address);
+        store.dispatch("getPnut");
+      }
+    },
   },
 };
 </script>

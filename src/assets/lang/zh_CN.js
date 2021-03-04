@@ -33,6 +33,7 @@ module.exports = {
     tsbdbalance: 'TSBD余额',
     pnutbalance: 'PNUT余额',
     input: '输入',
+    tips:"帮助信息",
 
     setting: '设置',
     admin:'管理员',
@@ -63,6 +64,7 @@ module.exports = {
     connectSteem:"链接Steem钱包",
     connectTron:"链接波场钱包",
     swapSubTitle:"及时、安全的将资产转移到波场网络",
+    install:"立即安装",
   },
   stake: {
     stake: '质押挖矿',

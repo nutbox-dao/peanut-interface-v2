@@ -57,12 +57,12 @@ export default {
   },
   async mounted() {
     if (!(await getKeychain())) {
-      const link =
-        "Chrome: https://chrome.google.com/webstore/detail/steem-keychain/lkcjlnjfpbikmcmbachjpdbijejflpcm\n\n" +
-        "Firefox: https://addons.mozilla.org/en-US/firefox/addon/steem-keychain";
-      this.tipTitle = this.$t("error.needkeychain");
-      this.tipMessage = link;
-      this.showMessage = true;
+      // const link =
+      //   "Chrome: https://chrome.google.com/webstore/detail/steem-keychain/lkcjlnjfpbikmcmbachjpdbijejflpcm\n\n" +
+      //   "Firefox: https://addons.mozilla.org/en-US/firefox/addon/steem-keychain";
+      // this.tipTitle = this.$t("error.needkeychain");
+      // this.tipMessage = link;
+      // this.showMessage = true;
     } else {
       if (this.steemAccount && this.steemAccount.trim().length > 0) {
         this.$store.dispatch("initializeSteemAccount", this.steemAccount);

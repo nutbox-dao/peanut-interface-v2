@@ -3,11 +3,14 @@
     <div class="mask" @click.self="hideMask">
       <div class="login">
         <p>{{ this.$t("message.userlogin") }}</p>
+        <div class="account-box">
+          <span class="keychain" @click="getKeychain"/>
           <b-input
             class="mb-2 mr-sm-2 mb-sm-0 input"
             :placeholder="$t('message.steemAccoutPlaceHolder')"
             v-model="steemAccount"
           ></b-input>
+        </div>
         <b-button variant="primary" class="login-btn" @click="login" :disabled="isLoging">
           <b-spinner
             small
@@ -37,7 +40,6 @@ export default {
     return {
       loginBtnText: "",
       isLoging: false,
-      showNeedKeyChain: false,
       steemAccount: "",
       tipTitle: "",
       tipMessage: "",
@@ -49,7 +51,9 @@ export default {
     TipMessage,
   },
   methods: {
-    showKeyChainNeeded() {},
+    getKeychain() {
+      window.open('https://chrome.google.com/webstore/detail/steem-keychain/lkcjlnjfpbikmcmbachjpdbijejflpcm','_blank')
+    },
     login() {
       const message = `nutbox_login-${Math.floor(
         100000000 + Math.random() * 900000000
@@ -114,13 +118,30 @@ export default {
   font-size: 20px;
   }
 }
-.input {
-  width: 444px;
+.account-box {
+  display: flex;
+  margin-top: 40px;
+.keychain{
+  width: 180px;
   height: 48px;
-  background: #f6f7f9;
-  border-radius: 16px;
-  border: 1px solid #e3e5e8;
-  margin-top: 42px;
+  background-color: var(--background);
+  margin-right: 2px;
+  border-radius:16px 0 0 16px;
+  background-image: url('../static/images/keychain.png');
+  background-repeat: no-repeat;
+  background-position: center;
+}
+.keychain:hover {
+  background-color:var(--dividers);
+  cursor: pointer;
+}
+.input {
+  height: 48px;
+  flex: 1;
+  background: var(--background);
+  border-radius: 0 16px 16px 0;
+  border: none;
+}
 }
 .login-btn{
   width: 100%;margin-top: 24px;

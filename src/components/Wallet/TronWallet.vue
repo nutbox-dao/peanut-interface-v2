@@ -110,13 +110,13 @@ export default {
   async mounted() {
     const address = await getTronLinkAddr();
     if (address && address === TRON_LINK_ADDR_NOT_FOUND.noTronLink) {
-      this.tipTitle = this.$t("error.needtronlink");
-      this.tipMessage = "TronLink: https://www.tronlink.org";
-      this.showMessage = true;
+      // this.tipTitle = this.$t("error.needtronlink");
+      // this.tipMessage = "TronLink: https://www.tronlink.org";
+      // this.showMessage = true;
     } else if (address && address === TRON_LINK_ADDR_NOT_FOUND.walletLocked) {
-      this.tipTitle = this.$t("error.error");
-      this.tipMessage = this.$t("error.unlockWallet");
-      this.showMessage = true;
+      // this.tipTitle = this.$t("error.error");
+      // this.tipMessage = this.$t("error.unlockWallet");
+      // this.showMessage = true;
     } else if (address) {
       this.initializeTronAccount(address);
     }
