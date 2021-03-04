@@ -37,7 +37,6 @@ export default {
     methods: {
       async update() {
         const rate = parseInt(this.pnutForVote)
-        console.log('type',typeof(this.posting_json_metadata));
         this.posting_json_metadata['config'] = {
           'pnut_for_upvote':rate
         }
@@ -49,7 +48,6 @@ export default {
     },
     async mounted () {
       const { posting_json_metadata } = await getAccountInfo(STEEM_MINE_ACCOUNT);
-      console.log('account:', posting_json_metadata,typeof(posting_json_metadata));
       const obj = JSON.parse(posting_json_metadata)
       if (Object.keys(obj).length > 0){
         this.posting_json_metadata = obj

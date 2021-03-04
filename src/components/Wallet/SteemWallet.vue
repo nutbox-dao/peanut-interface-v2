@@ -46,12 +46,6 @@ export default {
     ...mapState(["steemAccount", "steemBalance", "sbdBalance"]),
     ...mapGetters(["spBalance"]),
   },
-  methods: {
-    async changeAccount(account) {
-      this.$store.commit("saveSteemAccount", account);
-      console.log(account);
-    },
-  },
   components: {
     BalanceView,
   },

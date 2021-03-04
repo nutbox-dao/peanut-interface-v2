@@ -79,7 +79,6 @@ export const transferPnut = async function (to, amount, memo = "") {
       value: amount
     },
   ];
-  console.log('param', params);
   const {
     result,
     transaction
@@ -252,7 +251,7 @@ async function wa(callback) {
     }
     localStorage.setItem('tronLinkAddress', addr)
   } catch (e) {
-    console.log('watch wallet fail:', e)
+    console.error('watch wallet fail:', e)
   } finally {
     setTimeout(() => {
       wa(callback)
@@ -270,10 +269,8 @@ export const getTronPrice = function () {
       }
     })
     const arr = res.data.tickers
-    console.log('call tron price');
     for (let i = 0; i < arr.length; i++) {
       if (arr[i].target === 'USDT') {
-        console.log('tron price',parseFloat(arr[i].last));
         resolve(parseFloat(arr[i].last))
         break;
       }
@@ -292,7 +289,6 @@ export const getPnutPrice = function () {
     const trx = await retryMethod(async () => {
       return await getTrxBalanceOfAccount(PNUT_LP_TOKEN_ADDRESS)
     })
-    console.log('pnutPrice',trx/pnut);
     resolve(trx / pnut);
   })
 }

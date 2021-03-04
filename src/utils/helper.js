@@ -72,7 +72,6 @@ export function getDateString(now, timezone, extra = 0) {
 
 export const storeApy = async function () {
   const apys = await getApys()
-  console.log('aps',apys);
   store.commit('saveApy',parseFloat(apys.spApy).toFixed(1) + "%")
   store.commit('saveTspLpApy',(parseFloat(apys.spApy)/2).toFixed(1) + "%")
   store.commit('savePnutLpApy',parseFloat(apys.pnutLpApy).toFixed(1) + "%")

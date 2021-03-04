@@ -173,7 +173,6 @@ export const getSteemPrice = function () {
     const arr = res.data.tickers
     for (let i = 0; i < arr.length; i++) {
       if (arr[i].target === 'USDT') {
-        console.log('steemprice',parseFloat(arr[i].last));
         resolve(parseFloat(arr[i].last))
         break;
       }

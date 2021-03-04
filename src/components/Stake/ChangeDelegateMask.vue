@@ -132,7 +132,6 @@ export default {
       this.$emit("hideMask");
     },
     fillMax() {
-      console.log(this.operate);
       this.delegatevalue =
         this.operate === "add" ? this.spBalance : this.delegatedSp;
     },

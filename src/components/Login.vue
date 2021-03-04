@@ -65,7 +65,6 @@ export default {
         message,
         "Active",
         async function (res) {
-          console.log(res);
           if (res.success === true) {
             const ress = await that.$store.dispatch(
               "initializeSteemAccount",
