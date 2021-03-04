@@ -75,7 +75,9 @@ export default new Vuex.Store({
     },
 
     // apy
-    apy: Cookie.get('apy') || '0.0%'
+    apy: "",
+    tspLpApy:"",
+    pnutLpApy: "",
   },
   mutations: {
     // steem
@@ -188,10 +190,15 @@ export default new Vuex.Store({
     savePNUT_TRXContract: function (state, contract) {
       state.contracts['PNUT_TRX'] = contract
     },
-
+// apys
     saveApy: function (state, apy) {
       state.apy = apy
-      Cookie.set('apy', apy, '30d')
+    },
+    saveTspLpApy : function (state, tspLpApy) {
+      state.tspLpApy =tspLpApy
+    },
+    savePnutLpApy: function (state, pnutLpApy) {
+      state.pnutLpApy = pnutLpApy
     }
   },
   getters: {

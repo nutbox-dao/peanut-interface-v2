@@ -1,16 +1,3 @@
-import {
-  getSteemPrice
-} from './chain/steem'
-import {
-  getTronPrice,
-  intToAmount,
-  getPnutPrice,
-  getSupplyOfToken,
-  getBalanceOfToken
-} from './chain/tron'
-import {
-  getContract
-} from './chain/contract'
 import store from '../store'
 import {
   TRON_NODE_API,
@@ -21,6 +8,9 @@ import {
   TRON_API_KEY_ON_WEB,
   TSP_TOKEN_ADDRESS
 } from "../config"
+import {getApys} from "../apis/api"
+
+
 export const firstToUpper = function (str) {
   if (!str) {
     return
@@ -81,39 +71,9 @@ export function getDateString(now, timezone, extra = 0) {
 }
 
 export const storeApy = async function () {
-  const [steemPrice, tronPrice, pnutPrice] = await Promise.all([
-    getSteemPrice(),
-    getTronPrice(),
-    getPnutPrice()
-  ])
-  console.log('steemprice' + steemPrice, 'tronprice' + tronPrice, 'pnutprice' + pnutPrice)
-  const pnutPool = await getContract('PNUT_POOL')
-  const rewardsPerBlock = await retryMethod(async () => {
-    return intToAmount(await pnutPool.getRewardsPerBlock().call())
-  })
-  const totalDepositedSP = await retryMethod(async () => {
-    return intToAmount(await pnutPool.getTotalDepositedSP().call()) * store.state.vestsToSteem
-  })
-  let apy =
-    (28800 * rewardsPerBlock * 365 * pnutPrice * tronPrice) /
-    (totalDepositedSP * steemPrice)
-  if (!apy || isNaN(apy) || !isFinite(apy)) {
-    return
-  }
-  console.log('sp delegate apy:', apy)
-  apy = (apy * 100).toFixed(1)
-  store.commit('saveApy', apy + '%')
-}
-
-export const storePnutLpApy = async function () {
-  // total lp
-  const totalTspLp = await retryMethod(async () =>{
-    return intToAmount(await getSupplyOfToken(PNUT_LP_TOKEN_ADDRESS))
-  })
-  // pnut count
-  // deposit lp  totalDepositedPnutLp
-  // 等价的总pnut
-  // depositlp/totallp * pnutcount * 2
-  // rewardPerBlock of pnut lp pool
-  // cal apy
+  const apys = await getApys()
+  console.log('aps',apys);
+  store.commit('saveApy',parseFloat(apys.spApy).toFixed(1) + "%")
+  store.commit('saveTspLpApy',(parseFloat(apys.spApy)/2).toFixed(1) + "%")
+  store.commit('savePnutLpApy',parseFloat(apys.pnutLpApy).toFixed(1) + "%")
 }

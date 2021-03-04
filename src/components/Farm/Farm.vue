@@ -13,6 +13,8 @@
 
 <script>
 import FarmBox from "./FarmBox";
+import {storeApy} from "../../utils/helper"
+
 export default {
   name: "Farm",
   components: {
@@ -22,6 +24,7 @@ export default {
     return {};
   },
   mounted() {
+    storeApy()
     if (
       this.$store.state.tronAddress &&
       this.$store.state.tronAddress.length > 0

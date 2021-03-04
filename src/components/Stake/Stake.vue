@@ -14,6 +14,7 @@
 <script>
 import SPPool from "./SPPool";
 import FarmBox from "../Farm/FarmBox";
+import {storeApy} from "../../utils/helper"
 
 export default {
   name: "Stake",
@@ -25,6 +26,7 @@ export default {
     FarmBox,
   },
   mounted() {
+    storeApy()
     if (
       this.$store.state.tronAddress &&
       this.$store.state.tronAddress.length > 0

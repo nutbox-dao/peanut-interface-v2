@@ -170,6 +170,8 @@ export default {
       "approvedTspLp",
       "approvedPnutLp",
       "apy",
+      "tspLpApy",
+      "pnutLpApy"
     ]),
     ...mapGetters([
       "pnutLpBalance",
@@ -250,9 +252,9 @@ export default {
       if (this.symbol === "TSP_POOL") {
         return this.apy;
       } else if (this.symbol === "TSP_LP_POOL") {
-        return parseFloat(parseFloat(this.apy)/2).toFixed(1) + '%' ;
+        return this.tspLpApy;
       } else if (this.symbol === "PNUT_LP_POOL") {
-        return this.apy
+        return this.pnutLpApy
       }
     }
   },
