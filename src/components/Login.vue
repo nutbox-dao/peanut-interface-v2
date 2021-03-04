@@ -55,6 +55,9 @@ export default {
       window.open('https://chrome.google.com/webstore/detail/steem-keychain/lkcjlnjfpbikmcmbachjpdbijejflpcm','_blank')
     },
     login() {
+      if (this.steemAccount.length === 0){
+        return;
+      }
       const message = `nutbox_login-${Math.floor(
         100000000 + Math.random() * 900000000
       )}`;
