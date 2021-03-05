@@ -46,7 +46,7 @@
           <p id="nps-icon" class="my-icon" />
           {{ $t("message.admin") }}
         </b-nav-item>
-
+      </b-nav>
         <div class="bottom">
           <div class="links">
             <a
@@ -170,7 +170,6 @@
             </b-dd>
           </div>
         </div>
-      </b-nav>
     </div>
     <TipMessage
       :showMessage="tipMessage"
@@ -302,6 +301,7 @@ body {
   text-align: center;
   color: var(--primary-text);
   height: 100%;
+  min-height: 700px;
   display: flex;
   align-items: left;
   background-color: var(--background);
