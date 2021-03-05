@@ -1,32 +1,32 @@
 <template>
-<transition name="fade">
-  <div class="mask" @click="hideMask">
+  <transition name="fade">
+    <div class="mask" @click="hideMask">
       <div class="mask-box">
-          <p>
-              {{ $t('error.needtronlink') }}
-          </p>
-          <div class="install">
-              <b-button variant="primary" @click="install">
-                  {{ $t('wallet.install') }}
-              </b-button>
-          </div>
+        <p>
+          {{ $t("error.needtronlink") }}
+        </p>
+        <div class="install">
+          <b-button variant="primary" @click="install">
+            {{ $t("wallet.install") }}
+          </b-button>
+        </div>
       </div>
-  </div>
-</transition>
+    </div>
+  </transition>
 </template>
 
 <script>
 export default {
   name: "InstallTronLink",
-methods: {
+  methods: {
     install() {
-        window.open('https://www.tronlink.org','_blank');
-        this.$emit('hideMask')
+      window.open("https://www.tronlink.org", "_blank");
+      this.$emit("hideMask");
     },
-    hideMask(){
-        this.$emit('hideMask')
-    }
-},
+    hideMask() {
+      this.$emit("hideMask");
+    },
+  },
 };
 </script>
 
@@ -43,13 +43,26 @@ methods: {
   z-index: 100;
   box-sizing: border-box;
   margin-top: -50vh;
+  p {
+    font-size: 20px;
+    font-weight: 600;
+    border-bottom: 1px solid var(--background);
+    padding-bottom: 24px;
+  }
 }
 .install {
-    margin-top: 12px;
-    display: flex;
-    flex-direction: row-reverse;
-    background-repeat: no-repeat;
-    background-position: center left;
-    background-image: url('../../static/images/keychain.png');
+  margin-top: 23px;
+  display: flex;
+  flex-direction: row-reverse;
+  background-repeat: no-repeat;
+  background-position: 12px 10px;
+  background-image: url("../../static/images/tron-link.png");
+  background-color: var(--background);
+  height: 60px;
+  padding: 10px 16px;
+  border-radius: 16px;
+  .btn-primary{
+      padding: 8px 24px;
+  }
 }
 </style>
