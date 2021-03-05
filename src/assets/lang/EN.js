@@ -1,7 +1,7 @@
 module.exports = {
   message: {
     userlogin: 'Login',
-    steemAccoutPlaceHolder: 'Input Steem Account',
+    steemAccoutPlaceHolder: 'Input Your Steem Account',
     login: 'Login',
     loging:"Login...",
     delegatemine: 'Mining by Delegation',
@@ -13,7 +13,7 @@ module.exports = {
     sptotaldelegate: 'Total Delegated',
     totalpnut: 'Total PNUT',
     apy: 'APY',
-    pnutprofits: 'Your Mined PNUT',
+    pnutprofits: 'Your Earned PNUT',
     withdraw: 'Harvest',
     balance: 'Balance',
     approveContract:"Approve Contract",
@@ -21,7 +21,7 @@ module.exports = {
     confirmconvert: 'Confirm Conversion',
     servicecharge: 'Transaction Fee',
     delegatecharge: 'Delegation Fee',
-    atleastcharge: 'minimum',
+    atleastcharge: 'least charge',
     convertrate: 'Conversion Ratio',
     logout: 'Logout',
     confirmdelegate: 'Confirm Delegation',
@@ -61,9 +61,9 @@ module.exports = {
   wallet: {
     wallet: 'Wallet',
     swap: 'Cross chain transfer',
-    connectSteem:"Connect Steem-Keychain",
-    connectTron:"Connect tron-link",
-    swapSubTitle:"The soft, fast and most secure way to bring cross-chain assets to Tron chain.",
+    connectSteem:"Connect to Steem-Keychain",
+    connectTron:"Connect to tron-link",
+    swapSubTitle:"The fast and secure way to bring cross-chain assets to Tron chain.",
     install:"Install",
   },
   stake: {
@@ -104,14 +104,14 @@ module.exports = {
     liquidStaking: 'Liquid Staking',
     title: "TSP Stake & Redeem",
     tsp: {
-      tspIsCirculatingSP: 'TSP is the equivalent of SP, TSP can enjoy the same staking reward of SP, and TSP can be traded',
-      tsptosteemintro: 'The withdrawn TSP will be returned to your Steem account in around 33~40 days.'
+      tspIsCirculatingSP: 'TSP is the equivalent of SP, TSP can enjoy the same staking reward of SP, and can be traded as well.',
+      tsptosteemintro: 'The STEEM will be returned to your Steem account in around 33~40 days after TSP is claimed to be redeemed.'
     }
   },
   vote:{
     upvote:"Upvote",
     vote:"Upvote post",
-    title:"Pay PNUT,get nutbox.mine's upvote",
+    title:"Pay PNUT,and get nutbox.mine's upvote",
     link:"Post link",
     payPnut:"Pay PNUT",
     linkPlaceholder:"Input post link",
@@ -123,7 +123,7 @@ module.exports = {
     nps: 'Goverance',
     pass: 'Passed',
     pending: 'Pending',
-    unpass: 'Unpass',
+    unpass: 'Rejected',
   },
   error: {
     error: 'Error!',
@@ -135,9 +135,9 @@ module.exports = {
     approveFail: 'Approve fail',
     accountChanged: 'steem and tron address mismatch',
     delegateerror: 'Delegation Error！',
-    tryrefreshpage: 'Error，please refresh page and try again！',
+    tryrefreshpage: 'Error，please refresh page and try again!',
     steemloginerr: 'Steem login failed!',
-    needkeychainandtronlink: 'Need to install Steem Keychain and TronLink！',
+    needkeychainandtronlink: 'Need to install Steem Keychain and TronLink!',
     needkeychain: 'Please install Steem Keychain',
     needtronlink: 'Please install TronLink',
     insufficientEnerge: 'Not enough energy',
