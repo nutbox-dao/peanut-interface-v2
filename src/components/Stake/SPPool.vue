@@ -87,6 +87,7 @@
       v-if="showMessage"
       @hideMask="showMessage = false"
     />
+    <InstallTronLink v-if="showInstallTronLink" @hideMask="showInstallTronLink = false"/>
   </div>
 </template>
 
@@ -97,6 +98,7 @@ import ChangeDelegateMask from "./ChangeDelegateMask";
 import Login from "../Login";
 import { getContract } from "../../utils/chain/contract";
 import ConnectWalletBtn from "../ToolsComponents/ConnectWalletBtn";
+import InstallTronLink from "../ToolsComponents/InstallTronLink"
 
 import {
   intToAmount,
@@ -118,6 +120,7 @@ export default {
       showSteemLogin: false,
       withdrawLoading: false,
       showChangeDelegateMask: false,
+      showInstallTronLink: false,
       operate: "add",
       spLogo:
         "https://coin.top/production/upload/logo/TW2EWoRUJfwH9nMTfLxSL9JPLZeusUtTfR.jpeg?t=1608343575484",
@@ -152,6 +155,7 @@ export default {
     ConnectWalletBtn,
     Login,
     ChangeDelegateMask,
+    InstallTronLink
   },
   methods: {
     ...mapActions([
@@ -182,6 +186,10 @@ export default {
     },
 
     delegate() {
+      if (!this.tronAddress || this.tronAddress.length ===0 ){
+        this.showInstallTronLink = true;
+        return;
+      }
       this.operate = "add";
       this.showChangeDelegateMask = true;
     },
@@ -191,6 +199,10 @@ export default {
     },
 
     minusDelegate() {
+      if (!this.tronAddress || this.tronAddress.length ===0 ){
+        this.showInstallTronLink = true;
+        return
+      }
       this.operate = "minus";
       this.showChangeDelegateMask = true;
     },
