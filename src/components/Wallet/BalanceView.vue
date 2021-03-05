@@ -14,7 +14,7 @@
           </div>
           <div class="balance">
             <span class="title">
-              {{ balances | amountForm }}
+              {{ balances | amountForm(balanceDigit) }}
             </span>
           </div>
         </div>
@@ -80,6 +80,10 @@ export default {
       type: String,
       default: "STEEM",
     },
+    balanceDigit: {
+      type: Number,
+      default: 3
+    }
   },
   components: {
     Card,

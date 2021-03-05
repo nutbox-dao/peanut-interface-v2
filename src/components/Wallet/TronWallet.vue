@@ -48,6 +48,7 @@
         desc="S-PNUT-TRX"
         :balances="pnutLpBalance"
         :logo="pnutLpLogo"
+        :balanceDigit="0"
         walletType="TRON"
       />
     </div>
