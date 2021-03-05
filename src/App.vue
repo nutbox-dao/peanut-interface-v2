@@ -453,7 +453,7 @@ input::-webkit-input-placeholder {
     align-content: center;
     justify-content: space-around;
     margin-top: 19px;
-    padding-bottom: 24px;
+    padding-bottom: 18px;
     border-bottom: 1px solid var(--dividers);
     a {
       width: 32px;
@@ -461,13 +461,13 @@ input::-webkit-input-placeholder {
     }
   }
   .settings {
-    margin-top: 23px;
+    margin-top: 18px;
     width: 192;
-    height: 104px;
-    margin-bottom: 16px;
+    height: 84px;
+    margin-bottom: 12px;
     background: #f6f7f9;
     border-radius: 16px;
-    padding: 24px 30px;
+    padding: 14px 30px;
     display: flex;
     flex-direction: column;
     justify-content:space-between;
