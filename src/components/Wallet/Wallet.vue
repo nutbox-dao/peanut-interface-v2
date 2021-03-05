@@ -14,7 +14,13 @@
         @click.stop="showLogout = !showLogout"
         v-if="steemAccount && steemAccount.trim().length > 0"
       >
-        <p>{{ steemAccount }}</p>
+        <p>
+        <span>
+        {{ steemAccount }}
+        </span>
+        <img src="../../static/images/list-down-arrow.svg" alt="">
+        </p>
+
         <button @click="logout" v-if="showLogout">
           {{ $t("message.logout") }}
         </button>
@@ -90,11 +96,16 @@ export default {
       position: relative;
       box-sizing: border-box;
       font-size: 15px;
+      background-repeat: no-repeat;
+      background-position: center right;
       p {
         margin: 0;
         line-height: 38px;
         padding-left: 36px;
-        padding-right: 36px;
+        padding-right: 4px;
+        img{
+          margin-left: 16px;
+        }
       }
       button {
         position: relative;
