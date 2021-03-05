@@ -3,11 +3,11 @@
       <template>
         <div class="tab">
           <div :class="['tab-card', currentTab === 'steem' ? 'checked' : '']" @click="change('steem')">
-            <img src="../../static/images/tsteem.svg" alt="">
+            <img src="../../static/images/tokens/tsteem.png" alt="">
             <h5>TSTEEM</h5>
           </div>
           <div :class="['tab-card', currentTab === 'sbd' ? 'checked' : '']" @click="change('sbd')">
-            <img src="../../static/images/tsbd.svg" alt="">
+            <img src="../../static/images/tokens/tsbd.png" alt="">
             <h5>TSBD</h5>
           </div>
         </div>

@@ -37,13 +37,13 @@
           <button class="maxBtn" @click="fillMaxTrans">Max</button>
           <img
             class="coin-icon"
-            src="../../static/images/steem.svg"
+            src="../../static/images/tokens/steem.png"
             alt=""
             v-if="fromSteemToTron"
           />
           <img
             class="coin-icon"
-            src="../../static/images/tsp.svg"
+            src="../../static/images/tokens/tsp.png"
             alt=""
             v-else
           />
@@ -80,13 +80,13 @@
         <div class="token-box">
           <img
             class="coin-icon"
-            src="../../static/images/tsp.svg"
+            src="../../static/images/tokens/tsp.png"
             alt=""
             v-if="fromSteemToTron"
           />
           <img
             class="coin-icon"
-            src="../../static/images/steem.svg"
+            src="../../static/images/tokens/steem.png"
             alt=""
             v-else
           />

@@ -2,7 +2,7 @@
   <div class="stake">
     <Card>
       <div class="title-box">
-        <img :src="spLogo" alt="" />
+        <img src="../../static/images/tokens/sp.png" alt="" />
         <span class="title">
           {{ $t("message.delegatemine") }}
         </span>
@@ -122,8 +122,6 @@ export default {
       showChangeDelegateMask: false,
       showInstallTronLink: false,
       operate: "add",
-      spLogo:
-        "https://coin.top/production/upload/logo/TW2EWoRUJfwH9nMTfLxSL9JPLZeusUtTfR.jpeg?t=1608343575484",
     };
   },
   computed: {

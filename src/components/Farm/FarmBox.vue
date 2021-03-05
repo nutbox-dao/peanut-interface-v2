@@ -392,12 +392,9 @@ export default {
 
   mounted() {
     this.logo = {
-      TSP_POOL:
-        "https://coin.top/production/upload/logo/TW2EWoRUJfwH9nMTfLxSL9JPLZeusUtTfR.jpeg?t=1608343575484",
-      TSP_LP_POOL:
-        "https://coin.top/production/upload/logo/TBpTbddofiBrE1AfhQbwU2BhsrBUM2Lnir.png?t=1609305241285",
-      PNUT_LP_POOL:
-        "https://coin.top/production/logo/TPt2a3GtKMY5972mWa2aL3KKVY6ScWX2G2.jpg",
+      TSP_POOL: require('../../static/images/tokens/tsp.png'),
+      TSP_LP_POOL: require('../../static/images/tokens/tsp-lp.png'),
+      PNUT_LP_POOL: require('../../static/images/tokens/pnut-lp.png'),
     };
     this.title = {
       TSP_POOL: "TSP STAKE",

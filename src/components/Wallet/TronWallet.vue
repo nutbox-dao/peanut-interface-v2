@@ -76,12 +76,12 @@ export default {
       tipTitle: "",
       showMessage: false,
       tronLogo: "https://coin.top/production/logo/trx.png",
-      pnutLogo:"https://coin.top/production/upload/logo/TPZddNpQJHu8UtKPY1PYDBv2J5p5QpJ6XW.jpeg?t=1603183073762",
-      tsteemLogo: "https://coin.top/production/upload/logo/TBUZYrDh7gzjd1PLnkMHWoAo55ctRzZzGN.jpeg?t=1603158036125",
-      tsbdLogo: "https://coin.top/production/upload/logo/TEPZJmYLJxJc8b5FueswwLWmUDhJGnih6Q.jpeg?t=1603160965252",
-      tspLogo: "https://coin.top/production/upload/logo/TW2EWoRUJfwH9nMTfLxSL9JPLZeusUtTfR.jpeg?t=1608343575484",
-      tspLpLogo: "https://coin.top/production/upload/logo/TBpTbddofiBrE1AfhQbwU2BhsrBUM2Lnir.png?t=1609305241285",
-      pnutLpLogo:"https://coin.top/production/logo/TPt2a3GtKMY5972mWa2aL3KKVY6ScWX2G2.jpg",
+      pnutLogo:require("../../static/images/tokens/pnut.png"),
+      tsteemLogo: require("../../static/images/tokens/tsteem.png"),
+      tsbdLogo: require("../../static/images/tokens/tsbd.png"),
+      tspLogo: require("../../static/images/tokens/tsp.png"),
+      tspLpLogo: require("../../static/images/tokens/tsp-lp.png"),
+      pnutLpLogo: require("../../static/images/tokens/pnut-lp.png"),
     };
   },
 

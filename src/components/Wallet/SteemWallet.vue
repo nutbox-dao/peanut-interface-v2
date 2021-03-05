@@ -37,9 +37,9 @@ export default {
   name: "SteemWallet",
   data() {
     return {
-      steemLogo: require("../../static/images/steem.svg"),
-      sbdLogo: require("../../static/images/sbd.svg"),
-      spLogo: require("../../static/images/tsp.svg")
+      steemLogo: require("../../static/images/tokens/steem.png"),
+      sbdLogo: require("../../static/images/tokens/sbd.png"),
+      spLogo: require("../../static/images/tokens/sp.png")
     };
   },
   computed: {
