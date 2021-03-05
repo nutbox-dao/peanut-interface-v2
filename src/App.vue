@@ -75,7 +75,7 @@
                 Github
               </b-popover>
             </a>
-            <a id="docs-icon" href="https://docs.nutbox.io/" target="_blank">
+            <a id="docs-icon" href="https://docs.nutbox.io/lite_paper_v1/" target="_blank">
             </a>
             <b-popover
               target="docs-icon"
