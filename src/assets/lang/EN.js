@@ -56,7 +56,10 @@ module.exports = {
     zh: '中文',
     en: 'English',
     kr: '한국어',
-    '': ''
+    my: 'Malaysia',
+    tr: 'Türkçe',
+    es: 'Español',
+    jp: '日本語'
   },
   wallet: {
     wallet: 'Wallet',

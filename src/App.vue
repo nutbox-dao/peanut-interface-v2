@@ -20,31 +20,31 @@
         </b-nav-item>
         <b-nav-item to="/stake" router-tag="div">
           <p id="stake-icon" class="my-icon" />
-          {{ $t("stake.stake") }}
+          <span>{{ $t("stake.stake") }}</span>
         </b-nav-item>
         <b-nav-item to="/farm">
           <p id="farming-icon" class="my-icon" />
-          {{ $t("farm.farm") }}
+          <span>{{ $t("farm.farm") }}</span>
         </b-nav-item>
         <b-nav-item to="/liquid-staking">
           <p id="liquid-staking-icon" class="my-icon" />
-          {{ $t("liquidStaking.liquidStaking") }}
+          <span>{{ $t("liquidStaking.liquidStaking") }}</span>
         </b-nav-item>
         <b-nav-item to="/get-vote">
           <p id="upvote-icon" class="my-icon" />
-          {{ $t("vote.upvote") }}
+          <span>{{ $t("vote.upvote") }}</span>
         </b-nav-item>
         <b-nav-item href="https://blog.nutbox.io/" target="_blank">
           <p id="blog-icon" class="my-icon" />
-          {{ $t("message.blog") }}
+          <span>{{ $t("message.blog") }}</span>
         </b-nav-item>
         <b-nav-item to="/nps">
           <p id="nps-icon" class="my-icon" />
-          {{ $t("nps.nps") }}
+          <span>{{ $t("nps.nps") }}</span>
         </b-nav-item>
         <b-nav-item to="/admin" v-if="$store.state.steemAccount===nutboxMineAccount">
           <p id="nps-icon" class="my-icon" />
-          {{ $t("message.admin") }}
+          <span>{{ $t("message.admin") }}</span>
         </b-nav-item>
       </b-nav>
         <div class="bottom">
@@ -166,6 +166,22 @@
                   aria-hidden="true"
                 ></b-icon>
                 <span style="font-size: 14px">{{ $t("message.kr") }}</span>
+              </b-dropdown-item>
+              <b-dropdown-item @click="setLanguage('es')">
+                <b-icon
+                  style="font-size: 20px"
+                  :icon="lang == 'es' ? 'check' : 'blank'"
+                  aria-hidden="true"
+                ></b-icon>
+                <span style="font-size: 14px">{{ $t("message.es") }}</span>
+              </b-dropdown-item>
+              <b-dropdown-item @click="setLanguage('my')">
+                <b-icon
+                  style="font-size: 20px"
+                  :icon="lang == 'my' ? 'check' : 'blank'"
+                  aria-hidden="true"
+                ></b-icon>
+                <span style="font-size: 14px">{{ $t("message.my") }}</span>
               </b-dropdown-item>
             </b-dd>
           </div>
@@ -423,6 +439,9 @@ input::-webkit-input-placeholder {
   color: var(--disable);
   line-height: 14px;
   padding-left: 36px;
+  span{
+    flex: 1;
+  }
 }
 
 .left .active {
@@ -467,13 +486,14 @@ input::-webkit-input-placeholder {
     margin-bottom: 12px;
     background: #f6f7f9;
     border-radius: 16px;
-    padding: 14px 30px;
+    padding: 14px 20px;
     display: flex;
     flex-direction: column;
     justify-content:space-between;
 
     #steem-node{
       width: 100%;
+      overflow: hidden;
       background-image: url('./static/images/node.svg');
       background-repeat: no-repeat;
       background-position: center left;

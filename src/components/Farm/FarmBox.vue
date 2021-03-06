@@ -52,7 +52,7 @@
         <div class="op-bottom" v-if="!deposited && isConnected && approved">
           <span class="token-number-none"> 0 </span>
           <b-button variant="primary" @click="addDeposit" :disabled="isLoading">
-            {{ $t("stake.stake") }}
+            {{ $t("farm.stake") }}
           </b-button>
         </div>
         <div class="op-bottom" v-if="deposited && isConnected && approved">
