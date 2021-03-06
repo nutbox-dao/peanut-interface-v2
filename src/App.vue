@@ -493,7 +493,6 @@ input::-webkit-input-placeholder {
 
     #steem-node{
       width: 100%;
-      overflow: hidden;
       background-image: url('./static/images/node.svg');
       background-repeat: no-repeat;
       background-position: center left;

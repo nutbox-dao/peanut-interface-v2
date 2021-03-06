@@ -45,7 +45,7 @@
             :disabled="isLoading"
             style="width: 272px"
           >
-          <b-spinner small type="grow" v-show="isApproving"></b-spinner>
+            <b-spinner small type="grow" v-show="isApproving"></b-spinner>
             {{ $t("message.approveContract") }}
           </b-button>
         </div>
@@ -74,7 +74,7 @@
           </div>
         </div>
       </div>
-      
+
       <p class="fee apy">
         <span>APY</span>
         <span>{{ showingApy }}</span>
@@ -102,7 +102,10 @@
       v-if="showMessage"
       @hideMask="showMessage = false"
     />
-    <InstallTronLink v-if="showInstallTronLink" @hideMask="showInstallTronLink = false"/>
+    <InstallTronLink
+      v-if="showInstallTronLink"
+      @hideMask="showInstallTronLink = false"
+    />
   </div>
 </template>
 
@@ -112,7 +115,7 @@ import TipMessage from "../ToolsComponents/TipMessage";
 import ChangeDepositMask from "./ChangeDepositMask";
 import { approveContract, getContract } from "../../utils/chain/contract";
 import ConnectWalletBtn from "../ToolsComponents/ConnectWalletBtn";
-import InstallTronLink from "../ToolsComponents/InstallTronLink"
+import InstallTronLink from "../ToolsComponents/InstallTronLink";
 
 import {
   intToAmount,
@@ -134,7 +137,7 @@ export default {
     TipMessage,
     ChangeDepositMask,
     ConnectWalletBtn,
-    InstallTronLink
+    InstallTronLink,
   },
   data() {
     return {
@@ -148,14 +151,14 @@ export default {
       pnutLpPendingPnut: 0,
       tipMessage: "",
       tipTitle: "",
-      tipType:"error",
+      tipType: "error",
       showMessage: false,
       showChangeDepositMask: false,
       isLoading: false,
       isApproving: false,
       isWithdrawing: false,
       isAddStake: true,
-      showInstallTronLink:false
+      showInstallTronLink: false,
     };
   },
   props: {
@@ -177,7 +180,7 @@ export default {
       "approvedPnutLp",
       "apy",
       "tspLpApy",
-      "pnutLpApy"
+      "pnutLpApy",
     ]),
     ...mapGetters([
       "pnutLpBalance",
@@ -230,7 +233,7 @@ export default {
       } else if (this.symbol === "PNUT_LP_POOL") {
         pnut = this.pnutLpPendingPnut;
       }
-      if (parseFloat(pnut) === 0){
+      if (parseFloat(pnut) === 0) {
         return null;
       }
       return pnut;
@@ -260,9 +263,9 @@ export default {
       } else if (this.symbol === "TSP_LP_POOL") {
         return this.tspLpApy;
       } else if (this.symbol === "PNUT_LP_POOL") {
-        return this.pnutLpApy
+        return this.pnutLpApy;
       }
-    }
+    },
   },
   methods: {
     ...mapActions([
@@ -358,7 +361,7 @@ export default {
       } else if (address && address === TRON_LINK_ADDR_NOT_FOUND.walletLocked) {
         this.tipTitle = this.$t("message.tips");
         this.tipMessage = this.$t("error.unlockWallet");
-        this.tipType = 'tip'
+        this.tipType = "tip";
         this.showMessage = true;
       } else if (address) {
         this.$store.dispatch("initializeTronAccount", address);
@@ -384,7 +387,7 @@ export default {
     },
     showTip(title, message) {
       this.tipTitle = title;
-      this.tipType = 'error'
+      this.tipType = "error";
       this.tipMessage = message;
       this.showMessage = true;
     },
@@ -392,9 +395,9 @@ export default {
 
   mounted() {
     this.logo = {
-      TSP_POOL: require('../../static/images/tokens/tsp.png'),
-      TSP_LP_POOL: require('../../static/images/tokens/tsp-lp.png'),
-      PNUT_LP_POOL: require('../../static/images/tokens/pnut-lp.png'),
+      TSP_POOL: require("../../static/images/tokens/tsp.png"),
+      TSP_LP_POOL: require("../../static/images/tokens/tsp-lp.png"),
+      PNUT_LP_POOL: require("../../static/images/tokens/pnut-lp.png"),
     };
     this.title = {
       TSP_POOL: "TSP STAKE",
