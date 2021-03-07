@@ -183,6 +183,14 @@
                 ></b-icon>
                 <span style="font-size: 14px">{{ $t("message.my") }}</span>
               </b-dropdown-item>
+              <b-dropdown-item @click="setLanguage('jp')">
+                <b-icon
+                  style="font-size: 20px"
+                  :icon="lang == 'jp' ? 'check' : 'blank'"
+                  aria-hidden="true"
+                ></b-icon>
+                <span style="font-size: 14px">{{ $t("message.jp") }}</span>
+              </b-dropdown-item>
             </b-dd>
           </div>
         </div>
