@@ -17,20 +17,6 @@
     },
     {
       "constant": true,
-      "inputs": [],
-      "name": "devAddress",
-      "outputs": [
-        {
-          "name": "",
-          "type": "address"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "constant": true,
       "inputs": [
         {
           "name": "",
@@ -273,20 +259,6 @@
       "constant": false,
       "inputs": [
         {
-          "name": "dev",
-          "type": "address"
-        }
-      ],
-      "name": "setDevAddress",
-      "outputs": [],
-      "payable": false,
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "constant": false,
-      "inputs": [
-        {
           "name": "_amount",
           "type": "uint256"
         }
@@ -365,29 +337,15 @@
       "payable": false,
       "stateMutability": "nonpayable",
       "type": "function"
-    },
-    {
-      "constant": false,
-      "inputs": [
-        {
-          "name": "_amount",
-          "type": "uint256"
-        }
-      ],
-      "name": "withdrawBalanceToDev",
-      "outputs": [],
-      "payable": false,
-      "stateMutability": "nonpayable",
-      "type": "function"
     }
   ],
   "networks": {
     "*": {
       "events": {},
       "links": {},
-      "address": "413c2987ffcb788f1f44fc3bf847c905df7ae0fc9a"
+      "address": "4177fbcf93869419167ff6fb1ee62286b9fe0c3246"
     }
   },
   "schemaVersion": "2.0.1",
-  "updatedAt": "2021-02-20T02:55:20.202Z"
+  "updatedAt": "2021-03-08T06:28:54.031Z"
 }
