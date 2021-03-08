@@ -123,7 +123,7 @@ module.exports = {
     voteRate:"PNUT - 10% upvote",
   },
   nps: {
-    nps: 'Goverance',
+    nps: 'Governance',
     pass: 'Passed',
     pending: 'Pending',
     unpass: 'Rejected',
