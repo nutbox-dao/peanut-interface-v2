@@ -19,10 +19,10 @@ export const TRON_NODE_API = 'https://api.trongrid.io'
 
 export const TRC20_APPROVE_AMOUNT = 1e50
 
-export const TSTEEM_TRANSFER_FEE = 0.1
+export const TSTEEM_TRANSFER_FEE = 0.3
 export const STEEM_TO_TSP_FEE = 1
-export const TSBD_TRANSFER_FEE = 0.015
-export const STEEM_STAKE_FEE = 0.2
+export const TSBD_TRANSFER_FEE = 0.03
+export const STEEM_STAKE_FEE = 1
 
 export const TRANSFER_FEE_RATIO = 0.002
 export const STEEM_TO_TSP_FEE_RATIO = 0.002

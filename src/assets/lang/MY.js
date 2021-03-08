@@ -127,6 +127,7 @@ module.exports = {
     pass: 'Lulus',
     pending: 'Sedang Ditinjau',
     unpass: 'Tertolak',
+    rolling: 'Mengundi'
   },
   error: {
     error: 'Kesalahan',

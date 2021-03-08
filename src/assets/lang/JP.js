@@ -127,6 +127,7 @@ module.exports = {
       pass: 'パス',
       pending: '未定',
       unpass: 'アンパス',
+      rolling: '投票中'
     },
     error: {
       error: 'エラー',

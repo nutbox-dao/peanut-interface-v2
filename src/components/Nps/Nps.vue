@@ -81,6 +81,8 @@ export default {
         return this.$t("nps.pending");
       } else if (status === "unpass") {
         return this.$t("nps.unpass");
+      } else if (status === 'rolling'){
+        return this.$t("nps.rolling")
       }
     },
   },
@@ -141,10 +143,16 @@ export default {
       color: var(--warning);
     }
     .unpass {
-      background: rgba(255, 91, 77, 0.05);
+      background: rgba(255, 91, 77, 0.051);
       border-radius: 8px;
       border: 1px solid rgba(255, 91, 77, 0.3);
       color: var(--error);
+    }
+    .rolling {
+      background: #408fff0d;
+      border-radius: 8px;
+      border: 1px solid #408fff4d;
+      color: var(--link);
     }
   }
 }

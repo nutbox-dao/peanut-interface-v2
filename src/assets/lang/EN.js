@@ -127,6 +127,7 @@ module.exports = {
     pass: 'Passed',
     pending: 'Pending',
     unpass: 'Rejected',
+    rolling: 'Voting'
   },
   error: {
     error: 'Error!',

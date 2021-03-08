@@ -128,6 +128,7 @@ module.exports = {
       pass: 'Aprobado',
       pending: 'Pendiente',
       unpass: 'Rechazada',
+      rolling: 'Votación en curso'
     },
     error: {
       error: 'Error!',

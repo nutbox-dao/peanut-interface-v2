@@ -78,7 +78,7 @@ export async function steemWrap (from, to, amount, memo, currency, address, fee)
 }
 
 export async function steemDelegation (delegator, delegatee, amount, address) {
-  const fee = parseFloat(STEEM_STAKE_FEE || 0.2).toFixed(3)
+  const fee = parseFloat(STEEM_STAKE_FEE || 1).toFixed(3)
   return await requestBroadcastWithFee(delegator, address, fee, 'STEEM', [
     'delegate_vesting_shares',
     {

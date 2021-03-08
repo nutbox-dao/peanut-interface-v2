@@ -127,6 +127,7 @@ module.exports = {
     pass: '통과',
     pending: '처리 중',
     unpass: '거절',
+    rolling: '투표 중'
   },
   error: {
     error: '오류가 발생하였습니다.',
