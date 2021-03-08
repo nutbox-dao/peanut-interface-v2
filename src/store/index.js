@@ -71,7 +71,6 @@ export default new Vuex.Store({
       TSP_LP_POOL: {},
       PNUT_LP_POOL: {},
       TSP_POOL: {},
-      PNUT_TRX: {}
     },
 
     // apy
@@ -186,9 +185,6 @@ export default new Vuex.Store({
     },
     saveTSP_POOLContract: function (state, contract) {
       state.contracts['TSP_POOL'] = contract
-    },
-    savePNUT_TRXContract: function (state, contract) {
-      state.contracts['PNUT_TRX'] = contract
     },
 // apys
     saveApy: function (state, apy) {
