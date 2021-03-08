@@ -58,7 +58,7 @@
         <div class="op-bottom" v-if="deposited && isConnected && approved">
           <span
             :class="depositedBalance > 0 ? 'token-number' : 'token-number-none'"
-            >{{ depositedBalance | amountForm }}</span
+            >{{ depositedBalance | amountForm(0) }}</span
           >
           <div>
             <button

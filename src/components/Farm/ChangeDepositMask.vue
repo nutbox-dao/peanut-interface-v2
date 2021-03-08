@@ -36,7 +36,7 @@
           <b-button variant="primary-line" class="cancel" @click="cancel">
             {{ $t("message.cancel") }}
           </b-button>
-          <b-button variant="primary" class="confirm" @click="confirm">
+          <b-button variant="primary" class="confirm" @click="confirm" :disabled="isLoading">
             <b-spinner small type="grow" v-show="isLoading"></b-spinner
             >{{ $t("message.confirm") }}
           </b-button>
