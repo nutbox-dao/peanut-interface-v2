@@ -58,7 +58,7 @@
         <div class="op-bottom" v-if="deposited && isConnected && approved">
           <span
             :class="depositedBalance > 0 ? 'token-number' : 'token-number-none'"
-            >{{ depositedBalance | amountForm(0) }}</span
+            >{{ depositedBalance | amountForm(showingDigit) }}</span
           >
           <div>
             <button
@@ -266,6 +266,13 @@ export default {
         return this.pnutLpApy;
       }
     },
+    showingDigit(){
+      if(this.symbol === "PNUT_LP_POOL"){
+        return 0;
+      }else{
+        return 3;
+      }
+    }
   },
   methods: {
     ...mapActions([
