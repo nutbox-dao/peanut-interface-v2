@@ -141,7 +141,7 @@ module.exports = {
     delegateerror: '代理错误！',
     tryrefreshpage: '错误，请尝试刷新页面！',
     steemloginerr: 'Steem账户登录错误!',
-    needkeychainandtronlink: '需要同时安装keychain钱包和tronlink钱包！',
+    needkeychainandtronlink: '需要同时安装Steem Keychain钱包和TronLink钱包！',
     needkeychain: '请安装steem-keychain钱包',
     needtronlink: '请安装tronlink钱包',
     insufficientEnerge: '能量不足',

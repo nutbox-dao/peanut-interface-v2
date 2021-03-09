@@ -146,7 +146,7 @@ module.exports = {
     needtronlink: 'Please install TronLink',
     insufficientEnerge: 'Not enough energy',
     transferFail: 'Transfer fail',
-    unlockKeychain: 'Please unlock Steem-keychain',
+    unlockKeychain: 'Please unlock Steem Keychain',
     unlockWallet: 'Please unlock tronlink',
     steemLoginFail: 'Steem login fail',
     illegalTronAddress: 'Invalid tron address',

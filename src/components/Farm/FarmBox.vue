@@ -51,7 +51,7 @@
         </div>
         <div class="op-bottom" v-if="!deposited && isConnected && approved">
           <span class="token-number-none"> 0 </span>
-          <b-button variant="primary" @click="addDeposit" :disabled="isLoading">
+          <b-button variant="primary" @click="addDeposit" :disabled="isLoading || !depositedDataIsOk">
             {{ $t("farm.stake") }}
           </b-button>
         </div>
@@ -175,6 +175,9 @@ export default {
       "pnutBalanceInt",
       "tspBalanceInt",
       "depositedTspInt",
+      "depositedTspOk",
+      "depositedTspLpOk",
+      "depositedPnutLpIntOk",
       "approvedTsp",
       "approvedTspLp",
       "approvedPnutLp",
@@ -271,6 +274,15 @@ export default {
         return 0;
       }else{
         return 3;
+      }
+    },
+    depositedDataIsOk(){
+      if (this.symbol === "TSP_POOL") {
+        return this.depositedTspOk;
+      } else if (this.symbol === "TSP_LP_POOL") {
+        return this.depositedTspLpOk;
+      } else if (this.symbol === "PNUT_LP_POOL") {
+        return this.depositedPnutLpOk;
       }
     }
   },
