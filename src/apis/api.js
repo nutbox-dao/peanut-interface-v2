@@ -1,8 +1,8 @@
 import { get } from './axios'
 
-export const getProposal = async (params) => get('http://1.15.101.110:3000/nps/getProposal', params)
+export const getProposal = async (params) => get('https://service.nutbox.io/nps/getProposal', params)
 
-export const getApys = async () => get('/mining_pool_apys.json')
+export const getApys = async () => get('https://service.nutbox.io/service/getApys')
 
 export const getPnutLpExchangeInfo = async () => get('https://api.just.network/swap/scan/statusinfo?exchangeAddress=TPt2a3GtKMY5972mWa2aL3KKVY6ScWX2G2')
 
