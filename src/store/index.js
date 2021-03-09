@@ -56,6 +56,11 @@ export default new Vuex.Store({
     totalDepositedTspInt: 0,
     totalDepositedTspLpInt: 0,
     totalDepositedPnutLpInt: 0,
+    // data whether ok
+    delegatedVestsOk: false,
+    depositedTspOk: false,
+    depositedTspLpOk: false,
+    depositedPnutLpIntOk: false,
     // approvement
     approvedTsp: false,
     approvedTspLp: false,
@@ -75,7 +80,7 @@ export default new Vuex.Store({
 
     // apy
     apy: "",
-    tspLpApy:"",
+    tspLpApy: "",
     pnutLpApy: "",
   },
   mutations: {
@@ -151,6 +156,19 @@ export default new Vuex.Store({
     saveTotalDepositedPnutLpInt: function (state, totalDepositedPnutLpInt) {
       state.totalDepositedPnutLpInt = totalDepositedPnutLpInt
     },
+    // data whether ok
+    saveDelegatedVestsOk: function (state, delegatedVestsOk) {
+      state.delegatedVestsOk = delegatedVestsOk
+    },
+    saveDepositedTspOk: function (state, depositedTspOk) {
+      state.depositedTspOk = depositedTspOk
+    },
+    saveDepositedTspLpOk: function (state, depositedTspLpOk) {
+      state.depositedTspLpOk = depositedTspLpOk
+    },
+    saveDepositedPnutLpIntOk: function (state, depositedPnutLpIntOk) {
+      state.depositedPnutLpIntOk = depositedPnutLpIntOk
+    },
     // approve ment
     saveApprovedTSP: function (state, approvedTsp) {
       state.approvedTsp = approvedTsp
@@ -186,12 +204,12 @@ export default new Vuex.Store({
     saveTSP_POOLContract: function (state, contract) {
       state.contracts['TSP_POOL'] = contract
     },
-// apys
+    // apys
     saveApy: function (state, apy) {
       state.apy = apy
     },
-    saveTspLpApy : function (state, tspLpApy) {
-      state.tspLpApy =tspLpApy
+    saveTspLpApy: function (state, tspLpApy) {
+      state.tspLpApy = tspLpApy
     },
     savePnutLpApy: function (state, pnutLpApy) {
       state.pnutLpApy = pnutLpApy
@@ -430,6 +448,7 @@ export default new Vuex.Store({
           let amount = await contranct.delegators(context.state.tronAddress).call() // balanceOfDelegate
           amount = amount.amount
           context.commit('saveDelegatedVestsInt', amount || 0)
+          context.commit('saveDelegatedVestsOk', true)
         } catch (e) {
           // console.error('Get Delegated SP Fail:', e.message)
           throw e
@@ -446,6 +465,7 @@ export default new Vuex.Store({
           let amount = await contract.delegators(context.state.tronAddress).call()
           amount = amount.tspAmount
           context.commit('saveDepositedTspInt', amount || 0)
+          context.commit('saveDepositedTspOk', true)
         } catch (e) {
           // console.error('Get Deposited TSP Fail:', e.message)
           throw e
@@ -462,6 +482,7 @@ export default new Vuex.Store({
           let amount = await contract.delegators(context.state.tronAddress).call()
           amount = amount.tspLPAmount
           context.commit('saveDepositedTspLpInt', amount || 0)
+          context.commit('saveDepositedTspLpOk', true)
         } catch (e) {
           // console.error('Get Deposited TSP_LP Fail:', e.message)
           throw e
@@ -478,6 +499,7 @@ export default new Vuex.Store({
           let amount = await contract.delegators(context.state.tronAddress).call()
           amount = amount.pnutLpAmount
           context.commit('saveDepositedPnutLpInt', amount || 0)
+          context.commit('saveDepositedPnutLpIntOk', true)
         } catch (e) {
           // console.error('Get Deposited PNUT_LP Fail:', e.message)
           throw e
@@ -627,6 +649,13 @@ export default new Vuex.Store({
       dispatch
     }, tronAddress) {
       commit('saveTronAddress', tronAddress)
+      commit('saveDelegatedVestsOk', false)
+      commit('saveDepositedTspOk', false)
+      commit('saveDepositedTspLpOk', false)
+      commit('saveDepositedPnutLpIntOk', false)
+      commit('saveApprovedTSP', false)
+      commit('saveApprovedTSPLP', false)
+      commit('saveApprovedPNUTLP', false)
       dispatch('getTron')
       dispatch('getTsteem')
       dispatch('getTsp')

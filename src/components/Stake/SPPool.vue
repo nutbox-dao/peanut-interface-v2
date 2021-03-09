@@ -50,7 +50,7 @@
         </div>
         <div class="op-bottom" v-if="!delegated && isLogin">
           <span class="token-number-none"> 0 </span>
-          <b-button variant="primary" @click="delegate">
+          <b-button variant="primary" @click="delegate" :disabled="!delegatedVestsOk">
             {{ $t("stake.creaseDelegation") }}
           </b-button>
         </div>
@@ -131,6 +131,7 @@ export default {
       "steemBalance",
       "vestsToSteem",
       "vestsBalance",
+      "delegatedVestsOk",
       "apy",
     ]),
     ...mapGetters([
