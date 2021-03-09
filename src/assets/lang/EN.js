@@ -64,8 +64,8 @@ module.exports = {
   wallet: {
     wallet: 'Wallet',
     swap: 'Cross chain transfer',
-    connectSteem:"Connect to Steem-Keychain",
-    connectTron:"Connect to tron-link",
+    connectSteem:"Connect to Steem Keychain",
+    connectTron:"Connect to TronLink",
     swapSubTitle:"The fast and secure way to bring cross-chain assets to Tron chain.",
     install:"Install",
   },
