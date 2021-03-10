@@ -51,6 +51,7 @@
         <div class="op-bottom" v-if="!delegated && isLogin">
           <span class="token-number-none"> 0 </span>
           <b-button variant="primary" @click="delegate" :disabled="!delegatedVestsOk">
+            <b-spinner small type="grow" v-show="!delegatedVestsOk"></b-spinner>
             {{ $t("stake.creaseDelegation") }}
           </b-button>
         </div>

@@ -42,16 +42,17 @@
           <b-button
             variant="primary"
             @click="approveContract"
-            :disabled="isLoading"
+            :disabled="isLoading || !depositedDataIsOk"
             style="width: 272px"
           >
-            <b-spinner small type="grow" v-show="isApproving"></b-spinner>
+            <b-spinner small type="grow" v-show="isApproving || !depositedDataIsOk"></b-spinner>
             {{ $t("message.approveContract") }}
           </b-button>
         </div>
         <div class="op-bottom" v-if="!deposited && isConnected && approved">
           <span class="token-number-none"> 0 </span>
           <b-button variant="primary" @click="addDeposit" :disabled="isLoading || !depositedDataIsOk">
+            <b-spinner small type="grow" v-show="!depositedDataIsOk"></b-spinner>
             {{ $t("farm.stake") }}
           </b-button>
         </div>
