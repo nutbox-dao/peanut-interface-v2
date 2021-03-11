@@ -258,37 +258,3 @@ async function wa(callback) {
     }, 500)
   }
 }
-
-export const getTronPrice = function () {
-  return new Promise(async resolve => {
-    const res = await axios.request({
-      method: 'get',
-      url: 'https://api.coingecko.com/api/v3/coins/tron',
-      headers: {
-        accept: 'application/json'
-      }
-    })
-    const arr = res.data.tickers
-    for (let i = 0; i < arr.length; i++) {
-      if (arr[i].target === 'USDT') {
-        resolve(parseFloat(arr[i].last))
-        break;
-      }
-    }
-    resolve(1)
-  })
-}
-
-export const getPnutPrice = function () {
-  return new Promise(async resolve => {
-    // getPNUT count of pnut-trx account
-    const pnut = await retryMethod(async () => {
-      return await getBalanceOfToken(TRON_PNUT_CONTRACT,PNUT_LP_TOKEN_ADDRESS)
-    })
-    // getTron count of pnut-trx account
-    const trx = await retryMethod(async () => {
-      return await getTrxBalanceOfAccount(PNUT_LP_TOKEN_ADDRESS)
-    })
-    resolve(trx / pnut);
-  })
-}

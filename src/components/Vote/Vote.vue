@@ -41,9 +41,9 @@
               class="transfer-btn"
               variant="primary"
               @click="transferPnut"
-              :disabled="isLoading || !isReady"
+              :disabled="isTransfering || !isReady"
             >
-              <b-spinner small type="grow" v-show="isTransfering"></b-spinner>
+              <b-spinner small type="grow" v-show="isTransfering || !isReady"></b-spinner>
               {{ $t("vote.transfer") }}
             </b-button>
           </div>
@@ -101,7 +101,6 @@ export default {
   data() {
     return {
       showMessage: false,
-      isLoading: false,
       tipTitle: "",
       tipType: "error",
       tipMessage: "",
@@ -173,7 +172,6 @@ export default {
         return;
       }
       try {
-        this.isLoading = true;
         this.isTransfering = true;
         const res = await transferPnut(
           TRON_PNUT_RECEIVE_ACCOUNT,
@@ -189,7 +187,6 @@ export default {
       } catch (e) {
         this.showTip(this.$t("error.error"), e.message);
       } finally {
-        this.isLoading = false;
         this.isTransfering = false;
       }
     },
@@ -228,6 +225,7 @@ export default {
     margin-top: 12px;
     font-size: 16px;
     font-weight: 300;
+    color: var(--secondary-text);
   }
   .nav {
     display: flex;
