@@ -156,6 +156,7 @@ module.exports = {
     inputLinkIllegal: "정확한 링크를 입력해주세요.",
     transferFail: "송금이 실패하였습니다.",
     notEnoughFee: '수수료가 부족합니다.',
-    insufficentPnut: "PNUT이 부족합니다."
+    insufficentPnut: "PNUT이 부족합니다.",
+    hasVoted: "@nutbox.mine 계정으로부터 보팅을 받았습니다. 이용해주셔서 감사합니다!"
   }
 }
