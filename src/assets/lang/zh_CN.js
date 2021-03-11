@@ -156,7 +156,8 @@ module.exports = {
     inputLinkIllegal:"请输入正确的链接",
     transferFail:"转账失败",
     notEnoughFee: '手续费不足',
-    insufficentPnut:"PNUT余额不足"
+    insufficentPnut:"PNUT余额不足",
+    hasVoted: "Nutbox已经点赞了您的帖子。"
   }
 
 }

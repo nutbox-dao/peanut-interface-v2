@@ -186,3 +186,44 @@ export const updatePnutForVoteParams = async (jsonMetadata) => {
       })
   })
 }
+
+export const getPost = async function (author, permlink) {
+  return new Promise(async (resolve, reject) => {
+    const read = async (retries = 3) => {
+      try {
+        const res = await steem.api.getContentAsync(author, permlink);
+        if (res && res.author !== "" && res.permlink !== "") {
+          resolve(res);
+        } else {
+          reject(`Post:${permlink} of author:${author} is not exist!`);
+        }
+      } catch (error) {
+        if (retries > 0) {
+          setTimeout(async () => {
+            await read(retries - 1);
+          }, 1000);
+        } else {
+          console.error("Get Post of author/permlink failed:", error.message);
+          reject(error);
+        }
+      }
+    };
+    read();
+  });
+};
+
+export const postHasVotedByNutbox = async function (author, permlink) {
+  try{
+    const post = await getPost(author, permlink)
+    if (post && post.active_votes && post.active_votes.length > 0) {
+      return post.active_votes.filter((vote) => {
+        return vote.voter === STEEM_MINE_ACCOUNT;
+      })[0];
+    }else{
+      return false;
+    }
+  }catch(e){
+    return false;
+  }
+  
+};

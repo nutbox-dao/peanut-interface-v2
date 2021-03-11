@@ -156,6 +156,7 @@ module.exports = {
     inputLinkIllegal:"Please input correct link",
     transferFail: "Transfer Fail",
     notEnoughFee: 'Insufficient fee',
-    insufficentPnut:"Insufficent PNUT"
+    insufficentPnut:"Insufficent PNUT",
+    hasVoted:"Your post has been voted by nutbox.mine"
   },
 }

@@ -28,13 +28,13 @@
           <div class="input-area" v-if="tronAddress && tronAddress.length > 0">
             <div>
               <input type="text" v-model="pnutAmount" placeholder="0" />
-              <p style="margin-top:8px">
+              <p style="margin-top: 8px">
                 <span class="pnut-for-upvote">
-                {{payRate + " "}}
-                  </span>
-                  <span class="tips">
-                    {{$t('vote.voteRate')}}
-                  </span>
+                  {{ payRate + " " }}
+                </span>
+                <span class="tips">
+                  {{ $t("vote.voteRate") }}
+                </span>
               </p>
             </div>
             <b-button
@@ -43,7 +43,11 @@
               @click="transferPnut"
               :disabled="isTransfering || !isReady"
             >
-              <b-spinner small type="grow" v-show="isTransfering || !isReady"></b-spinner>
+              <b-spinner
+                small
+                type="grow"
+                v-show="isTransfering || !isReady"
+              ></b-spinner>
               {{ $t("vote.transfer") }}
             </b-button>
           </div>
@@ -90,7 +94,7 @@ import {
   getTronLinkAddr,
   transferPnut,
 } from "../../utils/chain/tron";
-import { getAccountInfo } from "../../utils/chain/steem";
+import { getAccountInfo, postHasVotedByNutbox } from "../../utils/chain/steem";
 
 export default {
   name: "Vote",
@@ -140,7 +144,7 @@ export default {
       if (!res) {
         this.showTip(this.$t("error.error"), this.$t("error.inputLinkIllegal"));
       }
-      return res;
+      return match;
     },
     checkPnutAmount() {
       const reg = /^\d+(\.\d+)?$/;
@@ -173,6 +177,13 @@ export default {
       }
       try {
         this.isTransfering = true;
+        const match = this.postLink.match(POST_LINK_REG);
+        const author = match[0].split("/")[0].replace("@", "");
+        const permlink = match[0].split("/")[1];
+        if (await postHasVotedByNutbox(author, permlink)) {
+          this.showTip(this.$t("error.error"), this.$t("error.hasVoted"));
+          return
+        }
         const res = await transferPnut(
           TRON_PNUT_RECEIVE_ACCOUNT,
           amountToInt(this.pnutAmount),
@@ -328,7 +339,7 @@ export default {
             border: none;
             height: 48px;
           }
-          p{
+          p {
             display: flex;
             align-items: center;
           }
@@ -337,11 +348,11 @@ export default {
             font-size: 18px;
             font-family: Helvetica-Bold, Helvetica;
             font-weight: bold;
-            margin: 0 6px 0 0 ;
+            margin: 0 6px 0 0;
             color: var(--success);
           }
-          .tips{
-            font-size:14px;
+          .tips {
+            font-size: 14px;
             font-weight: 600;
           }
           .transfer-btn {

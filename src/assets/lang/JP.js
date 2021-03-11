@@ -157,6 +157,7 @@ module.exports = {
       transferFail:'転送に失敗しました',
       notEnoughFee: '料金不足',
       insufficentPnut:'PNUT残高不足',
+      hasVoted: 'あなたの投稿はnutbox.mineに投票されました'
     }
   
 }
