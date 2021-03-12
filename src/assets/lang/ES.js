@@ -157,7 +157,8 @@ module.exports = {
       inputLinkIllegal:"Ingrese el enlace correcto",
       transferFail: "Error de Transferencia",
       notEnoughFee: 'Tarifa Insuficiente',
-      insufficentPnut:"NUEZ Insuficiente"
+      insufficentPnut:"NUEZ Insuficiente",
+      hasVoted: "nutbox.mine ha votado tu publicación"
     },
   }
   
