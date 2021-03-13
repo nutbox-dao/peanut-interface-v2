@@ -631,7 +631,7 @@ min-width: 75px;
 
 }
 .left .nav-item{
-  height: 30px;
+  height: 40px;
 }
 .left .nav-link {
      padding-left: 0px;
