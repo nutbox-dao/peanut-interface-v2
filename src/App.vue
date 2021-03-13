@@ -2,6 +2,7 @@
   <div id="app">
     <div class="left">
       <img src="./static/images/logo.svg" alt="nutbox" class="logo" />
+      <img src="./static/images/logo_small.svg" alt="nutbox" class="logo_small" />
       <b-nav pills vertical align="center" class="menu">
         <b-nav-item to="/wallet">
           <p id="wallet-icon" class="my-icon" />
@@ -605,9 +606,18 @@ input::-webkit-input-placeholder {
 #telegram-icon:hover {
   background-image: url("./static/images/telegram-hover.svg");
 }
+.logo{
+  display: block;
+}
+  .logo_small{
+    display: none;
+  }
 @media only screen and (max-width: 991px){
-  .logo{
-    width: 90%;
+  .logo_small{
+    display: block;
+  }
+   .logo{
+    display: none;
   }
 .nav-item span  {
    display: none;
@@ -619,6 +629,9 @@ min-width: 75px;
 .nav-link{
   display: inherit;
 
+}
+.left .nav-item{
+  height: 30px;
 }
 .left .nav-link {
      padding-left: 0px;
