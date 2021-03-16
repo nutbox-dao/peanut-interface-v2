@@ -2,9 +2,9 @@ import axios from 'axios'
 import Tron from 'tronweb'
 import {
   TRON_NODE_API,
+  TRON_NODE_API_MAIN,
   TRON_LINK_ADDR_NOT_FOUND,
   TRON_PNUT_CONTRACT,
-  TRON_NODE_API_MAIN,
   TRONWEB_API_KEY,
   PNUT_LP_TOKEN_ADDRESS
 } from '../../config.js'
@@ -12,6 +12,7 @@ import {
   sleep,
   retryMethod
 } from '../helper'
+import store from '../../store'
 
 function initTron(symbol) {
   const HttpProvider = Tron.providers.HttpProvider
@@ -32,7 +33,12 @@ function initTron(symbol) {
 }
 
 export function getTron(symbol = 'DEFAULT') {
-  return initTron(symbol)
+  if (store.state.tronweb){
+    return store.state.tronweb
+  }
+  const tronweb = initTron(symbol)
+  store.commit('saveTronweb', tronweb)
+  return tronweb
 }
 
 export async function getTronLinkAddr() {
@@ -204,7 +210,6 @@ export const getBalanceOfToken = async function (token, user) {
         value: user
       }],
       user)
-  // console.log("banlanceof",balance)
   return balance && balance.constant_result && balance.constant_result[0] && tron.toDecimal('0x' + balance.constant_result[0])
 }
 

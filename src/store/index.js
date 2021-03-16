@@ -40,6 +40,7 @@ export default new Vuex.Store({
     vestsToSteem: 0,
     // tron
     tronAddress: Cookie.get('tronAddress'),
+    tronweb: null,
     tronBalanceInt: 0,
     pnutBalanceInt: 0,
     tsteemBalanceInt: 0,
@@ -109,6 +110,9 @@ export default new Vuex.Store({
     saveTronAddress: function (state, tronAddress) {
       state.tronAddress = tronAddress
       Cookie.set('tronAddress', tronAddress, '30d')
+    },
+    saveTronweb: function (state, tronweb) {
+      state.tronweb = tronweb
     },
     savePnutBalanceInt: function (state, pnutBalanceInt) {
       state.pnutBalanceInt = pnutBalanceInt
