@@ -116,7 +116,7 @@ export default {
       tipMessage: "",
       tipTitle: "",
       showMessage: false,
-      pendingPnut: '',
+      pendingPnut: null,
       isLoading: false,
       showSteemLogin: false,
       withdrawLoading: false,
@@ -185,6 +185,14 @@ export default {
       } catch (e) {}
     },
 
+    updatePendingPeanut() {
+      if (!this.pendingPnut){
+        this.getPendingPeanut()
+      }else{
+        this.pendingPnut = parseFloat(this.pendingPnut) + parseFloat(this.delegatedSp) * 10 / parseFloat(this.totalDelegatedSp) 
+      }
+    },
+
     delegate() {
       if (!this.tronAddress || this.tronAddress.length ===0 ){
         this.showInstallTronLink = true;
@@ -251,7 +259,7 @@ export default {
       this.getDelegatedSp();
       this.getTotalDelegatedSP();
       // 设置定时器以更新当前收益
-      const timer = setInterval(this.getPendingPeanut, 3000);
+      const timer = setInterval(this.updatePendingPeanut, 3000);
       // 通过$once来监听定时器，在beforeDestroy钩子时被清除。
       this.$once("hook:beforeDestroy", () => {
         clearInterval(timer);

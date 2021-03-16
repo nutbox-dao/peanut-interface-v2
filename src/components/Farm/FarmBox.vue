@@ -45,14 +45,26 @@
             :disabled="isLoading || !depositedDataIsOk"
             style="width: 272px"
           >
-            <b-spinner small type="grow" v-show="isApproving || !depositedDataIsOk"></b-spinner>
+            <b-spinner
+              small
+              type="grow"
+              v-show="isApproving || !depositedDataIsOk"
+            ></b-spinner>
             {{ $t("message.approveContract") }}
           </b-button>
         </div>
         <div class="op-bottom" v-if="!deposited && isConnected && approved">
           <span class="token-number-none"> 0 </span>
-          <b-button variant="primary" @click="addDeposit" :disabled="isLoading || !depositedDataIsOk">
-            <b-spinner small type="grow" v-show="!depositedDataIsOk"></b-spinner>
+          <b-button
+            variant="primary"
+            @click="addDeposit"
+            :disabled="isLoading || !depositedDataIsOk"
+          >
+            <b-spinner
+              small
+              type="grow"
+              v-show="!depositedDataIsOk"
+            ></b-spinner>
             {{ $t("farm.stake") }}
           </b-button>
         </div>
@@ -149,7 +161,7 @@ export default {
       token: {},
       tspPendingPnut: 0,
       tspLpPendingPnut: 0,
-      pnutLpPendingPnut: 0,
+      pnutLpPendingPnut: null,
       tipMessage: "",
       tipTitle: "",
       tipType: "error",
@@ -270,14 +282,14 @@ export default {
         return this.pnutLpApy;
       }
     },
-    showingDigit(){
-      if(this.symbol === "PNUT_LP_POOL"){
+    showingDigit() {
+      if (this.symbol === "PNUT_LP_POOL") {
         return 0;
-      }else{
+      } else {
         return 3;
       }
     },
-    depositedDataIsOk(){
+    depositedDataIsOk() {
       if (this.symbol === "TSP_POOL") {
         return this.depositedTspOk;
       } else if (this.symbol === "TSP_LP_POOL") {
@@ -285,7 +297,7 @@ export default {
       } else if (this.symbol === "PNUT_LP_POOL") {
         return this.depositedPnutLpOk;
       }
-    }
+    },
   },
   methods: {
     ...mapActions([
@@ -390,16 +402,28 @@ export default {
     },
     async getPendingPeanut() {
       try {
-        const contract = await getContract(this.symbol);
-        if (!contract) return;
-        const s = await contract.getPendingPeanuts().call();
-        const pnut = intToAmount(s);
         if (this.symbol === "TSP_POOL") {
+          const contract = await getContract(this.symbol);
+          if (!contract) return;
+          const s = await contract.getPendingPeanuts().call();
+          const pnut = intToAmount(s);
           this.tspPendingPnut = pnut;
         } else if (this.symbol === "TSP_LP_POOL") {
+          const contract = await getContract(this.symbol);
+          if (!contract) return;
+          const s = await contract.getPendingPeanuts().call();
+          const pnut = intToAmount(s);
           this.tspLpPendingPnut = pnut;
         } else if (this.symbol === "PNUT_LP_POOL") {
-          this.pnutLpPendingPnut = pnut;
+          if (!this.pnutLpPendingPnut) {
+            const contract = await getContract(this.symbol);
+            if (!contract) return;
+            const s = await contract.getPendingPeanuts().call();
+            const pnut = intToAmount(s);
+            this.pnutLpPendingPnut = pnut;
+          } else {
+            this.pnutLpPendingPnut = parseFloat(this.pnutLpPendingPnut) + parseFloat(this.depositedBalance) * 0.2 / parseFloat(this.totalDeposited)
+          }
         }
       } catch (e) {
         //   console.log(234,e);
