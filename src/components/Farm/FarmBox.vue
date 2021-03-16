@@ -190,7 +190,7 @@ export default {
       "depositedTspInt",
       "depositedTspOk",
       "depositedTspLpOk",
-      "depositedPnutLpIntOk",
+      "depositedPnutLpOk",
       "approvedTsp",
       "approvedTspLp",
       "approvedPnutLp",
