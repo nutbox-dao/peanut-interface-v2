@@ -23,18 +23,30 @@ export const getAbiAndContractAddress = async function (symbol) {
   return { abi, address }
 }
 
-export const getContract = async function (symbol) {
+export const getContract = async function (symbol, useTronweb=false) {
   symbol = symbol.toUpperCase()
-  let instance = store.state.contracts[symbol]
-  if (Object.keys(instance).length !== 0) {
-    return instance
+  if (!useTronweb){
+    const instance = store.state.contracts[symbol]
+    if (Object.keys(instance).length !== 0) {
+      return instance
+    }
+  }else{ 
+    const instance = store.state.contracts_tronweb[symbol]
+    if (Object.keys(instance).length !== 0) {
+      return instance
+    }
   }
-  const tronLink = await getTronLink()
-  if (!tronLink) return
+  const tronlink = await getTronLink()
+  if (!tronlink) return
+  const tronweb = await getTron()
+  if (!tronweb) return
+
   const { abi, address } = await getAbiAndContractAddress(symbol)
-  instance = tronLink.contract(abi, address)
-  store.commit('save'+symbol+'Contract', instance)
-  return instance
+  const instance = tronlink.contract(abi, address)
+  const instance_tronweb = tronweb.contract(abi, address)
+  store.commit('save'+symbol+'Contract', {contract: instance, contract_tronweb: instance_tronweb})
+  return useTronweb ? instance_tronweb : instance
+
 }
 
 export const approveContract = async function (symbol) {

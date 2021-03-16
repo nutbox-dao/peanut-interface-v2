@@ -78,6 +78,16 @@ export default new Vuex.Store({
       PNUT_LP_POOL: {},
       TSP_POOL: {},
     },
+    contracts_tronweb: {
+      PNUT: {},
+      TSBD: {},
+      TSTEEM: {},
+      TSP: {},
+      PNUT_POOL: {},
+      TSP_LP_POOL: {},
+      PNUT_LP_POOL: {},
+      TSP_POOL: {},
+    },
 
     // apy
     apy: "",
@@ -184,29 +194,37 @@ export default new Vuex.Store({
       state.approvedPnutLp = approvedPnutLp
     },
     // contract
-    savePNUTContract: function (state, contract) {
+    savePNUTContract: function (state, {contract, contract_tronweb}) {
       state.contracts['PNUT'] = contract
+      state.contracts_tronweb['PNUT'] = contract_tronweb
     },
-    saveTSBDContract: function (state, contract) {
+    saveTSBDContract: function (state, {contract, contract_tronweb}) {
       state.contracts['TSBD'] = contract
+      state.contracts_tronweb['TSBD'] = contract_tronweb
     },
-    saveTSTEEMContract: function (state, contract) {
+    saveTSTEEMContract: function (state, {contract, contract_tronweb}) {
       state.contracts['TSTEEM'] = contract
+      state.contracts_tronweb['TSTEEM'] = contract_tronweb
     },
-    saveTSPContract: function (state, contract) {
+    saveTSPContract: function (state, {contract, contract_tronweb}) {
       state.contracts['TSP'] = contract
+      state.contracts_tronweb['TSP'] = contract_tronweb
     },
-    savePNUT_POOLContract: function (state, contract) {
+    savePNUT_POOLContract: function (state, {contract, contract_tronweb}) {
       state.contracts['PNUT_POOL'] = contract
+      state.contracts_tronweb['PNUT_POOL'] = contract_tronweb
     },
-    saveTSP_LP_POOLContract: function (state, contract) {
+    saveTSP_LP_POOLContract: function (state, {contract, contract_tronweb}) {
       state.contracts['TSP_LP_POOL'] = contract
+      state.contracts_tronweb['TSP_LP_POOL'] = contract_tronweb
     },
-    savePNUT_LP_POOLContract: function (state, contract) {
+    savePNUT_LP_POOLContract: function (state, {contract, contract_tronweb}) {
       state.contracts['PNUT_LP_POOL'] = contract
+      state.contracts_tronweb['PNUT_LP_POOL'] = contract_tronweb
     },
-    saveTSP_POOLContract: function (state, contract) {
+    saveTSP_POOLContract: function (state, {contract, contract_tronweb}) {
       state.contracts['TSP_POOL'] = contract
+      state.contracts_tronweb['TSP_POOL'] = contract_tronweb
     },
     // apys
     saveApy: function (state, apy) {
@@ -358,7 +376,7 @@ export default new Vuex.Store({
     async getTsteem(context) {
       retryMethod(async () => {
         try {
-          const contract = await getContract('TSTEEM')
+          const contract = await getContract('TSTEEM', true)
           const tsteem = await contract.balanceOf(context.state.tronAddress).call()
           context.commit('saveTsteemBalanceInt', tsteem)
         } catch (e) {
@@ -373,7 +391,7 @@ export default new Vuex.Store({
     async getTsp(context) {
       retryMethod(async () => {
         try {
-          const contract = await getContract('TSP')
+          const contract = await getContract('TSP' ,true)
           const tsp = await contract.balanceOf(context.state.tronAddress).call()
           context.commit('saveTspBalanceInt', tsp || 0)
         } catch (e) {
@@ -388,7 +406,7 @@ export default new Vuex.Store({
     async getTsbd(context) {
       retryMethod(async () => {
         try {
-          const contract = await getContract('TSBD')
+          const contract = await getContract('TSBD', true)
           const tsbd = await contract.balanceOf(context.state.tronAddress).call()
           context.commit('saveTsbdBalanceInt', tsbd || 0)
         } catch (e) {
@@ -403,7 +421,7 @@ export default new Vuex.Store({
     async getPnut(context) {
       retryMethod(async () => {
         try {
-          const contract = await getContract('PNUT')
+          const contract = await getContract('PNUT', true)
           const pnut = await contract.balanceOf(context.state.tronAddress).call()
           context.commit('savePnutBalanceInt', pnut || 0)
         } catch (e) {
@@ -448,7 +466,7 @@ export default new Vuex.Store({
     async getDelegatedSp(context) {
       retryMethod(async () => {
         try {
-          const contranct = await getContract('PNUT_POOL')
+          const contranct = await getContract('PNUT_POOL', true)
           let amount = await contranct.delegators(context.state.tronAddress).call() // balanceOfDelegate
           amount = amount.amount
           context.commit('saveDelegatedVestsInt', amount || 0)
@@ -465,7 +483,7 @@ export default new Vuex.Store({
     async getDepositedTsp(context) {
       retryMethod(async () => {
         try {
-          const contract = await getContract('TSP_POOL')
+          const contract = await getContract('TSP_POOL', true)
           let amount = await contract.delegators(context.state.tronAddress).call()
           amount = amount.tspAmount
           context.commit('saveDepositedTspInt', amount || 0)
@@ -482,7 +500,7 @@ export default new Vuex.Store({
     async getDepositedTspLp(context) {
       retryMethod(async () => {
         try {
-          const contract = await getContract('TSP_LP_POOL')
+          const contract = await getContract('TSP_LP_POOL', true)
           let amount = await contract.delegators(context.state.tronAddress).call()
           amount = amount.tspLPAmount
           context.commit('saveDepositedTspLpInt', amount || 0)
@@ -499,7 +517,7 @@ export default new Vuex.Store({
     async getDepositedPnutLp(context) {
       retryMethod(async () => {
         try {
-          const contract = await getContract('PNUT_LP_POOL')
+          const contract = await getContract('PNUT_LP_POOL', true)
           let amount = await contract.delegators(context.state.tronAddress).call()
           amount = amount.pnutLpAmount
           context.commit('saveDepositedPnutLpInt', amount || 0)
@@ -516,7 +534,7 @@ export default new Vuex.Store({
     async getTotalDelegatedSP(context) {
       retryMethod(async () => {
         try {
-          const contract = await getContract('PNUT_POOL')
+          const contract = await getContract('PNUT_POOL', true)
           let amount = await contract.totalDepositedSP().call()
           context.commit('saveTotalDelegatedVestsInt', amount || 0)
         } catch (e) {
@@ -531,7 +549,7 @@ export default new Vuex.Store({
     async getTotalDepositedTsp(context) {
       retryMethod(async () => {
         try {
-          const contract = await getContract('TSP_POOL')
+          const contract = await getContract('TSP_POOL', true)
           let amount = await contract.totalDepositedTSP().call()
           context.commit('saveTotalDepositedTspInt', amount || 0)
         } catch (e) {
@@ -546,7 +564,7 @@ export default new Vuex.Store({
     async getTotalDepositedTspLp(context) {
       retryMethod(async () => {
         try {
-          const contract = await getContract('TSP_LP_POOL')
+          const contract = await getContract('TSP_LP_POOL', true)
           let amount = await contract.totalDepositedTSPLP().call()
           context.commit('saveTotalDepositedTspLpInt', amount || 0)
         } catch (e) {
@@ -561,7 +579,7 @@ export default new Vuex.Store({
     async getTotalDepositedPnutLp(context) {
       retryMethod(async () => {
         try {
-          const contract = await getContract('PNUT_LP_POOL')
+          const contract = await getContract('PNUT_LP_POOL', true)
           let amount = await contract.totalDepositedPnutLp().call()
           context.commit('saveTotalDepositedPnutLpInt', amount || 0)
         } catch (e) {
@@ -576,7 +594,7 @@ export default new Vuex.Store({
     async getApprovedTSP(context) {
       retryMethod(async () => {
         try {
-          const contract = await getContract('TSP')
+          const contract = await getContract('TSP', true)
           let amount = await contract.allowance(context.state.tronAddress, TSP_POOL_ADDRESS).call()
           context.commit('saveApprovedTSP', intToAmount(amount) > 1e6)
         } catch (e) {
@@ -621,7 +639,6 @@ export default new Vuex.Store({
     async getApprovedPNUTLP(context) {
       retryMethod(async () => {
         try {
-          const tronWeb = await getTronLink()
           const tron = Tron()
           const params = [{
               type: 'address',
@@ -632,7 +649,7 @@ export default new Vuex.Store({
               value: PNUT_LP_POOL_ADDRESS
             }
           ]
-          const tx = await tronWeb.transactionBuilder
+          const tx = await tron.transactionBuilder
             .triggerConstantContract(PNUT_LP_TOKEN_ADDRESS,
               'allowance(address,address)', {},
               params,
