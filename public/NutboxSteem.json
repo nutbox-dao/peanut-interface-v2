@@ -1,5 +1,5 @@
 {
-  "contractName": "NutboxPeanuts",
+  "contractName": "NutboxSteem",
   "abi": [
     {
       "constant": true,
@@ -76,6 +76,50 @@
       "anonymous": false,
       "inputs": [
         {
+          "indexed": false,
+          "name": "steemAccount",
+          "type": "string"
+        },
+        {
+          "indexed": false,
+          "name": "user",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "name": "amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "SteemToTsteem",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "name": "steemAccount",
+          "type": "string"
+        },
+        {
+          "indexed": false,
+          "name": "user",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "name": "amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "TsteemToSteem",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
           "indexed": true,
           "name": "from",
           "type": "address"
@@ -137,6 +181,10 @@
       "constant": false,
       "inputs": [
         {
+          "name": "steemAccount",
+          "type": "string"
+        },
+        {
           "name": "_to",
           "type": "address"
         },
@@ -145,7 +193,25 @@
           "type": "uint256"
         }
       ],
-      "name": "mint",
+      "name": "steemToTsteem",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "steemAccount",
+          "type": "string"
+        },
+        {
+          "name": "_amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "tsteemToSteem",
       "outputs": [],
       "payable": false,
       "stateMutability": "nonpayable",
@@ -387,9 +453,9 @@
     "*": {
       "events": {},
       "links": {},
-      "address": "41249a13fa4b9267d176991a7414bd853765b67132"
+      "address": "412758f35ef2bf09686ad4d3944ff0b1763312b608"
     }
   },
   "schemaVersion": "2.0.1",
-  "updatedAt": "2020-12-13T12:58:04.600Z"
+  "updatedAt": "2020-10-19T07:08:39.858Z"
 }
