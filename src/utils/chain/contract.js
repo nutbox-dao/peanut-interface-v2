@@ -12,6 +12,7 @@ const CONTRACT_JSON_NAME_LIST = {
   TSP_LP_POOL: 'TspLpPool.json',
   TSP_POOL: 'TspPooling.json',
   PNUT_LP_POOL: 'PnutLpPool.json',
+  TSTEEM_POOL: 'TsteemPool.json'
 }
 
 export const getAbiAndContractAddress = async function (symbol) {
