@@ -91,6 +91,8 @@ export default {
       "tronAddress",
       "tspBalanceInt",
       "depositedTspInt",
+      "tsteemBalanceInt",
+      "depositedTsteemInt",
       "tspLpBalanceInt",
       "depositedTspLpInt",
       "pnutLpBalanceInt",
@@ -99,6 +101,8 @@ export default {
     ...mapGetters([
       "tspBalance",
       "depositedTsp",
+      "tsteemBalance",
+      "depositedTsteem",
       "tspLpBalance",
       "depositedTspLp",
       "pnutLpBalance",
@@ -112,6 +116,8 @@ export default {
         return this.tspLpBalance;
       } else if (this.symbol === "PNUT_LP_POOL") {
         return this.pnutLpBalance;
+      } else if (this.symbol === "TSTEEM_POOL") {
+        return this.tsteemBalance
       }
     },
     stakedBalance() {
@@ -121,6 +127,8 @@ export default {
         return this.depositedTspLp;
       } else if (this.symbol === "PNUT_LP_POOL") {
         return this.depositedPnutLp;
+      } else if (this.symbol === "TSTEEM_POOL") {
+        return this.depositedTsteem;
       }
     },
     tokenBalanceInt() {
@@ -130,6 +138,8 @@ export default {
         return this.tspLpBalanceInt;
       } else if (this.symbol === "PNUT_LP_POOL") {
         return this.pnutLpBalanceInt;
+      } else if (this.symbol === "TSTEEM_POOL") {
+        return this.tsteemBalanceInt
       }
     },
     stakedBalanceInt() {
@@ -139,6 +149,8 @@ export default {
         return this.depositedTspLpInt;
       } else if (this.symbol === "PNUT_LP_POOL") {
         return this.depositedPnutLpInt;
+      } else if (this.symbol === "TSTEEM_POOL") {
+        return this.depositedTsteemInt
       }
     },
   },
@@ -155,15 +167,19 @@ export default {
   methods: {
     ...mapActions([
       "getTsp",
+      "getTsteem",
       "getDepositedTsp",
       "getPnut",
       "getTotalDepositedTsp",
+      "getTotalDepositedTsteem",
       "getTotalDepositedTspLp",
       "getTotalDepositedPnutLp",
     ]),
     ...mapMutations([
       "saveTspBalanceInt",
+      "saveTsteemBalanceInt",
       "saveDepositedTspInt",
+      "saveDepositedTsteemInt",
       "saveTspLpBalanceInt",
       "saveDepositedTspLpInt",
       "savePnutLpBalanceInt",
@@ -284,6 +300,8 @@ export default {
         window.open("https://justswap.org/#/home?tokenAddress=TW2EWoRUJfwH9nMTfLxSL9JPLZeusUtTfR&type=swap", "_blank")
       } else if (this.symbol === "PNUT_LP_POOL") {
         window.open("https://justswap.org/#/home?tokenAddress=TPZddNpQJHu8UtKPY1PYDBv2J5p5QpJ6XW&type=swap", "_blank")
+      } else if (this.symbol === "TSTEEM_POOL"){
+        this.$router.push('wallet/swap')
       }
     },
 
@@ -306,22 +324,26 @@ export default {
       TSP_POOL: this.saveTspBalanceInt,
       TSP_LP_POOL: this.saveTspLpBalanceInt,
       PNUT_LP_POOL: this.savePnutLpBalanceInt,
+      TSTEEM_POOL: this.saveTsteemBalanceInt,
     }),
       (this.saveStakedMethod = {
         TSP_POOL: this.saveDepositedTspInt,
         TSP_LP_POOL: this.saveDepositedTspLpInt,
         PNUT_LP_POOL: this.saveDepositedPnutLpInt,
+        TSTEEM_POOL: this.saveDepositedTsteemInt,
       }),
       (this.getTotalStakedMethod = {
         TSP_POOL: this.getTotalDepositedTsp,
         TSP_LP_POOL: this.getTotalDepositedTspLp,
         PNUT_LP_POOL: this.getTotalDepositedPnutLp,
+      TSTEEM_POOL: this.getTotalDepositedTsteem,
       });
 
     this.token = {
       TSP_POOL: "TSP",
       TSP_LP_POOL: "S-TSP-TRX",
       PNUT_LP_POOL: "S-PNUT-TRX",
+      TSTEEM_POOL: "TSTEEM",
     };
   },
 };

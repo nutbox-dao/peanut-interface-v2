@@ -89,6 +89,7 @@ export default new Vuex.Store({
     apy: "",
     tspLpApy: "",
     pnutLpApy: "",
+    tsteemApy: ""
   },
   mutations: {
     // steem
@@ -239,7 +240,10 @@ export default new Vuex.Store({
     },
     savePnutLpApy: function (state, pnutLpApy) {
       state.pnutLpApy = pnutLpApy
-    }
+    },
+    saveTsteemApy: function (state, tsteemApy) {
+      state.tsteemApy = tsteemApy
+    },
   },
   getters: {
     // steem

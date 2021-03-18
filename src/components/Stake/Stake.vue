@@ -5,7 +5,7 @@
     </h3>
     <!-- <div class="nav"></div> -->
     <div class="stake-box">
-      <!-- <SPPool /> -->
+      <SPPool />
       <!-- <FarmBox symbol="TSP_POOL" /> -->
       <FarmBox symbol="TSTEEM_POOL" />
     </div>

@@ -186,7 +186,7 @@ export default {
     },
 
     updatePendingPeanut() {
-      if (!this.pendingPnut){
+      if (!this.pendingPnut || !this.delegatedVestsOk || parseFloat(this.totalDelegatedSp) === 0){
         this.getPendingPeanut()
       }else{
         this.pendingPnut = parseFloat(this.pendingPnut) + parseFloat(this.delegatedSp) * 10 / parseFloat(this.totalDelegatedSp) 
@@ -224,6 +224,7 @@ export default {
           .withdrawPeanuts()
           .send(TRON_CONTRACT_CALL_PARAMS);
         if (res && (await isTransactionSuccess(res))) {
+          this.pendingPnut = null
           this.getPnut();
         } else {
           if (res && (await isInsufficientEnerge(res))) {

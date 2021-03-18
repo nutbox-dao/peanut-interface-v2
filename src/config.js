@@ -40,11 +40,11 @@ export const STEEM_TSP_ACCOUNT = process.env.STEEM_TSP_ACCOUNT || 'nutbox-tsp'
 
 export const STEEM_DEX_TEST = 'terry4t'
 
-export const TRON_CONTRACT_CALL_PARAMS = { feeLimit: 40_000_000 }
+export const TRON_CONTRACT_CALL_PARAMS = { feeLimit: 45_000_000 }
 // Pnut contract
 export const TRON_PNUT_CONTRACT = "TDJjuVeGBtxWQPKFPuHsyD5p51scqYwiXf";
 export const TRON_PNUT_RECEIVE_ACCOUNT = "TMLMSuyygN1fL5HpUt1oQp3RjvdEsHZffG";
-// TSP-TRX 交易对地址
+// TSP 地址
 export const TSP_TOKEN_ADDRESS = 'TW2EWoRUJfwH9nMTfLxSL9JPLZeusUtTfR'
 export const TSP_POOL_ADDRESS = 'TF2Qz1byu4b54HPCKKY8FVwFeocKEZKW9D'
 // TSP-LP

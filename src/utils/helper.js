@@ -80,6 +80,7 @@ export const storeApy = async function () {
   const tspLpExchengePoolApy = parseFloat(tspVolume24) * 365 * 0.3 / parseFloat(tspTotalLiquidity)
   // save to cache
   store.commit('saveApy', parseFloat(apys.spApy).toFixed(1) + "%")
+  store.commit('saveTsteemApy', parseFloat(parseFloat(apys.spApy)*0.09).toFixed(1) + "%")
   store.commit('saveTspLpApy', parseFloat(apys.spApy).toFixed(1) + "% + " + tspLpExchengePoolApy.toFixed(1) + "%")
   store.commit('savePnutLpApy', parseFloat(apys.pnutLpApy).toFixed(1) + "% + " + pnutLpExchangePoolApy.toFixed(1) + "%")
 }

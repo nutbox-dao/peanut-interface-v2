@@ -26,9 +26,9 @@ function initTron(symbol) {
   } else {
     tronweb = new Tron(fullNode, solidityNode, eventServer)
   }
-  tronweb.setHeader({
-    'TRON-PRO-API-KEY': TRONWEB_API_KEY
-  })
+  // tronweb.setHeader({
+  //   'TRON-PRO-API-KEY': TRONWEB_API_KEY
+  // })
   return tronweb;
 }
 
