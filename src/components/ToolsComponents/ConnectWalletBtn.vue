@@ -8,7 +8,7 @@
       v-if="
         type == 'STEEM'
           ? !steemAccount || steemAccount.length === 0
-          : !tronAddress || tronAddress.length === 0
+          : !isConnectTron
       "
     >
     <b-spinner small type="grow" v-show="isConnecting"></b-spinner>
@@ -23,6 +23,7 @@
 <script>
 import { mapState } from "vuex";
 import { sleep } from '../../utils/helper'
+import { TRON_LINK_ADDR_NOT_FOUND } from '../../config'
 
 export default {
   name: "ConnectWalletBtn",
@@ -39,6 +40,14 @@ export default {
   },
   computed: {
     ...mapState(["steemAccount", "tronAddress"]),
+    isConnectTron() {
+      return (
+        this.tronAddress &&
+        this.tronAddress.length > 0 &&
+        this.tronAddress !== TRON_LINK_ADDR_NOT_FOUND.noTronLink &&
+        this.tronAddress !== TRON_LINK_ADDR_NOT_FOUND.walletLocked
+      );
+    },
   },
   methods: {
     async unlock() {

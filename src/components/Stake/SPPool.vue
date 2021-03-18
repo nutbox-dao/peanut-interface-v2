@@ -32,7 +32,7 @@
           <span class="info-token">STEEM POWER</span>
           <span class="info-desc">DELEGATED</span>
         </p>
-        <div class="op-bottom" v-if="delegated && isLogin">
+        <div class="op-bottom" v-if="delegated && isLogin && isConnectTron">
           <span :class="delegatedSp > 0 ? 'token-number' : 'token-number-none'">
             {{ delegatedSp | amountForm }}
           </span>
@@ -48,18 +48,28 @@
             >
           </div>
         </div>
-        <div class="op-bottom" v-if="!delegated && isLogin">
+        <div class="op-bottom" v-if="!delegated && isLogin && isConnectTron">
           <span class="token-number-none"> 0 </span>
-          <b-button variant="primary" @click="delegate" :disabled="!delegatedVestsOk">
+          <b-button
+            variant="primary"
+            @click="delegate"
+            :disabled="!delegatedVestsOk"
+          >
             <b-spinner small type="grow" v-show="!delegatedVestsOk"></b-spinner>
             {{ $t("stake.creaseDelegation") }}
           </b-button>
         </div>
-        <ConnectWalletBtn
-          class="op-bottom"
-          v-if="!isLogin"
-          @steemLogin="showSteemLogin = true"
-        />
+          <ConnectWalletBtn
+            class="op-bottom"
+            v-if="!isLogin"
+            @steemLogin="showSteemLogin = true"
+          />
+          <ConnectWalletBtn
+            class="op-bottom"
+            v-if="!isConnectTron"
+            @tronLogin="showTronLinkInfo"
+            type="TRON"
+          />
       </div>
       <!--apy-->
       <p class="fee apy">
@@ -88,7 +98,10 @@
       v-if="showMessage"
       @hideMask="showMessage = false"
     />
-    <InstallTronLink v-if="showInstallTronLink" @hideMask="showInstallTronLink = false"/>
+    <InstallTronLink
+      v-if="showInstallTronLink"
+      @hideMask="showInstallTronLink = false"
+    />
   </div>
 </template>
 
@@ -99,15 +112,19 @@ import ChangeDelegateMask from "./ChangeDelegateMask";
 import Login from "../Login";
 import { getContract } from "../../utils/chain/contract";
 import ConnectWalletBtn from "../ToolsComponents/ConnectWalletBtn";
-import InstallTronLink from "../ToolsComponents/InstallTronLink"
+import InstallTronLink from "../ToolsComponents/InstallTronLink";
 
 import {
   intToAmount,
   isTransactionSuccess,
   isInsufficientEnerge,
+  getTronLinkAddr
 } from "../../utils/chain/tron";
 import { mapState, mapGetters, mapActions, mapMutations } from "vuex";
-import { TRON_CONTRACT_CALL_PARAMS } from "../../config";
+import {
+  TRON_CONTRACT_CALL_PARAMS,
+  TRON_LINK_ADDR_NOT_FOUND,
+} from "../../config";
 
 export default {
   name: "SPPool",
@@ -148,6 +165,14 @@ export default {
     isLogin() {
       return this.steemAccount && this.steemAccount.length > 0;
     },
+    isConnectTron() {
+      return (
+        this.tronAddress &&
+        this.tronAddress.length > 0 &&
+        this.tronAddress !== TRON_LINK_ADDR_NOT_FOUND.noTronLink &&
+        this.tronAddress !== TRON_LINK_ADDR_NOT_FOUND.walletLocked
+      );
+    },
   },
   components: {
     Card,
@@ -155,7 +180,7 @@ export default {
     ConnectWalletBtn,
     Login,
     ChangeDelegateMask,
-    InstallTronLink
+    InstallTronLink,
   },
   methods: {
     ...mapActions([
@@ -172,12 +197,27 @@ export default {
       "saveDelegatedVestsInt",
     ]),
 
+    async showTronLinkInfo() {
+      const address = await getTronLinkAddr();
+      if (address && address === TRON_LINK_ADDR_NOT_FOUND.noTronLink) {
+        this.showInstallTronLink = true;
+      } else if (address && address === TRON_LINK_ADDR_NOT_FOUND.walletLocked) {
+        this.tipTitle = this.$t("message.tips");
+        this.tipMessage = this.$t("error.unlockWallet");
+        this.tipType = "tip";
+        this.showMessage = true;
+      } else if (address) {
+        this.$store.dispatch("initializeTronAccount", address);
+        this.$router.go(0);
+      }
+    },
+
     async getPendingPeanut() {
       try {
         const nutPool = await getContract("PNUT_POOL");
         if (!nutPool) return;
         const s = await nutPool.getPendingPeanuts().call();
-        if (parseInt(s) === 0){
+        if (parseInt(s) === 0) {
           this.pendingPnut = null;
           return;
         }
@@ -186,15 +226,22 @@ export default {
     },
 
     updatePendingPeanut() {
-      if (!this.pendingPnut || !this.delegatedVestsOk || parseFloat(this.totalDelegatedSp) === 0){
-        this.getPendingPeanut()
-      }else{
-        this.pendingPnut = parseFloat(this.pendingPnut) + parseFloat(this.delegatedSp) * 10 / parseFloat(this.totalDelegatedSp) 
+      if (
+        !this.pendingPnut ||
+        !this.delegatedVestsOk ||
+        parseFloat(this.totalDelegatedSp) === 0
+      ) {
+        this.getPendingPeanut();
+      } else {
+        this.pendingPnut =
+          parseFloat(this.pendingPnut) +
+          (parseFloat(this.delegatedSp) * 10) /
+            parseFloat(this.totalDelegatedSp);
       }
     },
 
     delegate() {
-      if (!this.tronAddress || this.tronAddress.length ===0 ){
+      if (!this.isConnectTron) {
         this.showInstallTronLink = true;
         return;
       }
@@ -207,9 +254,9 @@ export default {
     },
 
     minusDelegate() {
-      if (!this.tronAddress || this.tronAddress.length ===0 ){
+      if (!this.isConnectTron) {
         this.showInstallTronLink = true;
-        return
+        return;
       }
       this.operate = "minus";
       this.showChangeDelegateMask = true;
@@ -226,7 +273,7 @@ export default {
         if (res && (await isTransactionSuccess(res))) {
           // TODO: confirm the delegation is finished
           this.getPnut();
-          this.pendingPnut = null
+          this.pendingPnut = null;
         } else {
           if (res && (await isInsufficientEnerge(res))) {
             this.showTip(
