@@ -415,7 +415,7 @@ export default {
           const pnut = intToAmount(s);
           this.tspLpPendingPnut = pnut;
         } else if (this.symbol === "PNUT_LP_POOL") {
-          if (!this.pnutLpPendingPnut) {
+          if (!this.pnutLpPendingPnut || parseFloat(this.totalDeposited) === 0 || !this.depositedPnutLpOk) {
             const contract = await getContract(this.symbol);
             if (!contract) return;
             const s = await contract.getPendingPeanuts().call();
