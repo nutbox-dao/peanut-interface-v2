@@ -8,9 +8,26 @@
             <span class="title">
               {{ name }}
             </span>
-            <span style="font-size: 12px; color: var(--secondary-text)">
-              {{ desc }}
-            </span>
+            <div>
+              <span style="font-size: 12px; color: var(--secondary-text)">
+                {{ desc }}
+              </span>
+              <img
+                style="width: 14px; height: 14px"
+                src="../../static/images/copy.svg"
+                :id="address"
+                :data-clipboard-text="address"
+                v-if="address.length > 0"
+                @click="copyAddress"
+              />
+              <b-popover
+                :target="address"
+                triggers="hover focus"
+                placement="bottom"
+              >
+                copy address
+              </b-popover>
+            </div>
           </div>
           <div class="balance">
             <span class="title">
@@ -34,16 +51,20 @@
       v-if="showMessage"
       @hideMask="showMessage = false"
     />
-    <InstallTronLink v-if="showInstallTronLink" @hideMask="showInstallTronLink = false"/>
+    <InstallTronLink
+      v-if="showInstallTronLink"
+      @hideMask="showInstallTronLink = false"
+    />
   </div>
 </template>
 
 <script>
+import Clipboard from "clipboard";
 import Card from "../ToolsComponents/Card";
 import Login from "../Login";
 import ConnectWalletBtn from "../ToolsComponents/ConnectWalletBtn";
 import TipMessage from "../ToolsComponents/TipMessage";
-import InstallTronLink from "../ToolsComponents/InstallTronLink"
+import InstallTronLink from "../ToolsComponents/InstallTronLink";
 import { getTronLinkAddr } from "../../utils/chain/tron";
 import { TRON_LINK_ADDR_NOT_FOUND } from "../../config";
 
@@ -56,7 +77,7 @@ export default {
       tipTitle: "",
       tipMessage: "",
       showMessage: false,
-      showInstallTronLink:false,
+      showInstallTronLink: false,
     };
   },
   props: {
@@ -82,17 +103,30 @@ export default {
     },
     balanceDigit: {
       type: Number,
-      default: 3
-    }
+      default: 3,
+    },
+    address: {
+      type: String,
+      default: "",
+    },
   },
   components: {
     Card,
     ConnectWalletBtn,
     Login,
     TipMessage,
-    InstallTronLink
+    InstallTronLink,
   },
   methods: {
+    copyAddress() {
+      var clipboard = new Clipboard("#" + this.address);
+      clipboard.on("success", (e) => {
+        clipboard.destroy();
+      });
+      clipboard.on("error", (e) => {
+        clipboard.destroy;
+      });
+    },
     async tronLogin() {
       const store = this.$store;
       const address = await getTronLinkAddr();
@@ -144,6 +178,9 @@ export default {
         display: flex;
         flex-direction: column;
         flex-wrap: wrap;
+        img:hover {
+          cursor: pointer;
+        }
       }
     }
   }
