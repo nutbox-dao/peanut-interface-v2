@@ -152,10 +152,12 @@ export default {
         const nutPool = await getContract("PNUT_POOL");
         const res = await nutPool.delegators(this.tronAddress).call();
         const steemAcc = res.steemAccount;
+        const checkSteem = await nutPool.checkSteemAccount(this.steemAccount).call();
         if (
           this.steemAccount &&
           res.hasDeposited &&
-          steemAcc !== this.steemAccount
+          steemAcc !== this.steemAccount &&
+          this.tronAddress !== checkSteem[1]
         ) {
           this.showTip(
             this.$t("error.delegateerror"),
