@@ -234,6 +234,10 @@ export default {
     },
 
     fillMaxTrans() {
+      if (!this.steemAccount || this.steemAccount.length === 0){
+        this.showSteemLogin = true;
+        return;
+      }
       if (this.fromSteemToTron) {
         this.transValue = this.steemBalance;
         this.transValue = parseFloat(this.steemBalance - this.transFee);
