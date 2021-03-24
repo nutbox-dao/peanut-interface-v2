@@ -59,7 +59,7 @@ export const PNUT_LP_POOL_ADDRESS = 'TLud51bQbsvA3fGPoXw5e9NPb117ckYn5y'
 
 // TSTEEM
 export const TSTEEM_TOKEN_ADDRESS = 'TDZFuwYAnHmMkrZUvoEVBSLfLQv66fx3YJ'
-export const TSTEEM_POOL_ADDRESS = 'TJMpvYyT2dm8NNgAAd3v6mLEZSgzBLfcqY'
+export const TSTEEM_POOL_ADDRESS = 'TFccHHX5eJ6zcLa7ToYAZbn4NdAzDgFfJW'
 
 // approvement
 export const APPROVE_TOKEN_CONTRACT_PAIR = {
