@@ -233,6 +233,9 @@ export default {
       ) {
         this.getPendingPeanut();
       } else {
+        if (parseFloat(this.totalDelegatedSp) === 0 || parseFloat(this.delegatedSp) === 0){
+          return
+        }
         this.pendingPnut =
           parseFloat(this.pendingPnut) +
           (parseFloat(this.delegatedSp) * 10) /

@@ -422,6 +422,9 @@ export default {
             const pnut = intToAmount(s);
             this.pnutLpPendingPnut = pnut;
           } else {
+            if (parseFloat(this.depositedBalance) === 0 || parseFloat(this.totalDeposited) === 0){
+              return
+            }
             this.pnutLpPendingPnut = parseFloat(this.pnutLpPendingPnut) + parseFloat(this.depositedBalance) * 0.2 / parseFloat(this.totalDeposited)
           }
         }
