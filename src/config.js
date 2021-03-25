@@ -21,13 +21,13 @@ export const TRON_NODE_API = 'https://api.shasta.trongrid.io'
 
 export const TRC20_APPROVE_AMOUNT = 1e50
 
-export const TSTEEM_TRANSFER_FEE = 1
+export const TSTEEM_TRANSFER_FEE = 0.001
 export const STEEM_TO_TSP_FEE = 1
 export const TSBD_TRANSFER_FEE = 0.03
-export const STEEM_STAKE_FEE = 1
+export const STEEM_STAKE_FEE = 0.001
 
-export const TRANSFER_FEE_RATIO = 0.002
-export const STEEM_TO_TSP_FEE_RATIO = 0.002
+export const TRANSFER_FEE_RATIO = 0.00001
+export const STEEM_TO_TSP_FEE_RATIO = 0.00001
 export const PNUT_FOR_VOTE_RATE = 1000
 
 export const POST_LINK_REG = /@[\w\.\-]+\/[\w\-]+\/?$/;
