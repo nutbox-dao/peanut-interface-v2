@@ -34,12 +34,10 @@ export const POST_LINK_REG = /@[\w\.\-]+\/[\w\-]+\/?$/;
 
 
 //  steem account
-export const STEEM_DEX_ACCOUNT = process.env.STEEM_DEX_ACCOUNT || 'nutbox.dex'
+export const STEEM_DEX_ACCOUNT = process.env.STEEM_DEX_ACCOUNT || 'test.dex'
 export const STEEM_GAS_ACCOUNT = process.env.STEEM_GAS_ACCOUNT || 'nutbox.gas'
-export const STEEM_MINE_ACCOUNT = process.env.STEEM_MINE_ACCOUNT || 'nutbox.mine'
+export const STEEM_MINE_ACCOUNT = process.env.STEEM_MINE_ACCOUNT || 'terry5t'
 export const STEEM_TSP_ACCOUNT = process.env.STEEM_TSP_ACCOUNT || 'nutbox-tsp'
-
-export const STEEM_DEX_TEST = 'terry4t'
 
 export const TRON_CONTRACT_CALL_PARAMS = { feeLimit: 45_000_000 }
 // Pnut contract
