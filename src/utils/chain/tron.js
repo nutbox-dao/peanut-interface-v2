@@ -21,9 +21,9 @@ function initTron(symbol) {
   const solidityNode = new HttpProvider(TRON_NODE_API)
   const eventServer = new HttpProvider(TRON_NODE_API)
   const tronweb = new Tron(fullNode, solidityNode, eventServer, VUE_APP_KEY)
-  tronweb.setHeader({
-    'TRON-PRO-API-KEY': TRONWEB_API_KEY
-  })
+  // tronweb.setHeader({
+  //   'TRON-PRO-API-KEY': TRONWEB_API_KEY
+  // })
   return tronweb;
 }
 
