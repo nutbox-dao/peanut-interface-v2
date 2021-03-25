@@ -6,7 +6,8 @@ import {
   TRON_LINK_ADDR_NOT_FOUND,
   TRON_PNUT_CONTRACT,
   TRONWEB_API_KEY,
-  PNUT_LP_TOKEN_ADDRESS
+  PNUT_LP_TOKEN_ADDRESS,
+  VUE_APP_KEY
 } from '../../config.js'
 import {
   sleep,
@@ -19,16 +20,10 @@ function initTron(symbol) {
   const fullNode = new HttpProvider(TRON_NODE_API)
   const solidityNode = new HttpProvider(TRON_NODE_API)
   const eventServer = new HttpProvider(TRON_NODE_API)
-  const privateKey = null
-  let tronweb;
-  if (privateKey) {
-    tronweb = new Tron(fullNode, solidityNode, eventServer, privateKey)
-  } else {
-    tronweb = new Tron(fullNode, solidityNode, eventServer)
-  }
-  // tronweb.setHeader({
-  //   'TRON-PRO-API-KEY': TRONWEB_API_KEY
-  // })
+  const tronweb = new Tron(fullNode, solidityNode, eventServer, VUE_APP_KEY)
+  tronweb.setHeader({
+    'TRON-PRO-API-KEY': TRONWEB_API_KEY
+  })
   return tronweb;
 }
 

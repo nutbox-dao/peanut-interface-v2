@@ -13,6 +13,7 @@
         desc="Nutbox Peanut"
         :balances="pnutBalance"
         :logo="pnutLogo"
+        address="TPZddNpQJHu8UtKPY1PYDBv2J5p5QpJ6XW"
         walletType="TRON"
       />
       <BalanceView
@@ -20,6 +21,7 @@
         desc="Nutbox TSP"
         :balances="tspBalance"
         :logo="tspLogo"
+        address="TW2EWoRUJfwH9nMTfLxSL9JPLZeusUtTfR"
         walletType="TRON"
       />
       <BalanceView
@@ -27,6 +29,7 @@
         desc="Nutbox TSBD"
         :balances="tsbdBalance"
         :logo="tsbdLogo"
+        address="TEPZJmYLJxJc8b5FueswwLWmUDhJGnih6Q"
         walletType="TRON"
       />
       <BalanceView
@@ -34,6 +37,7 @@
         desc="Nutbox TSTEEM"
         :balances="tsteemBalance"
         :logo="tsteemLogo"
+        address="TBUZYrDh7gzjd1PLnkMHWoAo55ctRzZzGN"
         walletType="TRON"
       />
       <BalanceView
@@ -41,6 +45,7 @@
         desc="S-TSP-TRX"
         :balances="tspLpBalance"
         :logo="tspLpLogo"
+        address="TBpTbddofiBrE1AfhQbwU2BhsrBUM2Lnir"
         walletType="TRON"
       />
       <BalanceView
@@ -49,6 +54,7 @@
         :balances="pnutLpBalance"
         :logo="pnutLpLogo"
         :balanceDigit="0"
+        address="TPt2a3GtKMY5972mWa2aL3KKVY6ScWX2G2"
         walletType="TRON"
       />
     </div>

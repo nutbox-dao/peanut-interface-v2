@@ -42,158 +42,157 @@
           <p id="nps-icon" class="my-icon" />
           <span>{{ $t("nps.nps") }}</span>
         </b-nav-item>
-        <b-nav-item to="/admin" v-if="$store.state.steemAccount===nutboxMineAccount">
+        <b-nav-item
+          to="/admin"
+          v-if="$store.state.steemAccount === nutboxMineAccount"
+        >
           <p id="nps-icon" class="my-icon" />
           <span>{{ $t("message.admin") }}</span>
         </b-nav-item>
       </b-nav>
-        <div class="bottom">
-          <div class="links">
-            <a
-              id="justswap-icon"
-              href="https://justswap.org/#/home?tokenAddress=TPZddNpQJHu8UtKPY1PYDBv2J5p5QpJ6XW&type=swap"
-              target="_blank"
-            >
-              <b-popover
-                target="justswap-icon"
-                triggers="hover focus"
-                placement="top"
-              >
-                Justswap
-              </b-popover>
-            </a>
-            <a
-              id="github-icon"
-              href="https://github.com/nutbox-dao"
-              target="_blank"
-            >
-              <b-popover
-                target="github-icon"
-                triggers="hover focus"
-                placement="top"
-              >
-                Github
-              </b-popover>
-            </a>
-            <a id="docs-icon" href="https://docs.nutbox.io/lite_paper_v1/" target="_blank">
-            </a>
+      <div class="bottom">
+        <div class="links">
+          <a
+            id="justswap-icon"
+            href="https://justswap.org/#/home?tokenAddress=TPZddNpQJHu8UtKPY1PYDBv2J5p5QpJ6XW&type=swap"
+            target="_blank"
+          >
             <b-popover
-              target="docs-icon"
+              target="justswap-icon"
               triggers="hover focus"
               placement="top"
             >
-              {{ $t("message.docs") }}
+              Justswap
             </b-popover>
-            <a
-              id="discord-icon"
-              href="https://discord.com/invite/zPkMuGY"
-              target="_blank"
-            >
-            </a>
+          </a>
+          <a
+            id="github-icon"
+            href="https://github.com/nutbox-dao"
+            target="_blank"
+          >
             <b-popover
-              target="discord-icon"
+              target="github-icon"
               triggers="hover focus"
               placement="top"
             >
-              Discord
+              Github
             </b-popover>
-            <a
-              id="telegram-icon"
-              href="https://t.me/nutbox_defi"
-              target="_blank"
-            >
-            </a>
-            <b-popover
-              target="telegram-icon"
-              triggers="hover focus"
-              placement="top"
-            >
-              Telegram
-            </b-popover>
-          </div>
-
-          <div class="settings">
-            <b-dd
-              id="steem-node"
-              :text="$t('message.changeSteemNode')"
-              size="sm"
-              block
-              dropup
-              no-caret
-            >
-              <b-dropdown-item
-                v-for="item in steemUrls"
-                :key="item"
-                @click="selectNode(item)"
-              >
-                <b-icon
-                  :icon="item == currentSteemNode ? 'check' : 'blank'"
-                  aria-hidden="true"
-                  style="font-size: 20px"
-                ></b-icon>
-                <span style="font-size: 14px">{{ item }}</span>
-              </b-dropdown-item>
-            </b-dd>
-
-            <b-dd
-              id="language"
-              :text="lang.toUpperCase()"
-              size="sm"
-              block
-              dropup
-              no-caret
-            >
-              <b-dropdown-item @click="setLanguage('en')">
-                <b-icon
-                  style="font-size: 20px"
-                  :icon="lang == 'en' ? 'check' : 'blank'"
-                  aria-hidden="true"
-                ></b-icon>
-                <span style="font-size: 14px">{{ $t("message.en") }}</span>
-              </b-dropdown-item>
-              <b-dropdown-item @click="setLanguage('zh')">
-                <b-icon
-                  style="font-size: 20px"
-                  :icon="lang == 'zh' ? 'check' : 'blank'"
-                  aria-hidden="true"
-                ></b-icon>
-                <span style="font-size: 14px">{{ $t("message.zh") }}</span>
-              </b-dropdown-item>
-              <b-dropdown-item @click="setLanguage('kr')">
-                <b-icon
-                  style="font-size: 20px"
-                  :icon="lang == 'kr' ? 'check' : 'blank'"
-                  aria-hidden="true"
-                ></b-icon>
-                <span style="font-size: 14px">{{ $t("message.kr") }}</span>
-              </b-dropdown-item>
-              <b-dropdown-item @click="setLanguage('es')">
-                <b-icon
-                  style="font-size: 20px"
-                  :icon="lang == 'es' ? 'check' : 'blank'"
-                  aria-hidden="true"
-                ></b-icon>
-                <span style="font-size: 14px">{{ $t("message.es") }}</span>
-              </b-dropdown-item>
-              <b-dropdown-item @click="setLanguage('my')">
-                <b-icon
-                  style="font-size: 20px"
-                  :icon="lang == 'my' ? 'check' : 'blank'"
-                  aria-hidden="true"
-                ></b-icon>
-                <span style="font-size: 14px">{{ $t("message.my") }}</span>
-              </b-dropdown-item>
-              <b-dropdown-item @click="setLanguage('jp')">
-                <b-icon
-                  style="font-size: 20px"
-                  :icon="lang == 'jp' ? 'check' : 'blank'"
-                  aria-hidden="true"
-                ></b-icon>
-                <span style="font-size: 14px">{{ $t("message.jp") }}</span>
-              </b-dropdown-item>
-            </b-dd>
-          </div>
+          </a>
+          <a
+            id="docs-icon"
+            href="https://docs.nutbox.io/lite_paper_v1/"
+            target="_blank"
+          >
+          </a>
+          <b-popover target="docs-icon" triggers="hover focus" placement="top">
+            {{ $t("message.docs") }}
+          </b-popover>
+          <a
+            id="discord-icon"
+            href="https://discord.com/invite/zPkMuGY"
+            target="_blank"
+          >
+          </a>
+          <b-popover
+            target="discord-icon"
+            triggers="hover focus"
+            placement="top"
+          >
+            Discord
+          </b-popover>
+          <a id="telegram-icon" href="https://t.me/nutbox_defi" target="_blank">
+          </a>
+          <b-popover
+            target="telegram-icon"
+            triggers="hover focus"
+            placement="top"
+          >
+            Telegram
+          </b-popover>
         </div>
+
+        <div class="settings">
+          <b-dd
+            id="steem-node"
+            :text="$t('message.changeSteemNode')"
+            size="sm"
+            block
+            dropup
+            no-caret
+          >
+            <b-dropdown-item
+              v-for="item in steemUrls"
+              :key="item"
+              @click="selectNode(item)"
+            >
+              <b-icon
+                :icon="item == currentSteemNode ? 'check' : 'blank'"
+                aria-hidden="true"
+                style="font-size: 20px"
+              ></b-icon>
+              <span style="font-size: 14px">{{ item }}</span>
+            </b-dropdown-item>
+          </b-dd>
+
+          <b-dd
+            id="language"
+            :text="lang.toUpperCase()"
+            size="sm"
+            block
+            dropup
+            no-caret
+          >
+            <b-dropdown-item @click="setLanguage('en')">
+              <b-icon
+                style="font-size: 20px"
+                :icon="lang == 'en' ? 'check' : 'blank'"
+                aria-hidden="true"
+              ></b-icon>
+              <span style="font-size: 14px">{{ $t("message.en") }}</span>
+            </b-dropdown-item>
+            <b-dropdown-item @click="setLanguage('zh')">
+              <b-icon
+                style="font-size: 20px"
+                :icon="lang == 'zh' ? 'check' : 'blank'"
+                aria-hidden="true"
+              ></b-icon>
+              <span style="font-size: 14px">{{ $t("message.zh") }}</span>
+            </b-dropdown-item>
+            <b-dropdown-item @click="setLanguage('kr')">
+              <b-icon
+                style="font-size: 20px"
+                :icon="lang == 'kr' ? 'check' : 'blank'"
+                aria-hidden="true"
+              ></b-icon>
+              <span style="font-size: 14px">{{ $t("message.kr") }}</span>
+            </b-dropdown-item>
+            <b-dropdown-item @click="setLanguage('es')">
+              <b-icon
+                style="font-size: 20px"
+                :icon="lang == 'es' ? 'check' : 'blank'"
+                aria-hidden="true"
+              ></b-icon>
+              <span style="font-size: 14px">{{ $t("message.es") }}</span>
+            </b-dropdown-item>
+            <b-dropdown-item @click="setLanguage('my')">
+              <b-icon
+                style="font-size: 20px"
+                :icon="lang == 'my' ? 'check' : 'blank'"
+                aria-hidden="true"
+              ></b-icon>
+              <span style="font-size: 14px">{{ $t("message.my") }}</span>
+            </b-dropdown-item>
+            <b-dropdown-item @click="setLanguage('jp')">
+              <b-icon
+                style="font-size: 20px"
+                :icon="lang == 'jp' ? 'check' : 'blank'"
+                aria-hidden="true"
+              ></b-icon>
+              <span style="font-size: 14px">{{ $t("message.jp") }}</span>
+            </b-dropdown-item>
+          </b-dd>
+        </div>
+      </div>
     </div>
     <TipMessage
       :showMessage="tipMessage"
@@ -214,7 +213,7 @@ import {
   STEEM_API_URLS,
   STEEM_CONF_KEY,
   LOCALE_KEY,
-  STEEM_MINE_ACCOUNT
+  STEEM_MINE_ACCOUNT,
 } from "./config";
 import TipMessage from "./components/ToolsComponents/TipMessage";
 import { mapState, mapGetters } from "vuex";
@@ -241,7 +240,7 @@ export default {
     TipMessage,
   },
   methods: {
-    setLanguage(lang){    
+    setLanguage(lang) {
       this.lang = lang;
       localStorage.setItem(LOCALE_KEY, this.lang);
       this.$i18n.locale = lang;
@@ -259,12 +258,12 @@ export default {
 
     const address = await getTronLinkAddr();
     if (address && address === TRON_LINK_ADDR_NOT_FOUND.noTronLink) {
-      store.commit("saveTronAddress", '');
+      store.commit("saveTronAddress", "");
       // this.tipTitle = this.$t("error.needtronlink");
       // this.tipMessage = "TronLink: https://www.tronlink.org";
       // this.showMessage = true;
     } else if (address && address === TRON_LINK_ADDR_NOT_FOUND.walletLocked) {
-      store.commit("saveTronAddress", '');
+      store.commit("saveTronAddress", "");
       // this.tipTitle = this.$t("error.error");
       // this.tipMessage = this.$t("error.unlockWallet");
       // this.showMessage = true;
@@ -274,12 +273,12 @@ export default {
     }
     watchWallet((address) => {
       if (address && address === TRON_LINK_ADDR_NOT_FOUND.noTronLink) {
-      store.commit("saveTronAddress", '');
+        store.commit("saveTronAddress", "");
         // this.tipTitle = this.$t("error.needtronlink");
         // this.tipMessage = "TronLink: https://www.tronlink.org";
         // this.showMessage = true;
       } else if (address && address === TRON_LINK_ADDR_NOT_FOUND.walletLocked) {
-      store.commit("saveTronAddress", '');
+        store.commit("saveTronAddress", "");
         // this.tipTitle = this.$t("error.error");
         // this.tipMessage = this.$t("error.unlockWallet");
         // this.showMessage = true;
@@ -447,7 +446,7 @@ input::-webkit-input-placeholder {
   color: var(--disable);
   line-height: 14px;
   padding-left: 36px;
-  span{
+  span {
     flex: 1;
   }
 }
@@ -497,25 +496,25 @@ input::-webkit-input-placeholder {
     padding: 14px 20px;
     display: flex;
     flex-direction: column;
-    justify-content:space-between;
+    justify-content: space-between;
 
-    #steem-node{
+    #steem-node {
       width: 100%;
-      background-image: url('./static/images/node.svg');
+      background-image: url("./static/images/node.svg");
       background-repeat: no-repeat;
       background-position: center left;
     }
-    #language{
+    #language {
       width: 100%;
-      background-image: url('./static/images/lang.svg');
+      background-image: url("./static/images/lang.svg");
       background-repeat: no-repeat;
       background-position: center left;
     }
-    .btn-secondary{
+    .btn-secondary {
       color: var(--primary-text) !important;
       background-color: rgba(0, 0, 0, 0);
       border: none;
-      font-size:12px;
+      font-size: 12px;
       text-align: left;
       padding-left: 22px;
     }
