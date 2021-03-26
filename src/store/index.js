@@ -93,6 +93,7 @@ export default new Vuex.Store({
       TSP_LP_POOL: {},
       PNUT_LP_POOL: {},
       TSP_POOL: {},
+      TSTEEM_POOL: {}
     },
 
     // apy
@@ -245,8 +246,9 @@ export default new Vuex.Store({
       state.contracts['TSP_POOL'] = contract
       state.contracts_tronweb['TSP_POOL'] = contract_tronweb
     },
-    saveTSTEEM_POOLContract: function (state, contract) {
+    saveTSTEEM_POOLContract: function (state,  {contract, contract_tronweb}) {
       state.contracts['TSTEEM_POOL'] = contract
+      state.contracts_tronweb['TSTEEM_POOL'] = contract_tronweb
     },
     
     // apys
