@@ -91,6 +91,17 @@ module.exports = {
       minusTspDeposit: 'Unstake',
       notEnoughFee: 'Insufficient fee',
     },
+    tsteem: {
+      tsteemMine: 'TSTEEM Stake',
+      yourTsteemAmount: 'TSTEEM Staked',
+      balanceOfTsteem: 'TSTEEM Balance',
+      tsteemMinlingFee: 'Fee',
+      totalDepositTsteem: 'Total Deposited',
+      confirmDeposit: 'Confirm',
+      addTsteemDeposit: 'Stake',
+      minusTsteemDeposit: 'Unstake',
+      notEnoughFee: 'Insufficient fee',
+    },
     tspLp: {
       tspLPBalance: 'S-TSP-TRX Balance',
       yourTSPLPAmount: 'S-TSP-TRX Staked',

@@ -305,9 +305,9 @@ export default {
           .send(TRON_CONTRACT_CALL_PARAMS);
         if (res && (await isTransactionSuccess(res))) {
           this.saveTsbdBalanceInt(
-            amountToInt(parseFloat(this.tsbdBalance) - parseFloat(amount))
+            amountToInt(parseFloat(this.tsbdBalance) - parseFloat(this.transValue))
           );
-          this.saveSbdBalance(parseFloat(this.sbdBalance) + parseFloat(amount));
+          this.saveSbdBalance(parseFloat(this.sbdBalance) + parseFloat(this.transValue));
         } else {
           if (res && (await isInsufficientEnerge(res))) {
             this.tipMessage = this.$t("error.insufficientEnerge");
