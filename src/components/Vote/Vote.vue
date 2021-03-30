@@ -231,6 +231,10 @@ export default {
 <style lang="scss" scoped>
 #vote {
   padding: 0px 40px 64px;
+  min-height: 680px;
+  background-image: url('../../static/images/back-ground.png');
+  background-position: center 340px;
+  background-repeat: no-repeat;
   h5 {
     text-align: left;
     margin-top: 12px;
