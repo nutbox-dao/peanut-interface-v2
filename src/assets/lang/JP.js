@@ -91,6 +91,17 @@ module.exports = {
         minusTspDeposit: 'TSP預金を減らす',
         notEnoughFee: '料金不足',
       },
+      tsteem: {
+        tsteemMine: 'TSTEEMマイニング',
+        yourTsteemAmount: '保存されたTSTEEMの数',
+        balanceOfTsteem: 'TSTEEM残高',
+        tsteemMinlingFee: 'TSTEEMマイニング料金',
+        totalDepositTsteem: '総預金',
+        confirmDeposit: '預金を確認',
+        addTsteemDeposit: 'TSTEEM預金を増やす',
+        minusTsteemDeposit: 'TSTEEM預金を減らす',
+        notEnoughFee: '料金不足',
+      },
       tspLp: {
         tspLPBalance: 'S-TSP-TRX残高',
         yourTSPLPAmount: '保存されたS-TSP-TRXの数',
