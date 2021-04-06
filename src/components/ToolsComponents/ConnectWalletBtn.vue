@@ -3,6 +3,7 @@
     <b-button
       class="login-btn"
       variant="primary"
+      :style="'width:'+width+'px;'"
       @click="unlock"
       :disabled="isConnecting"
       v-if="
@@ -37,6 +38,10 @@ export default {
       type: String,
       default: "STEEM",
     },
+    width: {
+      type: String,
+      default: "272"
+    }
   },
   computed: {
     ...mapState(["steemAccount", "tronAddress"]),

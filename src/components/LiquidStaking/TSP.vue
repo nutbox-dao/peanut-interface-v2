@@ -101,7 +101,7 @@
       <b-button
         variant="primary"
         class="confirm-btn"
-        v-if="isLogin"
+        v-if="isLogin && isConnected"
         @click="trans"
         :disabled="!canTransFlag"
       >
@@ -111,11 +111,19 @@
       <b-button
         variant="primary"
         class="connectSteem"
-        v-else
+        v-if="!isLogin"
         @click="showSteemLogin = true"
       >
         {{ $t("wallet.connectSteem") }}
       </b-button>
+        <ConnectWalletBtn
+          class="connectTron"
+          v-if="!isConnected"
+          @tronLogin="showTronLinkInfo"
+          width="442"
+          type="TRON"
+        />
+
     </div>
 
     <!--手续费-->
@@ -144,25 +152,33 @@
       v-if="showMessage"
       @hideMask="showMessage = false"
     />
+    <InstallTronLink
+      v-if="showInstallTronLink"
+      @hideMask="showInstallTronLink = false"
+    />
   </div>
 </template>
 
 <script>
 import TipMessage from "../ToolsComponents/TipMessage";
 import Login from "../Login";
+import InstallTronLink from "../ToolsComponents/InstallTronLink";
 import ConnectWalletBtn from "../ToolsComponents/ConnectWalletBtn";
+
 import { mapState, mapGetters, mapActions, mapMutations } from "vuex";
 import {
   STEEM_TO_TSP_FEE,
   STEEM_TO_TSP_FEE_RATIO,
   STEEM_TSP_ACCOUNT,
   TRON_CONTRACT_CALL_PARAMS,
+  TRON_LINK_ADDR_NOT_FOUND
 } from "../../config";
 import {
   isAddress,
   amountToInt,
   isTransactionSuccess,
   isInsufficientEnerge,
+  getTronLinkAddr
 } from "../../utils/chain/tron";
 import { getContract } from "../../utils/chain/contract";
 import { steemTransferVest } from "../../utils/chain/steem";
@@ -187,6 +203,7 @@ export default {
       showMessage: false,
       showSteemLogin: false,
       fromSteemToTron: true,
+      showInstallTronLink: false,
     };
   },
   computed: {
@@ -216,6 +233,9 @@ export default {
     isLogin() {
       return this.steemAccount && this.steemAccount.length > 0;
     },
+    isConnected() {
+      return this.tronAddress && this.tronAddress.length > 0;
+    },
   },
 
   methods: {
@@ -239,6 +259,22 @@ export default {
       } else {
         const res3 = parseFloat(this.transValue) <= parseFloat(this.tspBalance);
         this.canTransFlag = res1 && res && res3;
+      }
+    },
+
+    async showTronLinkInfo() {
+      const address = await getTronLinkAddr();
+      console.log(address);
+      if (address && address === TRON_LINK_ADDR_NOT_FOUND.noTronLink) {
+        this.showInstallTronLink = true;
+      } else if (address && address === TRON_LINK_ADDR_NOT_FOUND.walletLocked) {
+        this.tipTitle = this.$t("message.tips");
+        this.tipMessage = this.$t("error.unlockWallet");
+        this.tipType = "tip";
+        this.showMessage = true;
+      } else if (address) {
+        this.$store.dispatch("initializeTronAccount", address);
+        this.$router.go(0);
       }
     },
 

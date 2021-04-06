@@ -44,10 +44,7 @@
       </div>
 
       <div class="icon-box">
-        <span
-          @click="changeTransOrder"
-          class="exchange-icon"
-        />
+        <span @click="changeTransOrder" class="exchange-icon" />
       </div>
 
       <div class="round-box">
@@ -89,7 +86,7 @@
 
       <div class="confirm-box">
         <b-button
-          v-if="steemAccount && steemAccount.length > 0"
+          v-if="steemAccount && steemAccount.length > 0 && isConnected"
           class="confirm-btn"
           variant="primary"
           @click="trans"
@@ -103,9 +100,21 @@
           ></b-spinner>
           {{ $t("message.confirmconvert") }}
         </b-button>
-        <b-button variant="primary" v-else class="connectSteem" @click="showSteemLogin=true">
-          {{ $t('wallet.connectSteem') }}
+        <b-button
+          variant="primary"
+          v-if="!steemAccount || steemAccount.length === 0"
+          class="connectSteem"
+          @click="showSteemLogin = true"
+        >
+          {{ $t("wallet.connectSteem") }}
         </b-button>
+        <ConnectWalletBtn
+          class="connectTron"
+          v-if="!isConnected"
+          @tronLogin="showTronLinkInfo"
+          width="442"
+          type="TRON"
+        />
       </div>
 
       <!--手续费-->
@@ -121,24 +130,28 @@
         <p v-if="fromSteemToTron">
           {{ $t("message.convertrate") }}： 1 STEEM = 1 TSTEEM
         </p>
-        <p v-else>
-          {{ $t("message.convertrate") }}： 1 TSTEEM = 1 STEEM<br />
-        </p>
+        <p v-else>{{ $t("message.convertrate") }}： 1 TSTEEM = 1 STEEM<br /></p>
       </div>
     </div>
-    <Login v-if="showSteemLogin" @hideMask="showSteemLogin=false"/>
+    <Login v-if="showSteemLogin" @hideMask="showSteemLogin = false" />
     <TipMessage
       :showMessage="tipMessage"
       :title="tipTitle"
       v-if="showMessage"
       @hideMask="showMessage = false"
     />
+    <InstallTronLink
+      v-if="showInstallTronLink"
+      @hideMask="showInstallTronLink = false"
+    />
   </div>
 </template>
 
 <script>
 import TipMessage from "../ToolsComponents/TipMessage";
-import Login from '../Login'
+import Login from "../Login";
+import InstallTronLink from "../ToolsComponents/InstallTronLink";
+import ConnectWalletBtn from "../ToolsComponents/ConnectWalletBtn"
 
 import { mapState, mapGetters, mapActions, mapMutations } from "vuex";
 import {
@@ -146,12 +159,14 @@ import {
   TRANSFER_FEE_RATIO,
   STEEM_DEX_ACCOUNT,
   TRON_CONTRACT_CALL_PARAMS,
+  TRON_LINK_ADDR_NOT_FOUND
 } from "../../config";
 import {
   isAddress,
   amountToInt,
   isTransactionSuccess,
   isInsufficientEnerge,
+  getTronLinkAddr
 } from "../../utils/chain/tron";
 import { getContract } from "../../utils/chain/contract";
 import { steemWrap } from "../../utils/chain/steem";
@@ -161,7 +176,9 @@ export default {
   name: "TSteemSwap",
   components: {
     TipMessage,
-    Login
+    Login,
+    InstallTronLink,
+    ConnectWalletBtn,
   },
   data() {
     return {
@@ -175,6 +192,7 @@ export default {
       tipTitle: "",
       showMessage: false,
       showSteemLogin: false,
+      showInstallTronLink: false,
     };
   },
   computed: {
@@ -200,6 +218,9 @@ export default {
         return f > TSTEEM_TRANSFER_FEE ? f : TSTEEM_TRANSFER_FEE;
       }
       return 0;
+    },
+    isConnected() {
+      return this.tronAddress && this.tronAddress.length > 0;
     },
   },
   methods: {
@@ -227,6 +248,22 @@ export default {
       }
     },
 
+    async showTronLinkInfo() {
+      const address = await getTronLinkAddr();
+      console.log(address);
+      if (address && address === TRON_LINK_ADDR_NOT_FOUND.noTronLink) {
+        this.showInstallTronLink = true;
+      } else if (address && address === TRON_LINK_ADDR_NOT_FOUND.walletLocked) {
+        this.tipTitle = this.$t("message.tips");
+        this.tipMessage = this.$t("error.unlockWallet");
+        this.tipType = "tip";
+        this.showMessage = true;
+      } else if (address) {
+        this.$store.dispatch("initializeTronAccount", address);
+        this.$router.go(0);
+      }
+    },
+
     changeTransOrder() {
       this.fromSteemToTron = !this.fromSteemToTron;
       this.transValue = "";
@@ -234,7 +271,7 @@ export default {
     },
 
     fillMaxTrans() {
-      if (!this.steemAccount || this.steemAccount.length === 0){
+      if (!this.steemAccount || this.steemAccount.length === 0) {
         this.showSteemLogin = true;
         return;
       }
