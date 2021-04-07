@@ -155,7 +155,7 @@ export default {
       }
       const amount = parseFloat(this.pnutAmount);
       if (parseFloat(this.pnutBalance) < amount) {
-        this.showTip(this.$t("error.error", this.$t("error.insufficentPnut")));
+        this.showTip(this.$t("error.error"), this.$t("error.insufficentPnut"));
         return false;
       }
       if (amount < this.payRate || amount > this.payRate * 10) {
