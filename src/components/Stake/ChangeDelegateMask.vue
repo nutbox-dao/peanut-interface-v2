@@ -37,13 +37,17 @@
           <b-button class="cancel" variant="primary-line" @click="cancel">{{
             $t("message.cancel")
           }}</b-button>
-          <b-button class="confirm" variant="primary" @click="confirm" :disabled="isLoading">
-            <b-spinner small type="grow" v-show="isLoading"></b-spinner>{{
-            $t("message.confirm")
-          }}</b-button>
+          <b-button
+            class="confirm"
+            variant="primary"
+            @click="confirm"
+            :disabled="isLoading"
+          >
+            <b-spinner small type="grow" v-show="isLoading"></b-spinner
+            >{{ $t("message.confirm") }}</b-button
+          >
         </div>
-        <p @click="getSp" class="getToken">{{ $t("stake.getSp") }} 
-        </p>
+        <p @click="getSp" class="getToken">{{ $t("stake.getSp") }}</p>
         <p class="fee">{{ $t("message.delegatecharge") }}： {{ fee }} STEEM</p>
       </div>
       <TipMessage
@@ -152,7 +156,9 @@ export default {
         const nutPool = await getContract("PNUT_POOL");
         const res = await nutPool.delegators(this.tronAddress).call();
         const steemAcc = res.steemAccount;
-        const checkSteem = await nutPool.checkSteemAccount(this.steemAccount).call();
+        const checkSteem = await nutPool
+          .checkSteemAccount(this.steemAccount)
+          .call();
         if (
           this.steemAccount &&
           res.hasDeposited &&
@@ -220,7 +226,7 @@ export default {
       );
       return false;
     },
-    getSp(){
+    getSp() {
       window.open("https://steemit.com/", "_blank");
     },
     showTip(title, message) {

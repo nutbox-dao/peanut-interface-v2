@@ -91,6 +91,17 @@ module.exports = {
       minusTspDeposit: '스테이킹 취소',
       notEnoughFee: '수수료가 부족합니다.',
     },
+    tsteem: {
+      tsteemMine: 'TSTEEM 스테이킹',
+      yourTsteemAmount: '스테이킹 중인 TSTEEM',
+      balanceOfTsteem: 'TSTEEM 잔액',
+      tsteemMinlingFee: '수수료',
+      totalDepositTsteem: '총 예치된',
+      confirmDeposit: '확인',
+      addTsteemDeposit: '스테이킹 실행',
+      minusTsteemDeposit: '스테이킹 취소',
+      notEnoughFee: '수수료가 부족합니다.',
+    },
     tspLp: {
       tspLPBalance: 'S-TSP-TRX 잔액',
       yourTSPLPAmount: '스테이킹 중인 S-TSP-TRX',

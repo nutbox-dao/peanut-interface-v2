@@ -346,10 +346,10 @@ export default {
           .send(TRON_CONTRACT_CALL_PARAMS);
         if (res && (await isTransactionSuccess(res))) {
           this.saveTsteemBalanceInt(
-            amountToInt(parseFloat(this.tsteemBalance) - parseFloat(amount))
+            amountToInt(parseFloat(this.tsteemBalance) - parseFloat(this.transValue))
           );
           this.saveSteemBalance(
-            parseFloat(this.steemBalance) + parseFloat(amount)
+            parseFloat(this.steemBalance) + parseFloat(this.transValue)
           );
         } else {
           if (res && (await isInsufficientEnerge(res))) {

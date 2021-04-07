@@ -160,6 +160,7 @@ export default {
       logo: {},
       token: {},
       tspPendingPnut: 0,
+      tsteemPendingPnut: 0,
       tspLpPendingPnut: 0,
       pnutLpPendingPnut: null,
       tipMessage: "",
@@ -187,26 +188,34 @@ export default {
       "depositedPnutLpInt",
       "pnutBalanceInt",
       "tspBalanceInt",
+      "tsteemBalanceInt",
       "depositedTspInt",
+      "depositedTsteemInt",
       "depositedTspOk",
+      "depositedTsteemOk",
       "depositedTspLpOk",
       "depositedPnutLpOk",
       "approvedTsp",
+      "approvedTsteem",
       "approvedTspLp",
       "approvedPnutLp",
       "apy",
       "tspLpApy",
       "pnutLpApy",
+      "tsteemApy",
     ]),
     ...mapGetters([
       "pnutLpBalance",
       "depositedPnutLp",
       "pnutBalance",
       "tspBalance",
+      "tsteemBalance",
       "depositedTsp",
+      "depositedTsteem",
       "tspLpBalance",
       "depositedTspLp",
       "totalDepositedTsp",
+      "totalDepositedTsteem",
       "totalDepositedTspLp",
       "totalDepositedPnutLp",
     ]),
@@ -220,6 +229,8 @@ export default {
         return this.depositedTspLp;
       } else if (this.symbol === "PNUT_LP_POOL") {
         return this.depositedPnutLp;
+      } else if (this.symbol === "TSTEEM_POOL") {
+        return this.depositedTsteem;
       }
     },
     deposited() {
@@ -229,6 +240,8 @@ export default {
         return this.depositedTspLp > 0;
       } else if (this.symbol === "PNUT_LP_POOL") {
         return this.depositedPnutLp > 0;
+      } else if (this.symbol === "TSTEEM_POOL") {
+        return this.depositedTsteem > 0;
       }
     },
     totalDeposited() {
@@ -238,6 +251,8 @@ export default {
         return this.totalDepositedTspLp;
       } else if (this.symbol === "PNUT_LP_POOL") {
         return this.totalDepositedPnutLp;
+      } else if (this.symbol === "TSTEEM_POOL") {
+        return this.totalDepositedTsteem;
       }
     },
     pendingPnut() {
@@ -248,6 +263,8 @@ export default {
         pnut = this.tspLpPendingPnut;
       } else if (this.symbol === "PNUT_LP_POOL") {
         pnut = this.pnutLpPendingPnut;
+      } else if (this.symbol === "TSTEEM_POOL") {
+        pnut = this.tsteemPendingPnut;
       }
       if (parseFloat(pnut) === 0) {
         return null;
@@ -261,6 +278,8 @@ export default {
         return this.approvedTspLp;
       } else if (this.symbol === "PNUT_LP_POOL") {
         return this.approvedPnutLp;
+      } else if (this.symbol === "TSTEEM_POOL") {
+        return this.approvedTsteem;
       }
     },
 
@@ -271,6 +290,8 @@ export default {
         return this.$t("farm.tspLp.totalDepositTspLP");
       } else if (this.symbol === "PNUT_LP_POOL") {
         return this.$t("farm.pnutLp.totalDepositPnutLP");
+      } else if (this.symbol === "TSTEEM_POOL") {
+        return this.$t("farm.tsteem.totalDepositTsteem");
       }
     },
     showingApy() {
@@ -280,6 +301,8 @@ export default {
         return this.tspLpApy;
       } else if (this.symbol === "PNUT_LP_POOL") {
         return this.pnutLpApy;
+      } else if (this.symbol == "TSTEEM_POOL") {
+        return this.tsteemApy;
       }
     },
     showingDigit() {
@@ -296,6 +319,8 @@ export default {
         return this.depositedTspLpOk;
       } else if (this.symbol === "PNUT_LP_POOL") {
         return this.depositedPnutLpOk;
+      } else if (this.symbol === "TSTEEM_POOL") {
+        return this.depositedTsteemOk;
       }
     },
   },
@@ -303,15 +328,19 @@ export default {
     ...mapActions([
       "getPnut",
       "getTsp",
+      "getTsteem",
       "getDepositedTsp",
+      "getDepositedTsteem",
       "getTspLp",
       "getDepositedTspLp",
       "getPnutLp",
       "getDepositedPnutLp",
       "getTotalDepositedTsp",
+      "getTotalDepositedTsteem",
       "getTotalDepositedTspLp",
       "getTotalDepositedPnutLp",
       "getApprovedTSP",
+      "getApprovedTSTEEM",
       "getApprovedTSPLP",
       "getApprovedPNUTLP",
     ]),
@@ -320,8 +349,10 @@ export default {
       "saveDepositedPnutLpInt",
       "savePnutBalanceInt",
       "saveTspBalanceInt",
+      "saveTsteemBalanceInt",
       "saveDepositedTspInt",
       "saveApprovedTSP",
+      "saveApprovedTSTEEM",
       "saveApprovedTSPLP",
       "saveApprovedPNUTLP",
     ]),
@@ -415,18 +446,34 @@ export default {
           const pnut = intToAmount(s);
           this.tspLpPendingPnut = pnut;
         } else if (this.symbol === "PNUT_LP_POOL") {
-          if (!this.pnutLpPendingPnut || parseFloat(this.totalDeposited) === 0 || !this.depositedPnutLpOk) {
+          if (
+            !this.pnutLpPendingPnut ||
+            parseFloat(this.totalDeposited) === 0 ||
+            !this.depositedPnutLpOk
+          ) {
             const contract = await getContract(this.symbol);
             if (!contract) return;
             const s = await contract.getPendingPeanuts().call();
             const pnut = intToAmount(s);
             this.pnutLpPendingPnut = pnut;
           } else {
-            if (parseFloat(this.depositedBalance) === 0 || parseFloat(this.totalDeposited) === 0){
-              return
+            if (
+              parseFloat(this.depositedBalance) === 0 ||
+              parseFloat(this.totalDeposited) === 0
+            ) {
+              return;
             }
-            this.pnutLpPendingPnut = parseFloat(this.pnutLpPendingPnut) + parseFloat(this.depositedBalance) * 0.2 / parseFloat(this.totalDeposited)
+            this.pnutLpPendingPnut =
+              parseFloat(this.pnutLpPendingPnut) +
+              (parseFloat(this.depositedBalance) * 0.2) /
+                parseFloat(this.totalDeposited);
           }
+        } else if (this.symbol === "TSTEEM_POOL") {
+          const contract = await getContract(this.symbol);
+          if (!contract) return;
+          const s = await contract.getPendingPeanuts().call();
+          const pnut = intToAmount(s);
+          this.tsteemPendingPnut = pnut;
         }
       } catch (e) {
         //   console.log(234,e);
@@ -445,25 +492,30 @@ export default {
       TSP_POOL: require("../../static/images/tokens/tsp.png"),
       TSP_LP_POOL: require("../../static/images/tokens/tsp-lp.png"),
       PNUT_LP_POOL: require("../../static/images/tokens/pnut-lp.png"),
+      TSTEEM_POOL: require("../../static/images/tokens/tsteem.png"),
     };
     this.title = {
       TSP_POOL: "TSP STAKE",
       TSP_LP_POOL: "TSP-TRX LP",
       PNUT_LP_POOL: "PNUT-TRX LP",
+      TSTEEM_POOL: "TSTEEM STAKE",
     };
 
     (this.token = {
       TSP_POOL: "TSP",
+      TSTEEM_POOL: "TSTEEM",
       TSP_LP_POOL: "S-TSP-TRX",
       PNUT_LP_POOL: "S-PNUT-TRX",
     }),
       (this.depositedDesc = {
         TSP_POOL: this.$t("farm.tsp.yourTspAmount"),
+        TSTEEM_POOL: this.$t("farm.tsteem.yourTsteemAmount"),
         TSP_LP_POOL: this.$t("farm.tspLp.yourTSPLPAmount"),
         PNUT_LP_POOL: this.$t("farm.pnutLp.yourPNUTLPAmount"),
       });
     this.saveApproveMethod = {
       TSP_POOL: this.saveApprovedTSP,
+      TSTEEM_POOL: this.saveApprovedTSTEEM,
       TSP_LP_POOL: this.saveApprovedTSPLP,
       PNUT_LP_POOL: this.saveApprovedPNUTLP,
     };
@@ -474,6 +526,11 @@ export default {
         this.getDepositedTsp();
         this.getTotalDepositedTsp();
         this.getApprovedTSP();
+      } else if (this.symbol === "TSTEEM_POOL") {
+        this.getTsteem();
+        this.getDepositedTsteem();
+        this.getTotalDepositedTsteem();
+        this.getApprovedTSTEEM();
       } else if (this.symbol === "TSP_LP_POOL") {
         this.getTspLp();
         this.getDepositedTspLp();
