@@ -11,6 +11,7 @@ import TSP from '../components/LiquidStaking/TSP'
 import Nps from '../components/Nps/Nps'
 import Vote from '../components/Vote/Vote'
 import Admin from '../components/Admin/Admin'
+import Blog from '../components/Blog/Blog'
 
 Vue.use(VueRouter)
 
@@ -60,6 +61,10 @@ const routes = [
         component: TSP
       }
     ]
+  },
+  {
+    path: '/blog',
+    component: Blog,
   },
   {
     path: '/get-vote',
