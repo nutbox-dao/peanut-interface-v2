@@ -34,7 +34,11 @@
           <p id="upvote-icon" class="my-icon" />
           <span>{{ $t("vote.upvote") }}</span>
         </b-nav-item>
-        <b-nav-item href="https://blog.nutbox.io/" target="_blank">
+        <!-- <b-nav-item href="https://blog.nutbox.io/" target="_blank">
+          <p id="blog-icon" class="my-icon" />
+          <span>{{ $t("message.blog") }}</span>
+        </b-nav-item> -->
+         <b-nav-item to="/blog">
           <p id="blog-icon" class="my-icon" />
           <span>{{ $t("message.blog") }}</span>
         </b-nav-item>
