@@ -169,7 +169,8 @@ module.exports = {
       transferFail: "Error de Transferencia",
       notEnoughFee: 'Tarifa Insuficiente',
       insufficentPnut:"NUEZ Insuficiente",
-      hasVoted: "nutbox.mine ha votado tu publicación"
+      hasVoted: "nutbox.mine ha votado tu publicación",
+      pleaseRetry: "Por favor, inténtalo de nuevo."
     },
   }
   

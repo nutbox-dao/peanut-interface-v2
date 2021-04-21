@@ -168,6 +168,7 @@ module.exports = {
     transferFail: "Transfer Fail",
     notEnoughFee: 'Insufficient fee',
     insufficentPnut:"Insufficent PNUT",
-    hasVoted:"Your post has been voted by nutbox.mine"
+    hasVoted:"Your post has been voted by nutbox.mine",
+    pleaseRetry: "Please try again"
   },
 }

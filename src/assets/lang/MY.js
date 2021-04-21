@@ -168,7 +168,8 @@ module.exports = {
     transferFail:"Pemindahan Gagal",
     notEnoughFee: 'Fi Transaksi Tidak Cukup',
     insufficentPnut:"Baki PNUT Tidak Cukup",
-    hasVoted: "Posting anda telah di-Upvote oleh @nutbox.mine"
+    hasVoted: "Posting anda telah di-Upvote oleh @nutbox.mine",
+    pleaseRetry: "Please try again"
   }
 
 }
