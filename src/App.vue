@@ -1,8 +1,10 @@
 <template>
   <div id="app">
     <div class="left">
-      <img src="./static/images/logo.png" style="width:200px;height:80px" alt="nutbox" class="logo" />
+    <div class="logo-container">
+      <img src="./static/images/logo.png" style="width:180px;height:70px" alt="nutbox" class="logo" />
       <img src="./static/images/logo_small.png" style="width:42px;height:42px;margin-bottom:12px" alt="nutbox" class="logo_small" />
+    </div>
       <b-nav pills vertical align="center" class="menu">
         <b-nav-item to="/wallet">
           <p id="wallet-icon" class="my-icon" />
@@ -398,6 +400,13 @@ input::-webkit-input-placeholder {
     height: 22px;
     line-height: 22px;
   }
+}
+
+.logo-container{
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  margin-left: -12px;
 }
 
 .logo {
