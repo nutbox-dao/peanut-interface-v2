@@ -1,8 +1,8 @@
 <template>
   <div id="app">
     <div class="left">
-      <img src="./static/images/logo.svg" alt="nutbox" class="logo" />
-      <img src="./static/images/logo_small.svg" alt="nutbox" class="logo_small" />
+      <img src="./static/images/logo.png" style="width:200px;height:80px" alt="nutbox" class="logo" />
+      <img src="./static/images/logo_small.png" style="width:42px;height:42px;margin-bottom:12px" alt="nutbox" class="logo_small" />
       <b-nav pills vertical align="center" class="menu">
         <b-nav-item to="/wallet">
           <p id="wallet-icon" class="my-icon" />
