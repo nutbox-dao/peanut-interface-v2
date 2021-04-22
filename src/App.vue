@@ -646,6 +646,7 @@ min-width: 75px;
     display: block;
 }
 .left .bottom .links a {
+  margin-bottom: 6px;
     display: block;
 }
 .menu .nav-link{
