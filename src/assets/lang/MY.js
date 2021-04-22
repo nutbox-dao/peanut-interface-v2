@@ -91,6 +91,17 @@ module.exports = {
       minusTspDeposit: 'Kurangkan Deposit',
       notEnoughFee: 'Fi Transaksi Tidak Cukup',
     },
+    tsteem: {
+      tsteemMine: 'Melombong dengan TSTEEM',
+      yourTsteemAmount: 'Amaun Deposit TSTEEM Anda',
+      balanceOfTsteem: 'Baki TSTEEM',
+      tsteemMinlingFee: 'Fi Transaksi Perlombongan',
+      totalDepositTsteem: 'Jumlah Deposit',
+      confirmDeposit: 'Sahkan Pendepositan',
+      addTsteemDeposit: 'Tambahkan Deposit',
+      minusTsteemDeposit: 'Kurangkan Deposit',
+      notEnoughFee: 'Fi Transaksi Tidak Cukup',
+    },
     tspLp: {
       tspLPBalance: 'Baki S-TSP-TRX',
       yourTSPLPAmount: 'Amaun Deposit S-TSP-TRX Anda',
@@ -157,7 +168,8 @@ module.exports = {
     transferFail:"Pemindahan Gagal",
     notEnoughFee: 'Fi Transaksi Tidak Cukup',
     insufficentPnut:"Baki PNUT Tidak Cukup",
-    hasVoted: "Posting anda telah di-Upvote oleh @nutbox.mine"
+    hasVoted: "Posting anda telah di-Upvote oleh @nutbox.mine",
+    pleaseRetry: "Please try again"
   }
 
 }

@@ -59,17 +59,17 @@
             {{ $t("stake.creaseDelegation") }}
           </b-button>
         </div>
-          <ConnectWalletBtn
-            class="op-bottom"
-            v-if="!isLogin"
-            @steemLogin="showSteemLogin = true"
-          />
-          <ConnectWalletBtn
-            class="op-bottom"
-            v-if="!isConnectTron"
-            @tronLogin="showTronLinkInfo"
-            type="TRON"
-          />
+        <ConnectWalletBtn
+          class="op-bottom"
+          v-if="!isLogin"
+          @steemLogin="showSteemLogin = true"
+        />
+        <ConnectWalletBtn
+          class="op-bottom"
+          v-if="!isConnectTron"
+          @tronLogin="showTronLinkInfo"
+          type="TRON"
+        />
       </div>
       <!--apy-->
       <p class="fee apy">
@@ -118,7 +118,7 @@ import {
   intToAmount,
   isTransactionSuccess,
   isInsufficientEnerge,
-  getTronLinkAddr
+  getTronLinkAddr,
 } from "../../utils/chain/tron";
 import { mapState, mapGetters, mapActions, mapMutations } from "vuex";
 import {
@@ -233,8 +233,11 @@ export default {
       ) {
         this.getPendingPeanut();
       } else {
-        if (parseFloat(this.totalDelegatedSp) === 0 || parseFloat(this.delegatedSp) === 0){
-          return
+        if (
+          parseFloat(this.totalDelegatedSp) === 0 ||
+          parseFloat(this.delegatedSp) === 0
+        ) {
+          return;
         }
         this.pendingPnut =
           parseFloat(this.pendingPnut) +

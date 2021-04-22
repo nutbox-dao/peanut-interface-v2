@@ -161,6 +161,16 @@ export const getVestingShares = async (username) => {
   return staked - delegated
 }
 
+export const getDelegateFromSteem = async (account) => {
+  try {
+    const res = await steem.api.getVestingDelegationsAsync(account, STEEM_MINE_ACCOUNT, 1)
+    const vests = parseFloat(res[0].vesting_shares.split(' ')[0])
+    return await vestsToSteem(vests)
+  } catch (e) {
+    return -1
+  }
+}
+
 export const getKeychain = async () => {
   if (window.steem_keychain) {
     return window.steem_keychain

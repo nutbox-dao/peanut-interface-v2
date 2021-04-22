@@ -82,4 +82,5 @@ export const storeApy = async function () {
   store.commit('saveApy', parseFloat(apys.spApy).toFixed(1) + "%")
   store.commit('saveTspLpApy', parseFloat(apys.spApy).toFixed(1) + "% + " + tspLpExchengePoolApy.toFixed(1) + "%")
   store.commit('savePnutLpApy', parseFloat(apys.pnutLpApy).toFixed(1) + "% + " + pnutLpExchangePoolApy.toFixed(1) + "%")
+  store.commit('saveTsteemApy',parseFloat(apys.tsteemApy).toFixed(1) + "%")
 }

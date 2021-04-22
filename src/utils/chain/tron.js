@@ -1,12 +1,9 @@
-import axios from 'axios'
 import Tron from 'tronweb'
 import {
   TRON_NODE_API,
-  TRON_NODE_API_MAIN,
   TRON_LINK_ADDR_NOT_FOUND,
   TRON_PNUT_CONTRACT,
   TRONWEB_API_KEY,
-  PNUT_LP_TOKEN_ADDRESS,
   VUE_APP_KEY
 } from '../../config.js'
 import {

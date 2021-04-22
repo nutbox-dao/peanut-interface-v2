@@ -91,6 +91,17 @@ module.exports = {
       minusTspDeposit: '减少储蓄',
       notEnoughFee: '手续费不足',
     },
+    tsteem: {
+      tsteemMine: 'TSTEEM挖矿',
+      yourTsteemAmount: '储蓄的TSTEEM数量',
+      balanceOfTsteem: 'TSTEEM 余额',
+      tsteemMinlingFee: '挖矿手续费',
+      totalDepositTsteem: '储蓄总量',
+      confirmDeposit: '确认储蓄',
+      addTsteemDeposit: '增加储蓄',
+      minusTsteemDeposit: '减少储蓄',
+      notEnoughFee: '手续费不足',
+    },
     tspLp: {
       tspLPBalance: 'S-TSP-TRX 余额',
       yourTSPLPAmount: '储蓄的S-TSP-TRX',
@@ -157,7 +168,8 @@ module.exports = {
     transferFail:"转账失败",
     notEnoughFee: '手续费不足',
     insufficentPnut:"PNUT余额不足",
-    hasVoted: "Nutbox已经点赞了您的帖子。"
+    hasVoted: "Nutbox已经点赞了您的帖子。",
+    pleaseRetry: "请重试"
   }
 
 }

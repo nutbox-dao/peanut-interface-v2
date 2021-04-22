@@ -91,6 +91,17 @@ module.exports = {
         minusTspDeposit: 'TSP預金を減らす',
         notEnoughFee: '料金不足',
       },
+      tsteem: {
+        tsteemMine: 'TSTEEMマイニング',
+        yourTsteemAmount: '保存されたTSTEEMの数',
+        balanceOfTsteem: 'TSTEEM残高',
+        tsteemMinlingFee: 'TSTEEMマイニング料金',
+        totalDepositTsteem: '総預金',
+        confirmDeposit: '預金を確認',
+        addTsteemDeposit: 'TSTEEM預金を増やす',
+        minusTsteemDeposit: 'TSTEEM預金を減らす',
+        notEnoughFee: '料金不足',
+      },
       tspLp: {
         tspLPBalance: 'S-TSP-TRX残高',
         yourTSPLPAmount: '保存されたS-TSP-TRXの数',
@@ -157,7 +168,8 @@ module.exports = {
       transferFail:'転送に失敗しました',
       notEnoughFee: '料金不足',
       insufficentPnut:'PNUT残高不足',
-      hasVoted: 'あなたの投稿はnutbox.mineに投票されました'
+      hasVoted: 'あなたの投稿はnutbox.mineに投票されました',
+      pleaseRetry: "もう一度試してください"
     }
   
 }

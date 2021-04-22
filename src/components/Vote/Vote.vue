@@ -155,7 +155,7 @@ export default {
       }
       const amount = parseFloat(this.pnutAmount);
       if (parseFloat(this.pnutBalance) < amount) {
-        this.showTip(this.$t("error.error", this.$t("error.insufficentPnut")));
+        this.showTip(this.$t("error.error"), this.$t("error.insufficentPnut"));
         return false;
       }
       if (amount < this.payRate || amount > this.payRate * 10) {
@@ -231,6 +231,10 @@ export default {
 <style lang="scss" scoped>
 #vote {
   padding: 0px 40px 64px;
+  min-height: 680px;
+  background-image: url('../../static/images/back-ground.png');
+  background-position: center 340px;
+  background-repeat: no-repeat;
   h5 {
     text-align: left;
     margin-top: 12px;

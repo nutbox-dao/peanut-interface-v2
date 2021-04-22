@@ -24,6 +24,9 @@ export default {
 <style lang="less" scoped>
 .liquid-staking {
   padding: 0px 40px 64px;
+  background-image: url("../../static/images/back-ground.png");
+  background-position: center 380px;
+  background-repeat: no-repeat;
   .exchange-box {
     padding-top: 76px;
     justify-content: center;

@@ -37,13 +37,17 @@
           <b-button class="cancel" variant="primary-line" @click="cancel">{{
             $t("message.cancel")
           }}</b-button>
-          <b-button class="confirm" variant="primary" @click="confirm" :disabled="isLoading">
-            <b-spinner small type="grow" v-show="isLoading"></b-spinner>{{
-            $t("message.confirm")
-          }}</b-button>
+          <b-button
+            class="confirm"
+            variant="primary"
+            @click="confirm"
+            :disabled="isLoading"
+          >
+            <b-spinner small type="grow" v-show="isLoading"></b-spinner
+            >{{ $t("message.confirm") }}</b-button
+          >
         </div>
-        <p @click="getSp" class="getToken">{{ $t("stake.getSp") }} 
-        </p>
+        <p @click="getSp" class="getToken">{{ $t("stake.getSp") }}</p>
         <p class="fee">{{ $t("message.delegatecharge") }}： {{ fee }} STEEM</p>
       </div>
       <TipMessage
@@ -63,8 +67,9 @@ import { formatBalance } from "../../utils/helper";
 
 import { amountToInt } from "../../utils/chain/tron";
 import { mapState, mapGetters, mapActions, mapMutations } from "vuex";
-import { steemDelegation } from "../../utils/chain/steem";
+import { steemDelegation, getDelegateFromSteem } from "../../utils/chain/steem";
 import { STEEM_STAKE_FEE, STEEM_MINE_ACCOUNT } from "../../config";
+import { sleep } from "../../utils/helper";
 
 export default {
   name: "ChangeDelegateMask",
@@ -140,10 +145,20 @@ export default {
     },
     async confirm() {
       let sp = 0;
+      this.isLoading = true;
+      const haveDelegated = await getDelegateFromSteem(this.steemAccount)
+      if (haveDelegated < 0){
+         this.showTip(
+            this.$t("error.delegateerror"),
+            this.$t("error.pleaseRetry")
+          );
+          this.isLoading = false
+          return
+      }
       if (this.operate === "add") {
-        sp = parseFloat(this.delegatedSp) + parseFloat(this.delegatevalue);
+        sp = parseFloat(haveDelegated) + parseFloat(this.delegatevalue);
       } else {
-        sp = parseFloat(this.delegatedSp) - parseFloat(this.delegatevalue);
+        sp = parseFloat(haveDelegated) - parseFloat(this.delegatevalue);
       }
       this.delegateSp(sp);
     },
@@ -152,7 +167,9 @@ export default {
         const nutPool = await getContract("PNUT_POOL");
         const res = await nutPool.delegators(this.tronAddress).call();
         const steemAcc = res.steemAccount;
-        const checkSteem = await nutPool.checkSteemAccount(this.steemAccount).call();
+        const checkSteem = await nutPool
+          .checkSteemAccount(this.steemAccount)
+          .call();
         if (
           this.steemAccount &&
           res.hasDeposited &&
@@ -175,7 +192,6 @@ export default {
     async delegateSp(sp) {
       try {
         sp = parseFloat(sp);
-        this.isLoading = true;
         if (
           (sp !== 0 && !this.checkInputValue()) ||
           !(await this.checkAddress()) ||
@@ -192,12 +208,11 @@ export default {
           this.tronAddress
         );
         if (res.success === true) {
-          this.saveDelegatedVestsInt(amountToInt(parseFloat(amount)));
-          await Promise.all([
-            this.getVests(),
-            this.getSteem(),
-            this.getTotalDelegatedSP(),
-          ]);
+          this.getVests(),
+          this.getSteem(),
+          await sleep();
+          this.getDelegatedSp();
+          this.getTotalDelegatedSP();
           this.$emit("hideMask");
         } else {
           this.showTip(this.$t("error.delegateerror"), res.message);
@@ -220,7 +235,7 @@ export default {
       );
       return false;
     },
-    getSp(){
+    getSp() {
       window.open("https://steemit.com/", "_blank");
     },
     showTip(title, message) {

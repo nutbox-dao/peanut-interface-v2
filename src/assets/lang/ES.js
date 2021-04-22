@@ -92,6 +92,17 @@ module.exports = {
         minusTspDeposit: 'Desapuntar',
         notEnoughFee: 'Tarifa Insuficiente',
       },
+      tsteem: {
+        tsteemMine: 'TSTEEM Estaca',
+        yourTsteemAmount: 'TSTEEM Apostado',
+        balanceOfTsteem: 'Balance de TSTEEM',
+        tsteemMinlingFee: 'Tarifa',
+        totalDepositTsteem: 'Total Depositado',
+        confirmDeposit: 'Confirmar',
+        addTsteemDeposit: 'Apostar',
+        minusTsteemDeposit: 'Desapuntar',
+        notEnoughFee: 'Tarifa Insuficiente',
+      },
       tspLp: {
         tspLPBalance: 'S-TSP-TRX Balance',
         yourTSPLPAmount: 'S-TSP-TRX Apostado',
@@ -158,7 +169,8 @@ module.exports = {
       transferFail: "Error de Transferencia",
       notEnoughFee: 'Tarifa Insuficiente',
       insufficentPnut:"NUEZ Insuficiente",
-      hasVoted: "nutbox.mine ha votado tu publicación"
+      hasVoted: "nutbox.mine ha votado tu publicación",
+      pleaseRetry: "Por favor, inténtalo de nuevo."
     },
   }
   
