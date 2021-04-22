@@ -2,18 +2,19 @@
   <div id="app">
     <div class="left">
       <img src="./static/images/logo.svg" alt="nutbox" class="logo" />
+      <img src="./static/images/logo_small.svg" alt="nutbox" class="logo_small" />
       <b-nav pills vertical align="center" class="menu">
         <b-nav-item to="/wallet">
           <p id="wallet-icon" class="my-icon" />
           <div style="padding: 0">
-            <p>
+            <p class="memu-wallet">
               {{
                 tronAddrFromat && tronAddrFromat.length > 0
                   ? tronAddrFromat
                   : $t("wallet.wallet")
               }}
             </p>
-            <p style="font-size: 12px; font-weight: 400; color: var(--disable)">
+            <p style="font-size: 12px; font-weight: 400; color: var(--disable)"  class="memu-wallet">
               {{ pnutBalance | amountForm }}
             </p>
           </div>
@@ -607,5 +608,61 @@ input::-webkit-input-placeholder {
 }
 #telegram-icon:hover {
   background-image: url("./static/images/telegram-hover.svg");
+}
+.logo{
+  display: block;
+}
+  .logo_small{
+    display: none;
+  }
+@media only screen and (max-width: 991px){
+  .logo_small{
+    display: block;
+  }
+   .logo{
+    display: none;
+  }
+.nav-item span  {
+   display: none;
+}
+.left{
+width: 75px;
+min-width: 75px;
+}
+.nav-link{
+  display: inherit;
+
+}
+.left .nav-item{
+  height: 40px;
+}
+.left .nav-link {
+     padding-left: 0px;
+}
+.left .bottom {
+  width: 100%;
+}
+.left .bottom .links {
+    display: block;
+}
+.left .bottom .links a {
+    display: block;
+}
+.menu .nav-link{
+  flex-wrap:inherit;
+}
+.memu-wallet{
+  display: none;
+}
+.left .bottom .settings{
+  background: transparent;
+}
+.left .bottom .settings .btn-secondary{
+   color: transparent !important;
+}
+.left .bottom .settings{
+  padding: 0;
+  display: block;
+}
 }
 </style>
