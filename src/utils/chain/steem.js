@@ -164,6 +164,9 @@ export const getVestingShares = async (username) => {
 export const getDelegateFromSteem = async (account) => {
   try {
     const res = await steem.api.getVestingDelegationsAsync(account, STEEM_MINE_ACCOUNT, 1)
+    if (res[0].delegatee !== STEEM_MINE_ACCOUNT){
+      return 0;
+    }
     const vests = parseFloat(res[0].vesting_shares.split(' ')[0])
     return await vestsToSteem(vests)
   } catch (e) {
