@@ -302,7 +302,7 @@ export default {
 
     async steemToTsteem() {
       try {
-        const amount = parseFloat(this.transValue).toFixed(3);
+        const amount = parseFloat(this.transValue);
         const res = await steemWrap(
           this.steemAccount,
           STEEM_DEX_ACCOUNT,
@@ -339,7 +339,7 @@ export default {
     async tsteemToSteem() {
       try {
         const contract = await getContract("TSTEEM");
-        let amount = parseFloat(this.transValue).toFixed(3);
+        let amount = parseFloat(this.transValue);
         amount = amountToInt(amount);
         const res = await contract
           .tsteemToSteem(this.steemAccount, amount)
