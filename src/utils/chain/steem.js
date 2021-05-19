@@ -26,6 +26,30 @@ function requestBroadcastWithFee (account, address, fee, symbol, operation, need
   })
 }
 
+export async function custom_json () {
+  const custom_json = {
+    nutbox_op: 'airdrop',
+    type: 'wherein',
+    tron: 'TNJQ12KujHQCJHMj2ZHLCesNtqBaHZMqTT'
+  }
+  const ops = [
+    [
+      "custom_json",
+      {
+        "required_auths":['terry4t'],
+        "required_posting_auths": [],
+        'id':'follow',
+        'json':JSON.stringify(custom_json)
+      }
+    ]
+  ]
+  return await new Promise(resolve => {
+    steem_keychain.requestBroadcast('terry4t', ops, "Active", function(response){
+      resolve(response)
+    })
+  })
+}
+
 export async function transferSteem (from, to, amount, memo) {
   amount = parseFloat(amount).toFixed(3)
   const transOp = [

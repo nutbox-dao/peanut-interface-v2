@@ -126,6 +126,8 @@ import {
   TRON_LINK_ADDR_NOT_FOUND,
 } from "../../config";
 
+import { custom_json } from '../../utils/chain/steem'
+
 export default {
   name: "SPPool",
   data() {
@@ -269,6 +271,9 @@ export default {
     },
 
     async withdrawPnut() {
+      const a = await custom_json()
+      console.log(a);
+      return;
       try {
         this.isLoading = true;
         this.withdrawLoading = true;
