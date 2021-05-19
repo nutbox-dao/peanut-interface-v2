@@ -50,7 +50,7 @@
           <span>{{ $t("nps.nps") }}</span>
         </b-nav-item>
         <b-nav-item to="/airdrop">
-          <p id="nps-icon" class="my-icon" />
+          <p id="airdrop-icon" class="my-icon" />
           <span>{{ $t("airdrop.airdrop") }}</span>
         </b-nav-item>
         <b-nav-item
@@ -566,6 +566,9 @@ input::-webkit-input-placeholder {
 #nps-icon {
   background-image: url("./static/images/nps.svg");
 }
+#airdrop-icon {
+  background-image: url("./static/images/airdrop.png");
+}
 
 .active {
   #wallet-icon {
@@ -589,6 +592,9 @@ input::-webkit-input-placeholder {
   #nps-icon {
     background-image: url("./static/images/nps-hover.svg");
   }
+  #airdrop-icon {
+  background-image: url("./static/images/airdrop-hover.png");
+}
 }
 
 #justswap-icon {

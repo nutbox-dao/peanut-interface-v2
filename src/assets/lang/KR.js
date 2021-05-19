@@ -15,6 +15,7 @@ module.exports = {
     apy: 'APY',
     pnutprofits: '채굴된 PNUT',
     withdraw: '수확',
+    withdrawn:'클레임 완료',
     balance: '잔액',
     approveContract: "컨트렉 승인",
     max: "최대",
@@ -141,7 +142,10 @@ module.exports = {
     rolling: '투표 중'
   },
   airdrop: {
-    airdrop: '공중 투하 하 다.'
+    airdrop: '에어드랍',
+    comingSoon:"가 에어드랍 예정",
+    whereinDes: 'WhereIN&CNSTM 토큰 홀더를 위한 에어드랍'
+
   },
   error: {
     error: '오류가 발생하였습니다.',

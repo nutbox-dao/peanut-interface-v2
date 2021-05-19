@@ -15,6 +15,7 @@ module.exports = {
     apy: 'APY',
     pnutprofits: 'Tu NUEZ ganado',
     withdraw: 'Retirar',
+    withdrawn: "Retirado",
     balance: 'Balance',
     approveContract: "Aprobar Contrato",
     max: "Max",
@@ -140,6 +141,11 @@ module.exports = {
     pending: 'Pendiente',
     unpass: 'Rechazada',
     rolling: 'Votación en curso'
+  },
+  airdrop: {
+    airdrop: 'Airdrop',
+    comingSoon:"Muy Pronto",
+    whereinDes: 'Airdrop de WehreIN y CNSTM para los poseedores de los token'
   },
   error: {
     error: 'Error!',
