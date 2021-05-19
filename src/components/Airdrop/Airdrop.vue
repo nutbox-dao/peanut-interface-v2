@@ -8,7 +8,7 @@
         <Card>
           <div class="title-box">
             <span class="title">
-              <p class="title">Wherein {{ $t("airdrop.airdrop") }}</p>
+              <p class="title">WhereIN {{ $t("airdrop.airdrop") }}</p>
             </span>
           </div>
 
