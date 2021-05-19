@@ -30,7 +30,7 @@
               <b-button
                 variant="primary"
                 @click="harvest"
-                :disabled="whereinDrawn || whereinAmount === 0 || !isLogin || !isConnectTron"
+                :disabled="whereinDrawn || whereinAmount === 0 || !isLogin || !isConnectTron || isLoading"
               >
                 <b-spinner small type="grow" v-show="isLoading"></b-spinner>
                 {{
@@ -181,7 +181,7 @@ export default {
           this.tronAddress
         );
         if (res) {
-          await sleep(5);
+          await sleep(10);
           this.getPnut();
           const res = await getAirdropInfo({
             author: this.steemAccount,
