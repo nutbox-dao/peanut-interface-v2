@@ -12,6 +12,7 @@ import Nps from '../components/Nps/Nps'
 import Vote from '../components/Vote/Vote'
 import Admin from '../components/Admin/Admin'
 import Blog from '../components/Blog/Blog'
+import Airdrop from '../components/Airdrop/Airdrop'
 
 Vue.use(VueRouter)
 
@@ -73,6 +74,10 @@ const routes = [
   {
     path: '/nps',
     component: Nps
+  },
+  {
+    path: '/airdrop',
+    component: Airdrop
   },
   {
     path:'/admin',

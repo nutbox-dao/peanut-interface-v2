@@ -15,6 +15,7 @@ module.exports = {
     apy: '年化收益率',
     pnutprofits: 'PNUT收益',
     withdraw: '收获',
+    withdrawn:"已收获",
     balance: '余额',
     approveContract:"授权合约",
     max:'最大',
@@ -132,6 +133,11 @@ module.exports = {
     pnutPlaceholder:"请填写支付金额",
     transfer:"转账",
     voteRate:"PNUT - 10% 点赞",
+  },
+  airdrop:{
+    airdrop: '空投',
+    comingSoon:"敬请期待",
+    whereinDes:"对WhereIN & CNSTM令牌持有者空投"
   },
   nps: {
     nps: '提案改善',

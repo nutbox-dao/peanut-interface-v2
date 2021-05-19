@@ -15,6 +15,7 @@ module.exports = {
       apy: '年間収益率',
       pnutprofits: 'PNUTの収益',
       withdraw: '引き出す',
+      withdrawn: '受け取りました',
       balance: '残高',
       approveContract:'契約の承認',
       max: '最大',
@@ -132,6 +133,11 @@ module.exports = {
       pnutPlaceholder:'お支払い金額をご記入ください',
       transfer:'転送',
       voteRate:'PNUT - 10%投票',
+    },
+    airdrop:{
+      airdrop: 'エアドロップ',
+      comingSoon:"まもなく",
+      whereinDes:"WhereIN & CNSTMのトークンホルダーへのエアドロップ"
     },
     nps: {
       nps: '改善提案',

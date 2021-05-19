@@ -26,25 +26,25 @@ function requestBroadcastWithFee (account, address, fee, symbol, operation, need
   })
 }
 
-export async function custom_json () {
+export async function custom_json (steem, tron) {
   const custom_json = {
     nutbox_op: 'airdrop',
     type: 'wherein',
-    tron: 'TNJQ12KujHQCJHMj2ZHLCesNtqBaHZMqTT'
+    tron
   }
   const ops = [
     [
       "custom_json",
       {
-        "required_auths":['terry4t'],
+        "required_auths":[steem],
         "required_posting_auths": [],
-        'id':'follow',
+        'id':'nutbox',
         'json':JSON.stringify(custom_json)
       }
     ]
   ]
   return await new Promise(resolve => {
-    steem_keychain.requestBroadcast('terry4t', ops, "Active", function(response){
+    steem_keychain.requestBroadcast(steem, ops, "Active", function(response){
       resolve(response)
     })
   })

@@ -49,6 +49,10 @@
           <p id="nps-icon" class="my-icon" />
           <span>{{ $t("nps.nps") }}</span>
         </b-nav-item>
+        <b-nav-item to="/airdrop">
+          <p id="nps-icon" class="my-icon" />
+          <span>{{ $t("airdrop.airdrop") }}</span>
+        </b-nav-item>
         <b-nav-item
           to="/admin"
           v-if="$store.state.steemAccount === nutboxMineAccount"

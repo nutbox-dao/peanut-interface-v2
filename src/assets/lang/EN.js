@@ -15,6 +15,7 @@ module.exports = {
     apy: 'APY',
     pnutprofits: 'Your Earned PNUT',
     withdraw: 'Harvest',
+    withdrawn: 'Harvested',
     balance: 'Balance',
     approveContract:"Approve Contract",
     max:"Max",
@@ -139,6 +140,11 @@ module.exports = {
     pending: 'Pending',
     unpass: 'Rejected',
     rolling: 'Voting'
+  },
+  airdrop: {
+    airdrop: 'Airdrop',
+    comingSoon:"Coming Soon",
+    whereinDes: 'Airdrop to WhereIN & CNSTM token holder'
   },
   error: {
     error: 'Error!',

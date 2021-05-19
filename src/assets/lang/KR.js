@@ -140,6 +140,9 @@ module.exports = {
     unpass: '거절',
     rolling: '투표 중'
   },
+  airdrop: {
+    airdrop: '공중 투하 하 다.'
+  },
   error: {
     error: '오류가 발생하였습니다.',
     depositFail: '입금이 실패하였습니다.',
