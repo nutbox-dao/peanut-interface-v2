@@ -159,6 +159,7 @@ export default {
         sp = parseFloat(haveDelegated) + parseFloat(this.delegatevalue);
       } else {
         sp = parseFloat(haveDelegated) - parseFloat(this.delegatevalue);
+        sp = sp < 0 ? 0 : sp; 
       }
       this.delegateSp(sp);
     },
