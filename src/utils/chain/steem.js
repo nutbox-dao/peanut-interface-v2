@@ -90,6 +90,7 @@ export async function delegate (
 
 export async function steemWrap (from, to, amount, memo, currency, address, fee) {
   fee = parseFloat(fee).toFixed(3)
+  amount = parseFloat(amount).toFixed(3)
   return await requestBroadcastWithFee(from, address, fee, currency, [
     'transfer',
     {
