@@ -1,66 +1,68 @@
 <template>
   <div id="app">
     <div class="left">
-    <div class="logo-container">
-      <img src="./static/images/logo.png" style="width:180px;height:70px" alt="nutbox" class="logo" />
-      <img src="./static/images/logo_small.png" style="width:42px;height:42px;margin-bottom:12px" alt="nutbox" class="logo_small" />
-    </div>
-      <b-nav pills vertical align="center" class="menu">
-        <b-nav-item to="/wallet">
-          <p id="wallet-icon" class="my-icon" />
-          <div style="padding: 0">
-            <p class="memu-wallet">
-              {{
-                tronAddrFromat && tronAddrFromat.length > 0
-                  ? tronAddrFromat
-                  : $t("wallet.wallet")
-              }}
-            </p>
-            <p style="font-size: 12px; font-weight: 400; color: var(--disable)"  class="memu-wallet">
-              {{ pnutBalance | amountForm }}
-            </p>
-          </div>
-        </b-nav-item>
-        <b-nav-item to="/stake" router-tag="div">
-          <p id="stake-icon" class="my-icon" />
-          <span>{{ $t("stake.stake") }}</span>
-        </b-nav-item>
-        <b-nav-item to="/farm">
-          <p id="farming-icon" class="my-icon" />
-          <span>{{ $t("farm.farm") }}</span>
-        </b-nav-item>
-        <b-nav-item to="/liquid-staking">
-          <p id="liquid-staking-icon" class="my-icon" />
-          <span>{{ $t("liquidStaking.liquidStaking") }}</span>
-        </b-nav-item>
-        <b-nav-item to="/get-vote">
-          <p id="upvote-icon" class="my-icon" />
-          <span>{{ $t("vote.upvote") }}</span>
-        </b-nav-item>
-        <!-- <b-nav-item href="https://blog.nutbox.io/" target="_blank">
-          <p id="blog-icon" class="my-icon" />
-          <span>{{ $t("message.blog") }}</span>
-        </b-nav-item> -->
-         <b-nav-item to="/blog">
-          <p id="blog-icon" class="my-icon" />
-          <span>{{ $t("message.blog") }}</span>
-        </b-nav-item>
-        <b-nav-item to="/nps">
-          <p id="nps-icon" class="my-icon" />
-          <span>{{ $t("nps.nps") }}</span>
-        </b-nav-item>
-        <b-nav-item to="/airdrop">
-          <p id="airdrop-icon" class="my-icon" />
-          <span>{{ $t("airdrop.airdrop") }}</span>
-        </b-nav-item>
-        <b-nav-item
-          to="/admin"
-          v-if="$store.state.steemAccount === nutboxMineAccount"
-        >
-          <p id="nps-icon" class="my-icon" />
-          <span>{{ $t("message.admin") }}</span>
-        </b-nav-item>
-      </b-nav>
+      <div class="top">
+        <div class="logo-container">
+          <img src="./static/images/logo.png" style="width:180px;height:70px" alt="nutbox" class="logo" />
+          <img src="./static/images/logo_small.png" style="width:42px;height:42px;margin-bottom:12px" alt="nutbox" class="logo_small" />
+        </div>
+        <b-nav pills vertical align="center" class="menu">
+          <b-nav-item to="/wallet">
+            <p id="wallet-icon" class="my-icon" />
+            <div style="padding: 0">
+              <p class="memu-wallet">
+                {{
+                  tronAddrFromat && tronAddrFromat.length > 0
+                    ? tronAddrFromat
+                    : $t("wallet.wallet")
+                }}
+              </p>
+              <p style="font-size: 12px; font-weight: 400; color: var(--disable)"  class="memu-wallet">
+                {{ pnutBalance | amountForm }}
+              </p>
+            </div>
+          </b-nav-item>
+          <b-nav-item to="/stake" router-tag="div">
+            <p id="stake-icon" class="my-icon" />
+            <span>{{ $t("stake.stake") }}</span>
+          </b-nav-item>
+          <b-nav-item to="/farm">
+            <p id="farming-icon" class="my-icon" />
+            <span>{{ $t("farm.farm") }}</span>
+          </b-nav-item>
+          <b-nav-item to="/liquid-staking">
+            <p id="liquid-staking-icon" class="my-icon" />
+            <span>{{ $t("liquidStaking.liquidStaking") }}</span>
+          </b-nav-item>
+          <b-nav-item to="/get-vote">
+            <p id="upvote-icon" class="my-icon" />
+            <span>{{ $t("vote.upvote") }}</span>
+          </b-nav-item>
+          <!-- <b-nav-item href="https://blog.nutbox.io/" target="_blank">
+            <p id="blog-icon" class="my-icon" />
+            <span>{{ $t("message.blog") }}</span>
+          </b-nav-item> -->
+          <b-nav-item to="/blog">
+            <p id="blog-icon" class="my-icon" />
+            <span>{{ $t("message.blog") }}</span>
+          </b-nav-item>
+          <b-nav-item to="/nps">
+            <p id="nps-icon" class="my-icon" />
+            <span>{{ $t("nps.nps") }}</span>
+          </b-nav-item>
+          <b-nav-item to="/airdrop">
+            <p id="airdrop-icon" class="my-icon" />
+            <span>{{ $t("airdrop.airdrop") }}</span>
+          </b-nav-item>
+          <b-nav-item
+            to="/admin"
+            v-if="$store.state.steemAccount === nutboxMineAccount"
+          >
+            <p id="nps-icon" class="my-icon" />
+            <span>{{ $t("message.admin") }}</span>
+          </b-nav-item>
+        </b-nav>
+      </div>
       <div class="bottom">
         <div class="links">
           <a
@@ -335,7 +337,7 @@ body {
   text-align: center;
   color: var(--primary-text);
   height: 100%;
-  min-height: 700px;
+  //min-height: 700px;
   display: flex;
   align-items: left;
   background-color: var(--background);
@@ -425,6 +427,13 @@ input::-webkit-input-placeholder {
   position: relative;
   box-shadow: 4px 0px 48px 0px rgba(0, 0, 0, 0.06);
   border-radius: 0px 4vh 4vh 0px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  ::-webkit-scrollbar{display:none;}
+
 }
 .right {
   flex: 1;
@@ -483,7 +492,7 @@ input::-webkit-input-placeholder {
 }
 
 .left .bottom {
-  position: absolute;
+  //position: absolute;
   padding: 0 20px;
   margin-left: -12px;
   width: 240px;
