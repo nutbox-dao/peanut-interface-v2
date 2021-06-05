@@ -307,7 +307,7 @@ export default {
           this.steemAccount,
           STEEM_DEX_ACCOUNT,
           amount,
-          this.tronAddress + " +" + amount + " TSTEEM",
+          this.tronAddress + " +" + amount.toFixed(3) + " TSTEEM",
           "STEEM",
           this.tronAddress,
           this.transFee
