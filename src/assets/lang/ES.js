@@ -75,8 +75,8 @@ module.exports = {
     stake: 'Minería por Stake y Delegación',
     creaseDelegation: "Delegado",
     increaseDelegation: "NoDelegado",
-    getSp: "Optener SP",
-    get: "Optener",
+    getSp: "Obtener SP",
+    get: "Obtener",
   },
   farm: {
     farm: 'Farming',
