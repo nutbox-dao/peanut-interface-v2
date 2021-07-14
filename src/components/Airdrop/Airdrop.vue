@@ -29,7 +29,7 @@
               </span>
               <b-button
                 variant="primary"
-                @click="harvest"
+                @click="harvestWherein"
                 :disabled="whereinDrawn || whereinAmount === 0 || !isLogin || !isConnectTron || isLoading"
               >
                 <b-spinner small type="grow" v-show="isLoading"></b-spinner>
@@ -173,12 +173,13 @@ export default {
   methods: {
     ...mapActions(["getPnut"]),
 
-    async harvest() {
+    async harvestWherein() {
       this.isLoading = true;
       try {
         const res = await custom_json(
           this.steemAccount,
-          this.tronAddress
+          this.tronAddress,
+          'wherein'
         );
         if (res) {
           await sleep(10);
