@@ -133,6 +133,12 @@ module.exports = {
     transfer:"Pemindahan",
     voteRate:"PNUT - 10% Upvote",
   },
+  airdrop:{
+    airdrop: 'Airdrop',
+    comingSoon:"Akan datang",
+    whereinDes:"对WhereIN & CNSTM令牌持有者空投",
+    nutboxDes:"Airdrop PNUT Abad"
+  },
   nps: {
     nps: 'Penambahbaikan Cadangan',
     pass: 'Lulus',

@@ -137,7 +137,8 @@ module.exports = {
     airdrop:{
       airdrop: 'エアドロップ',
       comingSoon:"まもなく",
-      whereinDes:"WhereIN & CNSTMのトークンホルダーへのエアドロップ"
+      whereinDes:"WhereIN & CNSTMのトークンホルダーへのエアドロップ",
+      nutboxDes: 'PNUTセンチュリーエアドロップ'
     },
     nps: {
       nps: '改善提案',

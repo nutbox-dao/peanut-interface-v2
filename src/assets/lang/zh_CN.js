@@ -137,7 +137,8 @@ module.exports = {
   airdrop:{
     airdrop: '空投',
     comingSoon:"敬请期待",
-    whereinDes:"对WhereIN & CNSTM令牌持有者空投"
+    whereinDes:"对WhereIN & CNSTM令牌持有者空投",
+    nutboxDes:"PNUT世纪大空投"
   },
   nps: {
     nps: '提案改善',
