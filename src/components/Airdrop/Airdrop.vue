@@ -168,7 +168,7 @@ export default {
         if (pending.length > 0){
           return pending[0]
         }else{
-          return drawn[0]
+          return drawn[drawn.length - 1]
         }
       }
       return 0;
@@ -181,7 +181,7 @@ export default {
         if (pending.length > 0){
           return pending[0]
         }else{
-          return drawn[0]
+          return drawn[drawn.length - 1]
         }
       }
       return 0;
