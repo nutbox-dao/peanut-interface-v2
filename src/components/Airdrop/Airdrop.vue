@@ -163,14 +163,26 @@ export default {
     wherein() {
       const w = this.airdropList.filter((a) => a.type === "wherein");
       if (w.length > 0) {
-        return w[0];
+        const drawn = w.filter(f => f.state === 'drawn')
+        const pending = w.filter(f => f.state === 'pending')
+        if (pending.length > 0){
+          return pending[0]
+        }else{
+          return drawn[0]
+        }
       }
       return 0;
     },
     nutbox() {
       const w = this.airdropList.filter((a) => a.type === "nutbox");
       if (w.length > 0) {
-        return w[0];
+        const drawn = w.filter(f => f.state === 'drawn')
+        const pending = w.filter(f => f.state === 'pending')
+        if (pending.length > 0){
+          return pending[0]
+        }else{
+          return drawn[0]
+        }
       }
       return 0;
     },
@@ -217,6 +229,7 @@ export default {
         const res = await custom_json(
           this.steemAccount,
           this.tronAddress,
+          this.whereinAmount,
           'wherein'
         );
         if (res) {
@@ -241,6 +254,7 @@ export default {
         const res = await custom_json(
           this.steemAccount,
           this.tronAddress,
+          this.nutboxAmount,
           'nutbox'
         );
         if (res) {
