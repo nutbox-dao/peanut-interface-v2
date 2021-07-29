@@ -30,9 +30,9 @@
               <b-button
                 variant="primary"
                 @click="harvestWherein"
-                :disabled="whereinDrawn || whereinAmount === 0 || !isLogin || !isConnectTron || isLoading"
+                :disabled="whereinDrawn || whereinAmount === 0 || !isLogin || !isConnectTron || isLoadingWherein"
               >
-                <b-spinner small type="grow" v-show="isLoading"></b-spinner>
+                <b-spinner small type="grow" v-show="isLoadingWherein"></b-spinner>
                 {{
                   !whereinDrawn
                     ? $t("message.withdraw")
@@ -40,7 +40,7 @@
                 }}
               </b-button>
             </div>
-            <div class="op-bottom" v-if="isLogin || isConnectTron">
+            <div class="op-bottom" v-if="!isLogin || !isConnectTron">
               <ConnectWalletBtn
                 class="op-bottom"
                 v-if="!isLogin"
@@ -49,7 +49,7 @@
               <ConnectWalletBtn
                 class="op-bottom"
                 v-if="!isConnectTron"
-                @tronLogin="showTronLinkInfo = true"
+                @tronLogin="showTronLinkInfo"
                 type="TRON"
               />
             </div>
@@ -58,17 +58,51 @@
         <Card>
           <div class="title-box">
             <span class="title">
-              <p class="title">Nutbox {{ $t("airdrop.airdrop") }}</p>
+              <p class="title">NUTBOX {{ $t("airdrop.airdrop") }}</p>
             </span>
           </div>
-          <div class="waiting-info-box">
-            <b-button
-              style="width: 80%; height: 50px"
-              :disabled="true"
-              variant="primary"
-            >
-              {{ $t("airdrop.comingSoon") }}
-            </b-button>
+
+          <div class="pending-box">
+            <p class="airdrop-des">
+              <span class="info-token">{{ $t("airdrop.nutboxDes") }}</span>
+            </p>
+          </div>
+
+          <div class="pending-box">
+            <p class="info-title">
+              <span class="info-token">NUTBOX</span>
+              <span class="info-desc">AIRDROP</span>
+            </p>
+            <div class="pending-input">
+              <span class="token-number-none">
+                {{ nutboxAmount }}
+              </span>
+              <b-button
+                variant="primary"
+                @click="harvestNutbox"
+                :disabled="nutboxDrawn || nutboxAmount === 0 || !isLogin || !isConnectTron || isLoadingNutbox"
+              >
+                <b-spinner small type="grow" v-show="isLoadingNutbox"></b-spinner>
+                {{
+                  !nutboxDrawn
+                    ? $t("message.withdraw")
+                    : $t("message.withdrawn")
+                }}
+              </b-button>
+            </div>
+            <div class="op-bottom" v-if="!isLogin || !isConnectTron">
+              <ConnectWalletBtn
+                class="op-bottom"
+                v-if="!isLogin"
+                @steemLogin="showSteemLogin = true"
+              />
+              <ConnectWalletBtn
+                class="op-bottom"
+                v-if="!isConnectTron"
+                @tronLogin="showTronLinkInfo"
+                type="TRON"
+              />
+            </div>
           </div>
         </Card>
       </div>
@@ -98,13 +132,17 @@ import { TRON_LINK_ADDR_NOT_FOUND } from '@/config'
 import Login from "../Login";
 import ConnectWalletBtn from "../ToolsComponents/ConnectWalletBtn";
 import InstallTronLink from "../ToolsComponents/InstallTronLink";
+import {
+  getTronLinkAddr,
+} from "@/utils/chain/tron";
 
 export default {
   name: "Airdrop",
   data() {
     return {
       airdropList: [],
-      isLoading: true,
+      isLoadingWherein: true,
+      isLoadingNutbox: true,
       tipMessage: "",
       tipTitle: "",
       showMessage: false,
@@ -125,14 +163,26 @@ export default {
     wherein() {
       const w = this.airdropList.filter((a) => a.type === "wherein");
       if (w.length > 0) {
-        return w[0];
+        const drawn = w.filter(f => f.state === 'drawn')
+        const pending = w.filter(f => f.state === 'pending')
+        if (pending.length > 0){
+          return pending
+        }else{
+          return drawn
+        }
       }
       return 0;
     },
     nutbox() {
       const w = this.airdropList.filter((a) => a.type === "nutbox");
       if (w.length > 0) {
-        return w[0];
+        const drawn = w.filter(f => f.state === 'drawn')
+        const pending = w.filter(f => f.state === 'pending')
+        if (pending.length > 0){
+          return pending
+        }else{
+          return drawn
+        }
       }
       return 0;
     },
@@ -144,19 +194,27 @@ export default {
     },
     whereinDrawn() {
       if (this.whereinNoAirdrop) return false;
-      return this.wherein.state === "drawn";
+      return this.wherein[0].state === "drawn";
     },
     nutboxDrawn() {
       if (this.nutboxNoAirdrop) return false;
-      return this.nutbox.state === "drawn";
+      return this.nutbox[0].state === "drawn";
     },
     whereinAmount() {
       if (this.whereinNoAirdrop) return 0;
-      return this.wherein.amount;
+      if (this.wherein[0].state === 'drawn'){
+        return this.wherein.reduce((s, w) => s + parseFloat(w.amount), 0)
+      }else{
+        return this.wherein[0].amount
+      }
     },
     nutboxAmount() {
       if (this.nutboxNoAirdrop) return 0;
-      return this.nutbox.amount;
+      if (this.nutbox[0].state === 'drawn'){
+        return this.nutbox.reduce((s, n) => s + parseFloat(n.amount), 0)
+      }else{
+        return this.nutbox[0].amount
+      }
     },
     isLogin() {
       return this.steemAccount && this.steemAccount.length > 0;
@@ -174,11 +232,12 @@ export default {
     ...mapActions(["getPnut"]),
 
     async harvestWherein() {
-      this.isLoading = true;
+      this.isLoadingWherein = true;
       try {
         const res = await custom_json(
           this.steemAccount,
           this.tronAddress,
+          this.whereinAmount,
           'wherein'
         );
         if (res) {
@@ -189,26 +248,67 @@ export default {
           });
           if (res) this.airdropList = res;
         } else {
-          this.showMessage($t("error.error"), "Harvest Failed");
+          this.showTip($t("error.error"), "Harvest Failed");
         }
       } catch (e) {
-        this.showMessage($t("error.error"), e.message);
+        this.showTip($t("error.error"), e.message);
       } finally {
-        this.isLoading = false;
+        this.isLoadingWherein = false;
       }
     },
+    async harvestNutbox() {
+      this.isLoadingNutbox = true;
+      try {
+        const res = await custom_json(
+          this.steemAccount,
+          this.tronAddress,
+          this.nutboxAmount,
+          'nutbox'
+        );
+        if (res) {
+          await sleep(10);
+          this.getPnut();
+          const res = await getAirdropInfo({
+            author: this.steemAccount,
+          });
+          if (res) this.airdropList = res;
+        } else {
+          this.showTip($t("error.error"), "Harvest Failed");
+        }
+      } catch (e) {
+        this.showTip($t("error.error"), e.message);
+      } finally {
+        this.isLoadingNutbox = false;
+      }
+    },
+    async showTronLinkInfo() {
+      const address = await getTronLinkAddr();
+      if (address && address === TRON_LINK_ADDR_NOT_FOUND.noTronLink) {
+        this.showInstallTronLink = true;
+      } else if (address && address === TRON_LINK_ADDR_NOT_FOUND.walletLocked) {
+        this.tipTitle = this.$t("message.tips");
+        this.tipMessage = this.$t("error.unlockWallet");
+        this.tipType = "tip";
+        this.showMessage = true;
+      } else if (address) {
+        this.$store.dispatch("initializeTronAccount", address);
+        this.$router.go(0);
+      }
+    },
+      showTip(title, message) {
+        this.tipTitle = title;
+        this.tipMessage = message;
+        this.showMessage = true;
+      },
   },
-  showMessage(title, message) {
-    this.tipTitle = title;
-    this.tipMessage = message;
-    this.showMessage = true;
-  },
+
   watch: {
       async steemAccount(newValue, oldValue) {
            const res = await getAirdropInfo({
             author: newValue,
             });
-            this.isLoading = false;
+            this.isLoadingWherein = false;
+            this.isLoadingNutbox = false;
             this.airdropList = res;
       }
   },
@@ -216,7 +316,9 @@ export default {
     const res = await getAirdropInfo({
       author: this.steemAccount,
     });
-    this.isLoading = false;
+    console.log('airdrop', res);
+    this.isLoadingWherein = false;
+    this.isLoadingNutbox = false
     this.airdropList = res;
   },
 };

@@ -145,7 +145,8 @@ module.exports = {
   airdrop: {
     airdrop: 'Airdrop',
     comingSoon:"Muy Pronto",
-    whereinDes: 'Airdrop de WehreIN y CNSTM para los poseedores del token'
+    whereinDes: 'Airdrop de WehreIN y CNSTM para los poseedores del token',
+    nutboxDes: ''
   },
   error: {
     error: 'Error!',

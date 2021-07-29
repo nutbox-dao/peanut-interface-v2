@@ -134,18 +134,18 @@ module.exports = {
     transfer: "송금",
     voteRate: "PNUT - 10% 업보트",
   },
+  airdrop: {
+    airdrop: '에어드랍',
+    comingSoon:"가 에어드랍 예정",
+    whereinDes: 'WhereIN&CNSTM 토큰 홀더를 위한 에어드랍',
+    nutboxDes: 'PNUT 역대 최대 에어드롭'
+  },
   nps: {
     nps: '거버넌스',
     pass: '통과',
     pending: '처리 중',
     unpass: '거절',
     rolling: '투표 중'
-  },
-  airdrop: {
-    airdrop: '에어드랍',
-    comingSoon:"가 에어드랍 예정",
-    whereinDes: 'WhereIN&CNSTM 토큰 홀더를 위한 에어드랍'
-
   },
   error: {
     error: '오류가 발생하였습니다.',

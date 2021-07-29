@@ -144,7 +144,8 @@ module.exports = {
   airdrop: {
     airdrop: 'Airdrop',
     comingSoon:"Coming Soon",
-    whereinDes: 'Airdrop to WhereIN & CNSTM token holder'
+    whereinDes: 'Airdrop to WhereIN & CNSTM token holder',
+    nutboxDes: 'The PNUT Century Airdrop'
   },
   error: {
     error: 'Error!',
