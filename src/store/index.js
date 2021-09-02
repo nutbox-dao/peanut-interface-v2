@@ -11,7 +11,9 @@ import {
   getContract
 } from '../utils/chain/contract'
 import {
-  retryMethod
+  retryMethod,
+  encrpty,
+  decrypt
 } from '../utils/helper'
 import {
   vestsToSteem,
@@ -110,7 +112,7 @@ export default new Vuex.Store({
       Cookie.set('steemAccount', steemAccount, '30d')
     },
     saveSteemPrivateKey: function (state, privateKey) {
-      state.steemPrivateKey = privateKey
+      state.steemPrivateKey = encrpty(privateKey)
     },
     saveSteemBalance: function (state, steemBalance) {
       state.steemBalance = steemBalance
@@ -277,6 +279,9 @@ export default new Vuex.Store({
     delegatedVests: state => {
       return intToAmount(state.delegatedVestsInt) || 0
     },
+    privateKey: state => {
+      return decrypt(state.privateKey)
+    },
     // tron
     tronAddrFromat: state => {
       if (!state.tronAddress) {
@@ -379,7 +384,7 @@ export default new Vuex.Store({
 
     async initializeSteemAccount ({
       commit
-    }, steemAccount, privateKey) {
+    }, { steemAccount, privateKey }) {
       try {
         const account = await getAccountInfo(steemAccount)
         const steem = parseFloat(account.balance)
