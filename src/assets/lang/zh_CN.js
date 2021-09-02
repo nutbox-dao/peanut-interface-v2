@@ -2,6 +2,7 @@ module.exports = {
   message: {
     userlogin: '用户登录',
     steemAccoutPlaceHolder: '请输入Steem用户名',
+    steemActiveKeyPlaceHolder: '请输入Steem活跃密钥',
     login: '登录',
     loging: '登录中...',
     delegatemine: '代理挖矿',

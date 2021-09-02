@@ -2,6 +2,7 @@ module.exports = {
   message: {
     userlogin: 'Login',
     steemAccoutPlaceHolder: 'Input Your Steem Account',
+    steemActiveKeyPlaceHolder: 'Input Your Steem Active Key',
     login: 'Login',
     loging: 'Login...',
     delegatemine: 'Mining by Delegation',
