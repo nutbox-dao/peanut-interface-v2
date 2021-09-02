@@ -1,9 +1,16 @@
 import store from '../store'
+import CryptoJS from 'crypto'
 import {
   getApys,
   getPnutLpExchangeInfo,
   getTspLpExchangeInfo
 } from '../apis/api'
+
+var cryptoOptions = {
+  key: process.env.VUE_APP_CRYPTO_KEY,
+  iv: process.env.VUE_APP_CRYPTO_IV,
+  method: process.env.VUE_APP_CRYPTO_METHOD
+}
 
 export const firstToUpper = function (str) {
   if (!str) {
@@ -82,4 +89,18 @@ export const storeApy = async function () {
   store.commit('saveTspLpApy', parseFloat(apys.spApy).toFixed(1) + '% + ' + tspLpExchengePoolApy.toFixed(1) + '%')
   store.commit('savePnutLpApy', parseFloat(apys.pnutLpApy).toFixed(1) + '% + ' + pnutLpExchangePoolApy.toFixed(1) + '%')
   store.commit('saveTsteemApy', parseFloat(apys.tsteemApy).toFixed(1) + '%')
+}
+
+export function encrpty (string) {
+  let encrypted = ''
+  const cipheriv = CryptoJS.createCipheriv(cryptoOptions.method, cryptoOptions.key, cryptoOptions.iv)
+  encrypted += cipheriv.update(string, 'utf8', 'hex')
+  return encrypted + cipheriv.final('hex')
+}
+
+export function decrypt (encryptedString) {
+  let encrypted = ''
+  const cipheriv = CryptoJS.createDecipheriv(cryptoOptions.method, cryptoOptions.key, cryptoOptions.iv)
+  encrypted += cipheriv.update(encryptedString, 'hex', 'utf8')
+  return encrypted + cipheriv.final('utf8')
 }

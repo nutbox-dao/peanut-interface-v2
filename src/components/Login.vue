@@ -75,7 +75,7 @@ export default {
       if (res) {
         const ress = await that.$store.dispatch(
           'initializeSteemAccount',
-          userName, privateKey
+          { steemAccount: userName, privateKey: privateKey }
         )
         if (!ress) {
           that.tipTitle = that.$t('error.error')
