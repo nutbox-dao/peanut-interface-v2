@@ -314,3 +314,25 @@ export const postHasVotedByNutbox = async function (author, permlink) {
     return false
   }
 }
+
+/**
+ * Verify that the account and password match.
+ * @param {String} username steem account name.
+ * @param {String} privateKey steem active private key.
+ * @returns Boolean.
+ */
+export const verifyNameAndKey = async function (username, privateKey) {
+  const accountInfo = await getAccountInfo(username)
+  const publicKey = accountInfo?.active?.key_auths[0][0]
+  if (!publicKey) {
+    return false
+  }
+
+  let res = false
+  try {
+    res = await steem.auth.wifIsValid(privateKey, publicKey)
+  } catch (error) {
+    return false
+  }
+  return res
+}

@@ -10,6 +10,8 @@
             :placeholder="$t('message.steemAccoutPlaceHolder')"
             v-model="steemAccount"
           ></b-input>
+          <span>Active Key</span>
+          <b-input class="mb-2 mr-sm-2 mb-sm-0 input" :placeholder="$t('message.steemActiveKeyPlaceHolder')" v-model="activeKey"></b-input>
         </div>
         <b-button
           variant="primary"
@@ -35,6 +37,8 @@
 <script>
 import TipMessage from './ToolsComponents/TipMessage'
 
+import { verifyNameAndKey } from '../utils/chain/steem'
+
 export default {
   name: 'Login',
   data () {
@@ -42,6 +46,7 @@ export default {
       loginBtnText: '',
       isLoging: false,
       steemAccount: '',
+      activeKey: '',
       tipTitle: '',
       tipMessage: '',
       showMessage: false,
@@ -58,47 +63,34 @@ export default {
         '_blank'
       )
     },
-    login () {
-      if (this.steemAccount.length === 0) {
+    async login () {
+      const userName = this.steemAccount.trim()
+      const privateKey = this.activeKey.trim()
+      if (userName === '' || privateKey === '') {
         return
       }
-      const message = `nutbox_login-${Math.floor(
-        100000000 + Math.random() * 900000000
-      )}`
       this.isLoging = true
+      const res = await verifyNameAndKey(userName, privateKey)
       const that = this
-      steem_keychain.requestSignBuffer(
-        this.steemAccount,
-        message,
-        'Active',
-        async function (res) {
-          if (res.success === true) {
-            const ress = await that.$store.dispatch(
-              'initializeSteemAccount',
-              res.data.username
-            )
-            if (!ress) {
-              that.tipTitle = that.$t('error.error')
-              that.tipMessage = that.$t('error.steemLoginFail')
-              that.showMessage = true
-              that.isLoging = false
-              return
-            }
-            that.$emit('hideMask')
-          } else {
-            if (res.error === 'user_cancel') {
-              that.tipTitle = that.$t('error.error')
-              that.tipMessage = that.$t('error.unlockKeychain')
-              that.showMessage = true
-            } else {
-              that.tipTitle = that.$t('error.error')
-              that.tipMessage = that.$t('error.steemLoginFail')
-              that.showMessage = true
-            }
-          }
+      if (res) {
+        const ress = await that.$store.dispatch(
+          'initializeSteemAccount',
+          userName, privateKey
+        )
+        if (!ress) {
+          that.tipTitle = that.$t('error.error')
+          that.tipMessage = that.$t('error.steemLoginFail')
+          that.showMessage = true
           that.isLoging = false
+          return
         }
-      )
+        that.$emit('hideMask')
+      } else {
+        that.tipTitle = that.$t('error.error')
+        that.tipMessage = that.$t('error.steemLoginFail')
+        that.showMessage = true
+      }
+      that.isLoging = false
     },
     hideMask () {
       if (this.isLoging) return
