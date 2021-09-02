@@ -3,7 +3,8 @@ module.exports = {
     userlogin: 'Login',
     steemAccoutPlaceHolder: 'Input Your Steem Account',
     steemActiveKeyPlaceHolder: 'Input Your Steem Active Key',
-    login: 'Login',
+    login: 'Login by active key',
+    loginByKeychain: 'Login by Keychain',
     loging: 'Login...',
     delegatemine: 'Mining by Delegation',
     spbalance: 'SP Balance',
@@ -66,7 +67,7 @@ module.exports = {
   wallet: {
     wallet: 'Wallet',
     swap: 'Cross chain transfer',
-    connectSteem: 'Connect to Steem Keychain',
+    connectSteem: 'Connect to Steem',
     connectTron: 'Connect to TronLink',
     swapSubTitle: 'The fast and secure way to bring cross-chain assets to Tron chain.',
     install: 'Install'

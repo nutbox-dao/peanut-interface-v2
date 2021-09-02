@@ -37,7 +37,8 @@ export default new Vuex.Store({
   state: {
     // steem
     steemAccount: Cookie.get('steemAccount'),
-    steemPrivateKey: '',
+    steemActiveKey: '',
+    c: 0,
     steemBalance: 0,
     vestsBalance: 0,
     sbdBalance: 0,
@@ -111,8 +112,11 @@ export default new Vuex.Store({
       state.steemAccount = steemAccount
       Cookie.set('steemAccount', steemAccount, '30d')
     },
-    saveSteemPrivateKey: function (state, privateKey) {
-      state.steemPrivateKey = encrpty(privateKey)
+    saveSteemActiveKey: function (state, activeKey) {
+      state.steemActiveKey = encrpty(activeKey)
+    },
+    saveSteemLoginType: function (state, steemLoginType) {
+      state.steemLoginType = steemLoginType
     },
     saveSteemBalance: function (state, steemBalance) {
       state.steemBalance = steemBalance
@@ -279,8 +283,11 @@ export default new Vuex.Store({
     delegatedVests: state => {
       return intToAmount(state.delegatedVestsInt) || 0
     },
-    privateKey: state => {
-      return decrypt(state.privateKey)
+    activeKey: state => {
+      return decrypt(state.steemActiveKey)
+    },
+    loginType: state => {
+      return state.steemLoginType
     },
     // tron
     tronAddrFromat: state => {
@@ -384,7 +391,7 @@ export default new Vuex.Store({
 
     async initializeSteemAccount ({
       commit
-    }, { steemAccount, privateKey }) {
+    }, { steemAccount, activeKey, steemLoginType }) {
       try {
         const account = await getAccountInfo(steemAccount)
         const steem = parseFloat(account.balance)
@@ -394,7 +401,10 @@ export default new Vuex.Store({
         commit('saveSbdBalance', sbd)
         commit('saveVestsBalance', vests)
         commit('saveSteemAccount', steemAccount)
-        commit('saveSteemPrivateKey', privateKey)
+        if(activeKey != null){
+          commit('saveSteemActiveKey', activeKey)
+        }
+        commit('saveSteemLoginType', steemLoginType)
         return true
       } catch (err) {
         // console.error('initializeSteemAccount Fail:', err.message)
