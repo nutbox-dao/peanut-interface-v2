@@ -3,23 +3,40 @@
     <div class="mask" @click.self="hideMask">
       <div class="login">
         <p>{{ this.$t("message.userlogin") }}</p>
-        <div class="account-box">
-          <span class="keychain" @click="getKeychain" />
-          <b-input
-            class="mb-2 mr-sm-2 mb-sm-0 input"
-            :placeholder="$t('message.steemAccoutPlaceHolder')"
-            v-model="steemAccount"
-          ></b-input>
+        <div>
+          <div class="account-box">
+            <span class="keychain" @click="getKeychain" />
+            <b-input
+              class="mb-2 mr-sm-2 mb-sm-0 input"
+              :placeholder="$t('message.steemAccoutPlaceHolder')"
+              v-model="steemAccount"
+            ></b-input>
+          </div>
+          <b-button
+            variant="primary"
+            class="login-btn"
+            @click="loginByKeychain"
+            :disabled="isLoging"
+          >
+            <b-spinner small type="grow" v-show="isLogingByKeyChain"></b-spinner>
+            {{ this.loginByKeychainBtnText }}
+          </b-button>
         </div>
-        <b-button
-          variant="primary"
-          class="login-btn"
-          @click="login"
-          :disabled="isLoging"
-        >
-          <b-spinner small type="grow" v-show="isLoging"></b-spinner>
-          {{ this.loginBtnText }}
-        </b-button>
+        <div>
+          <div class="account-box">
+            <span>Active Key</span>
+            <b-input class="mb-2 mr-sm-2 mb-sm-0 input" :placeholder="$t('message.steemActiveKeyPlaceHolder')" v-model="steemActiveKey"></b-input>
+          </div>
+          <b-button
+            variant="primary"
+            class="login-btn"
+            @click="login"
+            :disabled="isLoging"
+          >
+            <b-spinner small type="grow" v-show="isLogingByActiveKey"></b-spinner>
+            {{ this.loginBtnText }}
+          </b-button>
+        </div>
       </div>
       <TipMessage
         :showMessage="tipMessage"
@@ -35,13 +52,19 @@
 <script>
 import TipMessage from './ToolsComponents/TipMessage'
 
+import { verifyNameAndKey } from '../utils/chain/steem'
+
 export default {
   name: 'Login',
   data () {
     return {
       loginBtnText: '',
+      loginByKeychainBtnText: '',
       isLoging: false,
+      isLogingByKeyChain: false,
+      isLogingByActiveKey: false,
       steemAccount: '',
+      steemActiveKey: '',
       tipTitle: '',
       tipMessage: '',
       showMessage: false,
@@ -58,30 +81,71 @@ export default {
         '_blank'
       )
     },
-    login () {
-      if (this.steemAccount.length === 0) {
+    async login () {
+      const userName = this.steemAccount.trim()
+      const activeKey = this.steemActiveKey.trim()
+      if (userName === '' || activeKey === '') {
+        this.tipTitle = this.$t('error.error')
+        this.tipMessage = this.$t('error.steemAccountActiveKeyEmpty')
+        this.showMessage = true
+        return
+      }
+      this.isLoging = true
+      this.isLogingByActiveKey = true
+      const res = await verifyNameAndKey(userName, activeKey)
+      const that = this
+      if (res) {
+        const ress = await that.$store.dispatch(
+          'initializeSteemAccount',
+          { steemAccount: userName, activeKey: activeKey, steemLoginType: 0 }
+        )
+        if (!ress) {
+          that.tipTitle = that.$t('error.error')
+          that.tipMessage = that.$t('error.steemLoginFail')
+          that.showMessage = true
+          that.isLoging = false
+          this.isLogingByActiveKey = false
+          return
+        }
+        that.$emit('hideMask')
+      } else {
+        that.tipTitle = that.$t('error.error')
+        that.tipMessage = that.$t('error.steemLoginFail')
+        that.showMessage = true
+      }
+      that.isLoging = false
+      this.isLogingByActiveKey = false
+    },
+    async loginByKeychain () {
+      const userName = this.steemAccount.trim()
+      if (userName === '') {
+        this.tipTitle = this.$t('error.error')
+        this.tipMessage = this.$t('error.steemAccountEmpty')
+        this.showMessage = true
         return
       }
       const message = `nutbox_login-${Math.floor(
         100000000 + Math.random() * 900000000
       )}`
       this.isLoging = true
+      this.isLogingByKeyChain = true
       const that = this
       steem_keychain.requestSignBuffer(
-        this.steemAccount,
+        userName,
         message,
         'Active',
         async function (res) {
           if (res.success === true) {
             const ress = await that.$store.dispatch(
               'initializeSteemAccount',
-              res.data.username
+              { steemAccount: res.data.username, activeKey: null, steemLoginType: 1 }
             )
             if (!ress) {
               that.tipTitle = that.$t('error.error')
               that.tipMessage = that.$t('error.steemLoginFail')
               that.showMessage = true
-              that.isLoging = false
+              this.isLoging = false
+              that.isLogingByKeyChain = false
               return
             }
             that.$emit('hideMask')
@@ -96,7 +160,8 @@ export default {
               that.showMessage = true
             }
           }
-          that.isLoging = false
+          this.isLoging = false
+          that.isLogingByKeyChain = false
         }
       )
     },
@@ -107,6 +172,7 @@ export default {
   },
   async mounted () {
     this.loginBtnText = this.$t('message.login')
+    this.loginByKeychainBtnText = this.$t('message.loginByKeychain')
   }
 }
 </script>
@@ -115,7 +181,7 @@ export default {
 .login {
   margin-top: -15%;
   width: 492px;
-  height: 252px;
+  height: 402px;
   background: white;
   box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.05);
   border-radius: 28px;

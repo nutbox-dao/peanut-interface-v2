@@ -1,8 +1,10 @@
 module.exports = {
   message: {
     userlogin: 'Login',
-    steemAccoutPlaceHolder: 'Input Your Steem Account',
-    login: 'Login',
+    steemAccoutPlaceHolder: 'Input your Steem account',
+    steemActiveKeyPlaceHolder: 'Input your Steem active key',
+    login: 'Login by active key',
+    loginByKeychain: 'Login by Keychain',
     loging: 'Login...',
     delegatemine: 'Mining by Delegation',
     spbalance: 'SP Balance',
@@ -65,7 +67,7 @@ module.exports = {
   wallet: {
     wallet: 'Wallet',
     swap: 'Cross chain transfer',
-    connectSteem: 'Connect to Steem Keychain',
+    connectSteem: 'Connect to Steem',
     connectTron: 'Connect to TronLink',
     swapSubTitle: 'The fast and secure way to bring cross-chain assets to Tron chain.',
     install: 'Install'
@@ -176,6 +178,8 @@ module.exports = {
     notEnoughFee: 'Insufficient fee',
     insufficentPnut: 'Insufficent PNUT',
     hasVoted: 'Your post has been voted by nutbox.mine',
-    pleaseRetry: 'Please try again'
+    pleaseRetry: 'Please try again',
+    steemAccountEmpty: "Steem account can't be empty",
+    steemAccountActiveKeyEmpty: "Steem account or active key can't be empty"
   }
 }

@@ -11,7 +11,9 @@ import {
   getContract
 } from '../utils/chain/contract'
 import {
-  retryMethod
+  retryMethod,
+  encrpty,
+  decrypt
 } from '../utils/helper'
 import {
   vestsToSteem,
@@ -35,6 +37,8 @@ export default new Vuex.Store({
   state: {
     // steem
     steemAccount: Cookie.get('steemAccount'),
+    steemActiveKey: '',
+    c: 0,
     steemBalance: 0,
     vestsBalance: 0,
     sbdBalance: 0,
@@ -107,6 +111,12 @@ export default new Vuex.Store({
     saveSteemAccount: function (state, steemAccount) {
       state.steemAccount = steemAccount
       Cookie.set('steemAccount', steemAccount, '30d')
+    },
+    saveSteemActiveKey: function (state, activeKey) {
+      state.steemActiveKey = encrpty(activeKey)
+    },
+    saveSteemLoginType: function (state, steemLoginType) {
+      state.steemLoginType = steemLoginType
     },
     saveSteemBalance: function (state, steemBalance) {
       state.steemBalance = steemBalance
@@ -273,6 +283,12 @@ export default new Vuex.Store({
     delegatedVests: state => {
       return intToAmount(state.delegatedVestsInt) || 0
     },
+    activeKey: state => {
+      return decrypt(state.steemActiveKey)
+    },
+    loginType: state => {
+      return state.steemLoginType
+    },
     // tron
     tronAddrFromat: state => {
       if (!state.tronAddress) {
@@ -375,7 +391,7 @@ export default new Vuex.Store({
 
     async initializeSteemAccount ({
       commit
-    }, steemAccount) {
+    }, { steemAccount, activeKey, steemLoginType }) {
       try {
         const account = await getAccountInfo(steemAccount)
         const steem = parseFloat(account.balance)
@@ -385,6 +401,10 @@ export default new Vuex.Store({
         commit('saveSbdBalance', sbd)
         commit('saveVestsBalance', vests)
         commit('saveSteemAccount', steemAccount)
+        if(activeKey != null){
+          commit('saveSteemActiveKey', activeKey)
+        }
+        commit('saveSteemLoginType', steemLoginType)
         return true
       } catch (err) {
         // console.error('initializeSteemAccount Fail:', err.message)
