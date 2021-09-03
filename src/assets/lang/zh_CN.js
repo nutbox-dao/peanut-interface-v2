@@ -3,7 +3,8 @@ module.exports = {
     userlogin: '用户登录',
     steemAccoutPlaceHolder: '请输入Steem用户名',
     steemActiveKeyPlaceHolder: '请输入Steem活跃密钥',
-    login: '登录',
+    login: '通过活跃密钥登录',
+    loginByKeychain: '通过Keychain登录',
     loging: '登录中...',
     delegatemine: '代理挖矿',
     spbalance: 'SP余额',
@@ -177,7 +178,9 @@ module.exports = {
     notEnoughFee: '手续费不足',
     insufficentPnut: 'PNUT余额不足',
     hasVoted: 'Nutbox已经点赞了您的帖子。',
-    pleaseRetry: '请重试'
+    pleaseRetry: '请重试',
+    steemAccountEmpty: 'Steem帐号不能为空。',
+    steemAccountActiveKeyEmpty: 'Steem帐号或活跃密钥不能为空。'
   }
 
 }

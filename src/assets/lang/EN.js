@@ -178,6 +178,8 @@ module.exports = {
     notEnoughFee: 'Insufficient fee',
     insufficentPnut: 'Insufficent PNUT',
     hasVoted: 'Your post has been voted by nutbox.mine',
-    pleaseRetry: 'Please try again'
+    pleaseRetry: 'Please try again',
+    steemAccountEmpty: "Steem account can't be empty.",
+    steemAccountActiveKeyEmpty: "Steem account or active key can't be empty."
   }
 }
