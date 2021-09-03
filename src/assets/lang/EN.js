@@ -1,8 +1,8 @@
 module.exports = {
   message: {
     userlogin: 'Login',
-    steemAccoutPlaceHolder: 'Input Your Steem Account',
-    steemActiveKeyPlaceHolder: 'Input Your Steem Active Key',
+    steemAccoutPlaceHolder: 'Input your Steem account',
+    steemActiveKeyPlaceHolder: 'Input your Steem active key',
     login: 'Login by active key',
     loginByKeychain: 'Login by Keychain',
     loging: 'Login...',
@@ -179,7 +179,7 @@ module.exports = {
     insufficentPnut: 'Insufficent PNUT',
     hasVoted: 'Your post has been voted by nutbox.mine',
     pleaseRetry: 'Please try again',
-    steemAccountEmpty: "Steem account can't be empty.",
-    steemAccountActiveKeyEmpty: "Steem account or active key can't be empty."
+    steemAccountEmpty: "Steem account can't be empty",
+    steemAccountActiveKeyEmpty: "Steem account or active key can't be empty"
   }
 }

@@ -179,8 +179,8 @@ module.exports = {
     insufficentPnut: 'PNUT余额不足',
     hasVoted: 'Nutbox已经点赞了您的帖子。',
     pleaseRetry: '请重试',
-    steemAccountEmpty: 'Steem帐号不能为空。',
-    steemAccountActiveKeyEmpty: 'Steem帐号或活跃密钥不能为空。'
+    steemAccountEmpty: 'Steem帐号不能为空',
+    steemAccountActiveKeyEmpty: 'Steem帐号或活跃密钥不能为空'
   }
 
 }
