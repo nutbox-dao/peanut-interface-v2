@@ -9,7 +9,7 @@
             <b-input
               class="mb-2 mr-sm-2 mb-sm-0 input"
               :placeholder="$t('message.steemAccoutPlaceHolder')"
-              v-model="steemAccount"
+              v-model="keychainAccount"
             ></b-input>
           </div>
           <b-button
@@ -24,8 +24,10 @@
         </div>
         <div>
           <div class="account-box">
-            <span>Active Key</span>
-            <b-input class="mb-2 mr-sm-2 mb-sm-0 input" :placeholder="$t('message.steemActiveKeyPlaceHolder')" v-model="steemActiveKey"></b-input>
+            <b-input class="mb-2 mr-sm-2 mb-sm-0 input-active" :placeholder="$t('message.steemAccoutPlaceHolder')" v-model="steemAccount"></b-input>
+          </div>
+          <div class="account-box">
+            <b-input class="mb-2 mr-sm-2 mb-sm-0 input-active" :placeholder="$t('message.steemActiveKeyPlaceHolder')" v-model="steemActiveKey"></b-input>
           </div>
           <b-button
             variant="primary"
@@ -63,6 +65,7 @@ export default {
       isLoging: false,
       isLogingByKeyChain: false,
       isLogingByActiveKey: false,
+      keychainAccount: '',
       steemAccount: '',
       steemActiveKey: '',
       tipTitle: '',
@@ -99,14 +102,6 @@ export default {
           'initializeSteemAccount',
           { steemAccount: userName, activeKey: activeKey, steemLoginType: 0 }
         )
-        if (!ress) {
-          that.tipTitle = that.$t('error.error')
-          that.tipMessage = that.$t('error.steemLoginFail')
-          that.showMessage = true
-          that.isLoging = false
-          this.isLogingByActiveKey = false
-          return
-        }
         that.$emit('hideMask')
       } else {
         that.tipTitle = that.$t('error.error')
@@ -114,10 +109,11 @@ export default {
         that.showMessage = true
       }
       that.isLoging = false
-      this.isLogingByActiveKey = false
+      that.isLogingByActiveKey = false
     },
+    
     async loginByKeychain () {
-      const userName = this.steemAccount.trim()
+      const userName = this.keychainAccount.trim()
       if (userName === '') {
         this.tipTitle = this.$t('error.error')
         this.tipMessage = this.$t('error.steemAccountEmpty')
@@ -144,7 +140,7 @@ export default {
               that.tipTitle = that.$t('error.error')
               that.tipMessage = that.$t('error.steemLoginFail')
               that.showMessage = true
-              this.isLoging = false
+              that.isLoging = false
               that.isLogingByKeyChain = false
               return
             }
@@ -160,7 +156,7 @@ export default {
               that.showMessage = true
             }
           }
-          this.isLoging = false
+          that.isLoging = false
           that.isLogingByKeyChain = false
         }
       )
@@ -181,7 +177,7 @@ export default {
 .login {
   margin-top: -15%;
   width: 492px;
-  height: 402px;
+  height: 480px;
   background: white;
   box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.05);
   border-radius: 28px;
@@ -214,9 +210,18 @@ export default {
     border-radius: 0 16px 16px 0;
     border: none;
   }
+  .input-active {
+    height: 48px;
+    flex: 1;
+    background: var(--background);
+    border-radius: 16px;
+    border: none;
+    margin-top: -20px;
+  }
 }
 .login-btn {
   width: 100%;
   margin-top: 24px;
+  margin-bottom: 20px;
 }
 </style>

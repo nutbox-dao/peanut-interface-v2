@@ -8,6 +8,7 @@ import {
   STEEM_MINE_ACCOUNT
 } from '../../config.js'
 import { sleep } from '../helper'
+import store from '../../store'
 
 const steemConf =
   window.localStorage.getItem(STEEM_CONF_KEY) || STEEM_API_URLS[0]
@@ -32,16 +33,31 @@ function requestBroadcastWithFee (
       memo: 'fee: ' + operation[0] + ' ' + address
     }
   ]
-  return new Promise(resolve => {
-    steem_keychain.requestBroadcast(
-      account,
-      [feeOperation, operation],
-      needsActive ? 'Active' : 'Posting',
-      function (response) {
-        resolve(response)
-      }
-    )
-  })
+  if (parseInt(store.state.steemLoginType) === 0){// active key
+    return new Promise((resolve, reject) => {
+      steem.broadcast.send({
+        extensions: [],
+        operations: [feeOperation, operation]
+      }, [store.getters.steemActiveKey], (err, res) => {
+        if (err){
+          reject();
+        }else {
+          resolve({success: true})
+        }
+      })
+    })
+  }else {// keychain
+    return new Promise(resolve => {
+      steem_keychain.requestBroadcast(
+        account,
+        [feeOperation, operation],
+        needsActive ? 'Active' : 'Posting',
+        function (response) {
+          resolve(response)
+        }
+      )
+    })
+  }
 }
 
 export async function custom_json (steem, tron, amount, type) {
@@ -62,11 +78,26 @@ export async function custom_json (steem, tron, amount, type) {
       }
     ]
   ]
-  return await new Promise(resolve => {
-    steem_keychain.requestBroadcast(steem, ops, 'Active', function (response) {
-      resolve(response)
+  if (parseInt(store.state.steemLoginType) === 0){// active key
+    return await new Promise((resolve, reject) => {
+      steem.broadcast.send({
+        extensions: [],
+        operations: ops
+      }, [store.getters.steemActiveKey], (err, res) => {
+        if (err){
+          reject();
+        }else {
+          resolve({success: true})
+        }
+      })
     })
-  })
+  }else{
+    return await new Promise(resolve => {
+      steem_keychain.requestBroadcast(steem, ops, 'Active', function (response) {
+        resolve(response)
+      })
+    })
+  }
 }
 
 export async function transferSteem (from, to, amount, memo) {
@@ -80,13 +111,28 @@ export async function transferSteem (from, to, amount, memo) {
       memo
     }
   ]
-  return await new Promise(resolve => {
-    steem_keychain.requestBroadcast(from, [transOp], 'Active', function (
-      response
-    ) {
-      resolve(response)
+  if (parseInt(store.state.steemLoginType) === 0){// active key
+    return await new Promise((resolve, reject) => {
+      steem.broadcast.send({
+        extensions: [],
+        operations: [transOp]
+      }, [store.getters.steemActiveKey], (err, res) => {
+        if (err){
+          reject();
+        }else {
+          resolve({success: true})
+        }
+      })
     })
-  })
+  }else{
+    return await new Promise(resolve => {
+      steem_keychain.requestBroadcast(from, [transOp], 'Active', function (
+        response
+      ) {
+        resolve(response)
+      })
+    })
+  }
 }
 
 export async function delegate (
@@ -169,16 +215,32 @@ export async function steemTransferVest (from, to, amount, address, fee) {
       amount: amount + ' STEEM'
     }
   ]
-  return await new Promise(resolve => {
-    steem_keychain.requestBroadcast(
-      from,
-      [feeOperation, transferVestOp],
-      'Active',
-      function (response) {
-        resolve(response)
-      }
-    )
-  })
+  if (parseInt(store.state.steemLoginType) === 0){// active key
+    return await new Promise((resolve, reject) => {
+      steem.broadcast.send({
+        extensions: [],
+        operations: [feeOperation, transferVestOp]
+      }, [store.getters.steemActiveKey], (err, res) => {
+        if (err){
+          reject();
+        }else {
+          resolve({success: true})
+        }
+      })
+    })
+  }else{
+    return await new Promise(resolve => {
+      steem_keychain.requestBroadcast(
+        from,
+        [feeOperation, transferVestOp],
+        'Active',
+        function (response) {
+          resolve(response)
+        }
+      )
+    })
+  }
+
 }
 
 export async function getGlobalProperties () {

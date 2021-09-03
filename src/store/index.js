@@ -37,8 +37,8 @@ export default new Vuex.Store({
   state: {
     // steem
     steemAccount: Cookie.get('steemAccount'),
-    steemActiveKey: '',
-    c: 0,
+    steemActiveKey: Cookie.get('steemActiveKey'),
+    steemLoginType: Cookie.get('steemLoginType'),
     steemBalance: 0,
     vestsBalance: 0,
     sbdBalance: 0,
@@ -114,9 +114,11 @@ export default new Vuex.Store({
     },
     saveSteemActiveKey: function (state, activeKey) {
       state.steemActiveKey = encrpty(activeKey)
+      Cookie.set('steemActiveKey', state.steemActiveKey, '30d')
     },
     saveSteemLoginType: function (state, steemLoginType) {
       state.steemLoginType = steemLoginType
+      Cookie.set('steemLoginType', steemLoginType, '30d')
     },
     saveSteemBalance: function (state, steemBalance) {
       state.steemBalance = steemBalance
@@ -283,11 +285,9 @@ export default new Vuex.Store({
     delegatedVests: state => {
       return intToAmount(state.delegatedVestsInt) || 0
     },
-    activeKey: state => {
+    steemActiveKey: state => {
+      if (!state.steemActiveKey) return;
       return decrypt(state.steemActiveKey)
-    },
-    loginType: state => {
-      return state.steemLoginType
     },
     // tron
     tronAddrFromat: state => {
@@ -401,13 +401,13 @@ export default new Vuex.Store({
         commit('saveSbdBalance', sbd)
         commit('saveVestsBalance', vests)
         commit('saveSteemAccount', steemAccount)
-        if(activeKey != null){
+        if(activeKey){
           commit('saveSteemActiveKey', activeKey)
         }
         commit('saveSteemLoginType', steemLoginType)
         return true
       } catch (err) {
-        // console.error('initializeSteemAccount Fail:', err.message)
+        console.error('initializeSteemAccount Fail:', err.message)
         return false
       }
     },

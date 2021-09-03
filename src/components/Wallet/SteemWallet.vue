@@ -43,8 +43,8 @@ export default {
     };
   },
   computed: {
-    ...mapState(["steemAccount", "steemBalance", "sbdBalance"]),
-    ...mapGetters(["spBalance"]),
+    ...mapState(["steemAccount", "steemLoginType", "steemBalance", "sbdBalance"]),
+    ...mapGetters(["spBalance", 'steemActiveKey']),
   },
   components: {
     BalanceView,
@@ -59,7 +59,8 @@ export default {
       // this.showMessage = true;
     } else {
       if (this.steemAccount && this.steemAccount.trim().length > 0) {
-        this.$store.dispatch("initializeSteemAccount", this.steemAccount);
+        console.log({ steemAccount: this.steemAccount, activeKey: this.steemActiveKey, steemLoginType: this.steemLoginType });
+        this.$store.dispatch("initializeSteemAccount", { steemAccount: this.steemAccount, activeKey: this.steemActiveKey, steemLoginType: this.steemLoginType });
       }
     }
   },
