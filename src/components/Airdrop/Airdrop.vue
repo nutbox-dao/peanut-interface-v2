@@ -163,14 +163,26 @@ export default {
     wherein() {
       const w = this.airdropList.filter((a) => a.type === "wherein");
       if (w.length > 0) {
-        return w[0];
+        const drawn = w.filter(f => f.state === 'drawn')
+        const pending = w.filter(f => f.state === 'pending')
+        if (pending.length > 0){
+          return pending
+        }else{
+          return drawn
+        }
       }
       return 0;
     },
     nutbox() {
       const w = this.airdropList.filter((a) => a.type === "nutbox");
       if (w.length > 0) {
-        return w[0];
+        const drawn = w.filter(f => f.state === 'drawn')
+        const pending = w.filter(f => f.state === 'pending')
+        if (pending.length > 0){
+          return pending
+        }else{
+          return drawn
+        }
       }
       return 0;
     },
@@ -182,19 +194,27 @@ export default {
     },
     whereinDrawn() {
       if (this.whereinNoAirdrop) return false;
-      return this.wherein.state === "drawn";
+      return this.wherein[0].state === "drawn";
     },
     nutboxDrawn() {
       if (this.nutboxNoAirdrop) return false;
-      return this.nutbox.state === "drawn";
+      return this.nutbox[0].state === "drawn";
     },
     whereinAmount() {
       if (this.whereinNoAirdrop) return 0;
-      return this.wherein.amount;
+      if (this.wherein[0].state === 'drawn'){
+        return this.wherein.reduce((s, w) => s + parseFloat(w.amount), 0)
+      }else{
+        return this.wherein[0].amount
+      }
     },
     nutboxAmount() {
       if (this.nutboxNoAirdrop) return 0;
-      return this.nutbox.amount;
+      if (this.nutbox[0].state === 'drawn'){
+        return this.nutbox.reduce((s, n) => s + parseFloat(n.amount), 0)
+      }else{
+        return this.nutbox[0].amount
+      }
     },
     isLogin() {
       return this.steemAccount && this.steemAccount.length > 0;
@@ -217,6 +237,7 @@ export default {
         const res = await custom_json(
           this.steemAccount,
           this.tronAddress,
+          this.whereinAmount,
           'wherein'
         );
         if (res) {
@@ -241,6 +262,7 @@ export default {
         const res = await custom_json(
           this.steemAccount,
           this.tronAddress,
+          this.nutboxAmount,
           'nutbox'
         );
         if (res) {

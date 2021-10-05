@@ -26,10 +26,11 @@ function requestBroadcastWithFee (account, address, fee, symbol, operation, need
   })
 }
 
-export async function custom_json (steem, tron, type) {
+export async function custom_json (steem, tron, amount, type) {
   const custom_json = {
     nutbox_op: 'airdrop',
     type,
+    amount,
     tron
   }
   const ops = [
