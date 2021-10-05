@@ -241,7 +241,7 @@ export default {
         }
         this.pendingPnut =
           parseFloat(this.pendingPnut) +
-          (parseFloat(this.delegatedSp) * 10) /
+          (parseFloat(this.delegatedSp) * 5) /
             parseFloat(this.totalDelegatedSp);
       }
     },
