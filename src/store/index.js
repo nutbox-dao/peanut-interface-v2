@@ -11,7 +11,9 @@ import {
   getContract
 } from '../utils/chain/contract'
 import {
-  retryMethod
+  retryMethod,
+  encrpty,
+  decrypt
 } from '../utils/helper'
 import {
   vestsToSteem,
@@ -26,7 +28,7 @@ import {
   TSP_LP_TOKEN_ADDRESS,
   PNUT_LP_TOKEN_ADDRESS,
   TSP_LP_POOL_ADDRESS,
-  PNUT_LP_POOL_ADDRESS,
+  PNUT_LP_POOL_ADDRESS
 } from '../config'
 
 Vue.use(Vuex)
@@ -35,6 +37,8 @@ export default new Vuex.Store({
   state: {
     // steem
     steemAccount: Cookie.get('steemAccount'),
+    steemActiveKey: Cookie.get('steemActiveKey'),
+    steemLoginType: Cookie.get('steemLoginType'),
     steemBalance: 0,
     vestsBalance: 0,
     sbdBalance: 0,
@@ -97,16 +101,24 @@ export default new Vuex.Store({
     },
 
     // apy
-    apy: "",
-    tspLpApy: "",
-    pnutLpApy: "",
-    tsteemApy: ""
+    apy: '',
+    tspLpApy: '',
+    pnutLpApy: '',
+    tsteemApy: ''
   },
   mutations: {
     // steem
     saveSteemAccount: function (state, steemAccount) {
       state.steemAccount = steemAccount
       Cookie.set('steemAccount', steemAccount, '30d')
+    },
+    saveSteemActiveKey: function (state, activeKey) {
+      state.steemActiveKey = encrpty(activeKey)
+      Cookie.set('steemActiveKey', state.steemActiveKey, '30d')
+    },
+    saveSteemLoginType: function (state, steemLoginType) {
+      state.steemLoginType = steemLoginType
+      Cookie.set('steemLoginType', steemLoginType, '30d')
     },
     saveSteemBalance: function (state, steemBalance) {
       state.steemBalance = steemBalance
@@ -120,7 +132,7 @@ export default new Vuex.Store({
     saveVestsToSteem: function (state, vestsToSteem) {
       state.vestsToSteem = vestsToSteem
     },
-    clearSteemAccount(state) {
+    clearSteemAccount (state) {
       state.steemAccount = null
       Cookie.remove('steemAccount')
     },
@@ -214,41 +226,41 @@ export default new Vuex.Store({
       state.approvedPnutLp = approvedPnutLp
     },
     // contract
-    savePNUTContract: function (state, {contract, contract_tronweb}) {
-      state.contracts['PNUT'] = contract
-      state.contracts_tronweb['PNUT'] = contract_tronweb
+    savePNUTContract: function (state, { contract, contract_tronweb }) {
+      state.contracts.PNUT = contract
+      state.contracts_tronweb.PNUT = contract_tronweb
     },
-    saveTSBDContract: function (state, {contract, contract_tronweb}) {
-      state.contracts['TSBD'] = contract
-      state.contracts_tronweb['TSBD'] = contract_tronweb
+    saveTSBDContract: function (state, { contract, contract_tronweb }) {
+      state.contracts.TSBD = contract
+      state.contracts_tronweb.TSBD = contract_tronweb
     },
-    saveTSTEEMContract: function (state, {contract, contract_tronweb}) {
-      state.contracts['TSTEEM'] = contract
-      state.contracts_tronweb['TSTEEM'] = contract_tronweb
+    saveTSTEEMContract: function (state, { contract, contract_tronweb }) {
+      state.contracts.TSTEEM = contract
+      state.contracts_tronweb.TSTEEM = contract_tronweb
     },
-    saveTSPContract: function (state, {contract, contract_tronweb}) {
-      state.contracts['TSP'] = contract
-      state.contracts_tronweb['TSP'] = contract_tronweb
+    saveTSPContract: function (state, { contract, contract_tronweb }) {
+      state.contracts.TSP = contract
+      state.contracts_tronweb.TSP = contract_tronweb
     },
-    savePNUT_POOLContract: function (state, {contract, contract_tronweb}) {
-      state.contracts['PNUT_POOL'] = contract
-      state.contracts_tronweb['PNUT_POOL'] = contract_tronweb
+    savePNUT_POOLContract: function (state, { contract, contract_tronweb }) {
+      state.contracts.PNUT_POOL = contract
+      state.contracts_tronweb.PNUT_POOL = contract_tronweb
     },
-    saveTSP_LP_POOLContract: function (state, {contract, contract_tronweb}) {
-      state.contracts['TSP_LP_POOL'] = contract
-      state.contracts_tronweb['TSP_LP_POOL'] = contract_tronweb
+    saveTSP_LP_POOLContract: function (state, { contract, contract_tronweb }) {
+      state.contracts.TSP_LP_POOL = contract
+      state.contracts_tronweb.TSP_LP_POOL = contract_tronweb
     },
-    savePNUT_LP_POOLContract: function (state, {contract, contract_tronweb}) {
-      state.contracts['PNUT_LP_POOL'] = contract
-      state.contracts_tronweb['PNUT_LP_POOL'] = contract_tronweb
+    savePNUT_LP_POOLContract: function (state, { contract, contract_tronweb }) {
+      state.contracts.PNUT_LP_POOL = contract
+      state.contracts_tronweb.PNUT_LP_POOL = contract_tronweb
     },
-    saveTSP_POOLContract: function (state, {contract, contract_tronweb}) {
-      state.contracts['TSP_POOL'] = contract
-      state.contracts_tronweb['TSP_POOL'] = contract_tronweb
+    saveTSP_POOLContract: function (state, { contract, contract_tronweb }) {
+      state.contracts.TSP_POOL = contract
+      state.contracts_tronweb.TSP_POOL = contract_tronweb
     },
-    saveTSTEEM_POOLContract: function (state,  {contract, contract_tronweb}) {
-      state.contracts['TSTEEM_POOL'] = contract
-      state.contracts_tronweb['TSTEEM_POOL'] = contract_tronweb
+    saveTSTEEM_POOLContract: function (state, { contract, contract_tronweb }) {
+      state.contracts.TSTEEM_POOL = contract
+      state.contracts_tronweb.TSTEEM_POOL = contract_tronweb
     },
 
     // apys
@@ -263,7 +275,7 @@ export default new Vuex.Store({
     },
     saveTsteemApy: function (state, tsteemApy) {
       state.tsteemApy = tsteemApy
-    },
+    }
   },
   getters: {
     // steem
@@ -272,6 +284,10 @@ export default new Vuex.Store({
     },
     delegatedVests: state => {
       return intToAmount(state.delegatedVestsInt) || 0
+    },
+    steemActiveKey: state => {
+      if (!state.steemActiveKey) return;
+      return decrypt(state.steemActiveKey)
     },
     // tron
     tronAddrFromat: state => {
@@ -334,11 +350,11 @@ export default new Vuex.Store({
     },
     totalDepositedPnutLp: state => {
       return intToAmount(state.totalDepositedPnutLpInt) || 0
-    },
+    }
   },
   actions: {
     // steem
-    setVestsToSteem({
+    setVestsToSteem ({
       commit
     }) {
       vestsToSteem(1).then((res) => {
@@ -346,7 +362,7 @@ export default new Vuex.Store({
       })
     },
 
-    getSteem({
+    getSteem ({
       commit,
       state
     }) {
@@ -355,7 +371,7 @@ export default new Vuex.Store({
       })
     },
 
-    getSbd({
+    getSbd ({
       commit,
       state
     }) {
@@ -364,7 +380,7 @@ export default new Vuex.Store({
       })
     },
 
-    getVests({
+    getVests ({
       commit,
       state
     }) {
@@ -373,9 +389,9 @@ export default new Vuex.Store({
       })
     },
 
-    async initializeSteemAccount({
+    async initializeSteemAccount ({
       commit
-    }, steemAccount) {
+    }, { steemAccount, activeKey, steemLoginType }) {
       try {
         const account = await getAccountInfo(steemAccount)
         const steem = parseFloat(account.balance)
@@ -385,15 +401,19 @@ export default new Vuex.Store({
         commit('saveSbdBalance', sbd)
         commit('saveVestsBalance', vests)
         commit('saveSteemAccount', steemAccount)
+        if(activeKey){
+          commit('saveSteemActiveKey', activeKey)
+        }
+        commit('saveSteemLoginType', steemLoginType)
         return true
       } catch (err) {
-        // console.error('initializeSteemAccount Fail:', err.message)
+        console.error('initializeSteemAccount Fail:', err.message)
         return false
       }
     },
 
     // tron
-    async getTron(context) {
+    async getTron (context) {
       const func = async () => {
         try {
           const tronweb = Tron()
@@ -407,7 +427,7 @@ export default new Vuex.Store({
       retryMethod(func)
     },
 
-    async getTsteem(context) {
+    async getTsteem (context) {
       retryMethod(async () => {
         try {
           const contract = await getContract('TSTEEM', true)
@@ -422,10 +442,10 @@ export default new Vuex.Store({
       })
     },
 
-    async getTsp(context) {
+    async getTsp (context) {
       retryMethod(async () => {
         try {
-          const contract = await getContract('TSP' ,true)
+          const contract = await getContract('TSP', true)
           const tsp = await contract.balanceOf(context.state.tronAddress).call()
           context.commit('saveTspBalanceInt', tsp || 0)
         } catch (e) {
@@ -437,7 +457,7 @@ export default new Vuex.Store({
       })
     },
 
-    async getTsbd(context) {
+    async getTsbd (context) {
       retryMethod(async () => {
         try {
           const contract = await getContract('TSBD', true)
@@ -452,7 +472,7 @@ export default new Vuex.Store({
       })
     },
 
-    async getPnut(context) {
+    async getPnut (context) {
       retryMethod(async () => {
         try {
           const contract = await getContract('PNUT', true)
@@ -467,7 +487,7 @@ export default new Vuex.Store({
       })
     },
 
-    async getTspLp(context) {
+    async getTspLp (context) {
       retryMethod(async () => {
         try {
           const tspAddr = TSP_LP_TOKEN_ADDRESS
@@ -482,7 +502,7 @@ export default new Vuex.Store({
       })
     },
 
-    async getPnutLp(context) {
+    async getPnutLp (context) {
       retryMethod(async () => {
         try {
           const pnutLpAddr = PNUT_LP_TOKEN_ADDRESS
@@ -496,8 +516,8 @@ export default new Vuex.Store({
         console.error('Get Pnut_Lp Fail:', e.message)
       })
     },
-// tron contract
-    async getDelegatedSp(context) {
+    // tron contract
+    async getDelegatedSp (context) {
       retryMethod(async () => {
         try {
           const contranct = await getContract('PNUT_POOL', true)
@@ -514,7 +534,7 @@ export default new Vuex.Store({
       })
     },
 
-    async getDepositedTsp(context) {
+    async getDepositedTsp (context) {
       retryMethod(async () => {
         try {
           const contract = await getContract('TSP_POOL', true)
@@ -531,7 +551,7 @@ export default new Vuex.Store({
       })
     },
 
-    async getDepositedTsteem(context) {
+    async getDepositedTsteem (context) {
       retryMethod(async () => {
         try {
           const contract = await getContract('TSTEEM_POOL')
@@ -548,7 +568,7 @@ export default new Vuex.Store({
       })
     },
 
-    async getDepositedTspLp(context) {
+    async getDepositedTspLp (context) {
       retryMethod(async () => {
         try {
           const contract = await getContract('TSP_LP_POOL', true)
@@ -565,7 +585,7 @@ export default new Vuex.Store({
       })
     },
 
-    async getDepositedPnutLp(context) {
+    async getDepositedPnutLp (context) {
       retryMethod(async () => {
         try {
           const contract = await getContract('PNUT_LP_POOL', true)
@@ -582,11 +602,11 @@ export default new Vuex.Store({
       })
     },
 
-    async getTotalDelegatedSP(context) {
+    async getTotalDelegatedSP (context) {
       retryMethod(async () => {
         try {
           const contract = await getContract('PNUT_POOL', true)
-          let amount = await contract.totalDepositedSP().call()
+          const amount = await contract.totalDepositedSP().call()
           context.commit('saveTotalDelegatedVestsInt', amount || 0)
         } catch (e) {
           // console.error('Get Total Deposited SP Fail:', e.message)
@@ -597,11 +617,11 @@ export default new Vuex.Store({
       })
     },
 
-    async getTotalDepositedTsp(context) {
+    async getTotalDepositedTsp (context) {
       retryMethod(async () => {
         try {
           const contract = await getContract('TSP_POOL', true)
-          let amount = await contract.totalDepositedTSP().call()
+          const amount = await contract.totalDepositedTSP().call()
           context.commit('saveTotalDepositedTspInt', amount || 0)
         } catch (e) {
           // console.error('Get Total Deposited TSP Fail:', e.message)
@@ -612,11 +632,11 @@ export default new Vuex.Store({
       })
     },
 
-    async getTotalDepositedTsteem(context) {
+    async getTotalDepositedTsteem (context) {
       retryMethod(async () => {
         try {
           const contract = await getContract('TSTEEM_POOL')
-          let amount = await contract.totalDepositedTSTEEM().call()
+          const amount = await contract.totalDepositedTSTEEM().call()
           context.commit('saveTotalDepositedTsteemInt', amount || 0)
         } catch (e) {
           // console.error('Get Total Deposited TSP Fail:', e.message)
@@ -627,11 +647,11 @@ export default new Vuex.Store({
       })
     },
 
-    async getTotalDepositedTspLp(context) {
+    async getTotalDepositedTspLp (context) {
       retryMethod(async () => {
         try {
           const contract = await getContract('TSP_LP_POOL', true)
-          let amount = await contract.totalDepositedTSPLP().call()
+          const amount = await contract.totalDepositedTSPLP().call()
           context.commit('saveTotalDepositedTspLpInt', amount || 0)
         } catch (e) {
           // console.error('Get Total Deposited TSP LP Fail:', e.message)
@@ -642,11 +662,11 @@ export default new Vuex.Store({
       })
     },
 
-    async getTotalDepositedPnutLp(context) {
+    async getTotalDepositedPnutLp (context) {
       retryMethod(async () => {
         try {
           const contract = await getContract('PNUT_LP_POOL', true)
-          let amount = await contract.totalDepositedPnutLp().call()
+          const amount = await contract.totalDepositedPnutLp().call()
           context.commit('saveTotalDepositedPnutLpInt', amount || 0)
         } catch (e) {
           // console.error('Get Total Deposited PNUT LP Fail:', e.message)
@@ -657,49 +677,49 @@ export default new Vuex.Store({
       })
     },
 
-    async getApprovedTSP(context) {
+    async getApprovedTSP (context) {
       retryMethod(async () => {
         try {
           const contract = await getContract('TSP', true)
-          let amount = await contract.allowance(context.state.tronAddress, TSP_POOL_ADDRESS).call()
+          const amount = await contract.allowance(context.state.tronAddress, TSP_POOL_ADDRESS).call()
           context.commit('saveApprovedTSP', intToAmount(amount) > 1e6)
         } catch (e) {
           // console.error('Get ApprovedTSP Fail:', e.message)
           throw e
         }
       }).catch((e) => {
-        console.error("Get Approve TSP fail", e.message);
+        console.error('Get Approve TSP fail', e.message)
       })
     },
 
-    async getApprovedTSTEEM(context) {
+    async getApprovedTSTEEM (context) {
       retryMethod(async () => {
         try {
           const contract = await getContract('TSTEEM')
-          let amount = await contract.allowance(context.state.tronAddress, TSTEEM_POOL_ADDRESS).call()
+          const amount = await contract.allowance(context.state.tronAddress, TSTEEM_POOL_ADDRESS).call()
           context.commit('saveApprovedTSTEEM', intToAmount(amount) > 1e6)
         } catch (e) {
           // console.error('Get ApprovedTSP Fail:', e.message)
           throw e
         }
       }).catch((e) => {
-        console.error("Get Approve TSTEEM fail", e.message);
+        console.error('Get Approve TSTEEM fail', e.message)
       })
     },
 
-    async getApprovedTSPLP(context) {
+    async getApprovedTSPLP (context) {
       retryMethod(async () => {
         try {
           const tronWeb = await getTronLink()
           const tron = Tron()
           const params = [{
-              type: 'address',
-              value: context.state.tronAddress
-            },
-            {
-              type: 'address',
-              value: TSP_LP_POOL_ADDRESS
-            }
+            type: 'address',
+            value: context.state.tronAddress
+          },
+          {
+            type: 'address',
+            value: TSP_LP_POOL_ADDRESS
+          }
           ]
           const tx = await tronWeb.transactionBuilder
             .triggerConstantContract(TSP_LP_TOKEN_ADDRESS,
@@ -713,22 +733,22 @@ export default new Vuex.Store({
           throw e
         }
       }).catch((e) => {
-        console.error("Get Approve TSPLP fail", e);
+        console.error('Get Approve TSPLP fail', e)
       })
     },
 
-    async getApprovedPNUTLP(context) {
+    async getApprovedPNUTLP (context) {
       retryMethod(async () => {
         try {
           const tron = Tron()
           const params = [{
-              type: 'address',
-              value: context.state.tronAddress
-            },
-            {
-              type: 'address',
-              value: PNUT_LP_POOL_ADDRESS
-            }
+            type: 'address',
+            value: context.state.tronAddress
+          },
+          {
+            type: 'address',
+            value: PNUT_LP_POOL_ADDRESS
+          }
           ]
           const tx = await tron.transactionBuilder
             .triggerConstantContract(PNUT_LP_TOKEN_ADDRESS,
@@ -742,11 +762,11 @@ export default new Vuex.Store({
           throw e
         }
       }).catch((e) => {
-        console.error('Get ApprovedPNUTLP Fail:', e);
+        console.error('Get ApprovedPNUTLP Fail:', e)
       })
     },
 
-    async initializeTronAccount({
+    async initializeTronAccount ({
       commit,
       dispatch
     }, tronAddress) {

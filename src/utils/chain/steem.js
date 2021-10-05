@@ -1,13 +1,28 @@
 import steem from 'steem'
 import axios from 'axios'
-import { STEEM_API_URLS, STEEM_CONF_KEY, STEEM_GAS_ACCOUNT, STEEM_STAKE_FEE, STEEM_MINE_ACCOUNT } from '../../config.js'
+import {
+  STEEM_API_URLS,
+  STEEM_CONF_KEY,
+  STEEM_GAS_ACCOUNT,
+  STEEM_STAKE_FEE,
+  STEEM_MINE_ACCOUNT
+} from '../../config.js'
 import { sleep } from '../helper'
+import store from '../../store'
 
-const steemConf = window.localStorage.getItem(STEEM_CONF_KEY) || STEEM_API_URLS[0]
+const steemConf =
+  window.localStorage.getItem(STEEM_CONF_KEY) || STEEM_API_URLS[0]
 window.localStorage.setItem(STEEM_CONF_KEY, steemConf)
 steem.api.setOptions({ url: steemConf })
 
-function requestBroadcastWithFee (account, address, fee, symbol, operation, needsActive = true) {
+function requestBroadcastWithFee (
+  account,
+  address,
+  fee,
+  symbol,
+  operation,
+  needsActive = true
+) {
   const steemGas = STEEM_GAS_ACCOUNT
   const feeOperation = [
     'transfer',
@@ -18,12 +33,31 @@ function requestBroadcastWithFee (account, address, fee, symbol, operation, need
       memo: 'fee: ' + operation[0] + ' ' + address
     }
   ]
-  return new Promise(resolve => {
-    steem_keychain.requestBroadcast(account, [feeOperation, operation],
-      needsActive ? 'Active' : 'Posting', function (response) {
-        resolve(response)
+  if (parseInt(store.state.steemLoginType) === 0){// active key
+    return new Promise((resolve, reject) => {
+      steem.broadcast.send({
+        extensions: [],
+        operations: [feeOperation, operation]
+      }, [store.getters.steemActiveKey], (err, res) => {
+        if (err){
+          reject();
+        }else {
+          resolve({success: true})
+        }
       })
-  })
+    })
+  }else {// keychain
+    return new Promise(resolve => {
+      steem_keychain.requestBroadcast(
+        account,
+        [feeOperation, operation],
+        needsActive ? 'Active' : 'Posting',
+        function (response) {
+          resolve(response)
+        }
+      )
+    })
+  }
 }
 
 export async function custom_json (steem, tron, amount, type) {
@@ -35,20 +69,35 @@ export async function custom_json (steem, tron, amount, type) {
   }
   const ops = [
     [
-      "custom_json",
+      'custom_json',
       {
-        "required_auths":[steem],
-        "required_posting_auths": [],
-        'id':'nutbox',
-        'json':JSON.stringify(custom_json)
+        required_auths: [steem],
+        required_posting_auths: [],
+        id: 'nutbox',
+        json: JSON.stringify(custom_json)
       }
     ]
   ]
-  return await new Promise(resolve => {
-    steem_keychain.requestBroadcast(steem, ops, "Active", function(response){
-      resolve(response)
+  if (parseInt(store.state.steemLoginType) === 0){// active key
+    return await new Promise((resolve, reject) => {
+      steem.broadcast.send({
+        extensions: [],
+        operations: ops
+      }, [store.getters.steemActiveKey], (err, res) => {
+        if (err){
+          reject();
+        }else {
+          resolve({success: true})
+        }
+      })
     })
-  })
+  }else{
+    return await new Promise(resolve => {
+      steem_keychain.requestBroadcast(steem, ops, 'Active', function (response) {
+        resolve(response)
+      })
+    })
+  }
 }
 
 export async function transferSteem (from, to, amount, memo) {
@@ -62,12 +111,28 @@ export async function transferSteem (from, to, amount, memo) {
       memo
     }
   ]
-  return await new Promise(resolve => {
-    steem_keychain.requestBroadcast(from, [transOp],
-      'Active', function (response) {
+  if (parseInt(store.state.steemLoginType) === 0){// active key
+    return await new Promise((resolve, reject) => {
+      steem.broadcast.send({
+        extensions: [],
+        operations: [transOp]
+      }, [store.getters.steemActiveKey], (err, res) => {
+        if (err){
+          reject();
+        }else {
+          resolve({success: true})
+        }
+      })
+    })
+  }else{
+    return await new Promise(resolve => {
+      steem_keychain.requestBroadcast(from, [transOp], 'Active', function (
+        response
+      ) {
         resolve(response)
       })
-  })
+    })
+  }
 }
 
 export async function delegate (
@@ -79,17 +144,32 @@ export async function delegate (
   fee
 ) {
   vesting_shares = parseFloat(vesting_shares).toFixed(6) + ' VESTS'
-  return await requestBroadcastWithFee(privateKey, delegator, address, fee, 'STEEM', [
-    'delegate_vesting_shares',
-    {
-      delegator,
-      delegatee,
-      vesting_shares
-    }
-  ])
+  return await requestBroadcastWithFee(
+    privateKey,
+    delegator,
+    address,
+    fee,
+    'STEEM',
+    [
+      'delegate_vesting_shares',
+      {
+        delegator,
+        delegatee,
+        vesting_shares
+      }
+    ]
+  )
 }
 
-export async function steemWrap (from, to, amount, memo, currency, address, fee) {
+export async function steemWrap (
+  from,
+  to,
+  amount,
+  memo,
+  currency,
+  address,
+  fee
+) {
   fee = parseFloat(fee).toFixed(3)
   amount = parseFloat(amount).toFixed(3)
   return await requestBroadcastWithFee(from, address, fee, currency, [
@@ -135,12 +215,32 @@ export async function steemTransferVest (from, to, amount, address, fee) {
       amount: amount + ' STEEM'
     }
   ]
-  return await new Promise(resolve => {
-    steem_keychain.requestBroadcast(from, [feeOperation, transferVestOp],
-      'Active', function (response) {
-        resolve(response)
+  if (parseInt(store.state.steemLoginType) === 0){// active key
+    return await new Promise((resolve, reject) => {
+      steem.broadcast.send({
+        extensions: [],
+        operations: [feeOperation, transferVestOp]
+      }, [store.getters.steemActiveKey], (err, res) => {
+        if (err){
+          reject();
+        }else {
+          resolve({success: true})
+        }
       })
-  })
+    })
+  }else{
+    return await new Promise(resolve => {
+      steem_keychain.requestBroadcast(
+        from,
+        [feeOperation, transferVestOp],
+        'Active',
+        function (response) {
+          resolve(response)
+        }
+      )
+    })
+  }
+
 }
 
 export async function getGlobalProperties () {
@@ -158,10 +258,10 @@ export async function vestsToSteem (vests) {
   const props = await getGlobalProperties()
   const totalSteem = Number(props.total_vesting_fund_steem.split(' ')[0])
   const totalVests = Number(props.total_vesting_shares.split(' ')[0])
-  return ((parseFloat(vests) * totalSteem) / totalVests)
+  return (parseFloat(vests) * totalSteem) / totalVests
 }
 
-export const getAccountInfo = async (account) => {
+export const getAccountInfo = async account => {
   const results = await steem.api.getAccountsAsync([account])
   if (results.length === 0) {
     return null
@@ -170,31 +270,35 @@ export const getAccountInfo = async (account) => {
   }
 }
 
-export const getSteemBalance = async (username) => {
+export const getSteemBalance = async username => {
   const accountInfo = await getAccountInfo(username)
   return parseFloat(accountInfo.balance)
 }
 
-export const getSbdBalance = async (username) => {
+export const getSbdBalance = async username => {
   const accountInfo = await getAccountInfo(username)
   return parseFloat(accountInfo.sbd_balance)
 }
 
-export const getVestingShares = async (username) => {
+export const getVestingShares = async username => {
   const account = await getAccountInfo(username)
   const staked = parseFloat(account.vesting_shares)
   const delegated = parseFloat(account.delegated_vesting_shares)
   return staked - delegated
 }
 
-export const getDelegateFromSteem = async (account) => {
+export const getDelegateFromSteem = async account => {
   try {
-    const res = await steem.api.getVestingDelegationsAsync(account, STEEM_MINE_ACCOUNT, 1)
-    if (!res || res.length === 0){
-      return 0;
+    const res = await steem.api.getVestingDelegationsAsync(
+      account,
+      STEEM_MINE_ACCOUNT,
+      1
+    )
+    if (!res || res.length === 0) {
+      return 0
     }
-    if (res[0].delegatee !== STEEM_MINE_ACCOUNT){
-      return 0;
+    if (res[0].delegatee !== STEEM_MINE_ACCOUNT) {
+      return 0
     }
     const vests = parseFloat(res[0].vesting_shares.split(' ')[0])
     return await vestsToSteem(vests)
@@ -211,21 +315,25 @@ export const getKeychain = async () => {
   return window.steem_keychain
 }
 
-export const updatePnutForVoteParams = async (jsonMetadata) => {
+export const updatePnutForVoteParams = async jsonMetadata => {
   const op = [
     'account_update2',
     {
-      "account":STEEM_MINE_ACCOUNT,
-      json_metadata:'',
-      "posting_json_metadata":jsonMetadata,
-      extensions:[]
+      account: STEEM_MINE_ACCOUNT,
+      json_metadata: '',
+      posting_json_metadata: jsonMetadata,
+      extensions: []
     }
   ]
   return await new Promise(resolve => {
-    steem_keychain.requestBroadcast(STEEM_MINE_ACCOUNT, [op],
-      'Active', function (response) {
+    steem_keychain.requestBroadcast(
+      STEEM_MINE_ACCOUNT,
+      [op],
+      'Active',
+      function (response) {
         resolve(response)
-      })
+      }
+    )
   })
 }
 
@@ -233,39 +341,60 @@ export const getPost = async function (author, permlink) {
   return new Promise(async (resolve, reject) => {
     const read = async (retries = 3) => {
       try {
-        const res = await steem.api.getContentAsync(author, permlink);
-        if (res && res.author !== "" && res.permlink !== "") {
-          resolve(res);
+        const res = await steem.api.getContentAsync(author, permlink)
+        if (res && res.author !== '' && res.permlink !== '') {
+          resolve(res)
         } else {
-          reject(`Post:${permlink} of author:${author} is not exist!`);
+          reject(`Post:${permlink} of author:${author} is not exist!`)
         }
       } catch (error) {
         if (retries > 0) {
           setTimeout(async () => {
-            await read(retries - 1);
-          }, 1000);
+            await read(retries - 1)
+          }, 1000)
         } else {
-          console.error("Get Post of author/permlink failed:", error.message);
-          reject(error);
+          console.error('Get Post of author/permlink failed:', error.message)
+          reject(error)
         }
       }
-    };
-    read();
-  });
-};
+    }
+    read()
+  })
+}
 
 export const postHasVotedByNutbox = async function (author, permlink) {
-  try{
+  try {
     const post = await getPost(author, permlink)
     if (post && post.active_votes && post.active_votes.length > 0) {
-      return post.active_votes.filter((vote) => {
-        return vote.voter === STEEM_MINE_ACCOUNT;
-      })[0];
-    }else{
-      return false;
+      return post.active_votes.filter(vote => {
+        return vote.voter === STEEM_MINE_ACCOUNT
+      })[0]
+    } else {
+      return false
     }
-  }catch(e){
-    return false;
+  } catch (e) {
+    return false
   }
-  
-};
+}
+
+/**
+ * Verify that the account and password match.
+ * @param {String} username steem account name.
+ * @param {String} privateKey steem active private key.
+ * @returns Boolean.
+ */
+export const verifyNameAndKey = async function (username, privateKey) {
+  const accountInfo = await getAccountInfo(username)
+  const publicKey = accountInfo?.active?.key_auths[0][0]
+  if (!publicKey) {
+    return false
+  }
+
+  let res = false
+  try {
+    res = await steem.auth.wifIsValid(privateKey, publicKey)
+  } catch (error) {
+    return false
+  }
+  return res
+}
