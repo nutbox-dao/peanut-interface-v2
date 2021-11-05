@@ -24,7 +24,7 @@ export const TRC20_APPROVE_AMOUNT = 1e50
 export const TSTEEM_TRANSFER_FEE = 1
 export const STEEM_TO_TSP_FEE = 1
 export const TSBD_TRANSFER_FEE = 0.03
-export const STEEM_STAKE_FEE = 1
+export const STEEM_STAKE_FEE = 2
 
 export const TRANSFER_FEE_RATIO = 0.002
 export const STEEM_TO_TSP_FEE_RATIO = 0.002
@@ -39,7 +39,7 @@ export const STEEM_GAS_ACCOUNT = process.env.STEEM_GAS_ACCOUNT || 'nutbox.gas'
 export const STEEM_MINE_ACCOUNT = process.env.STEEM_MINE_ACCOUNT || 'nutbox.mine'
 export const STEEM_TSP_ACCOUNT = process.env.STEEM_TSP_ACCOUNT || 'nutbox-tsp'
 
-export const TRON_CONTRACT_CALL_PARAMS = { feeLimit: 45_000_000 }
+export const TRON_CONTRACT_CALL_PARAMS = { feeLimit: 90_000_000 }
 // Pnut contract
 export const TRON_PNUT_CONTRACT = "TPZddNpQJHu8UtKPY1PYDBv2J5p5QpJ6XW";
 export const TRON_PNUT_RECEIVE_ACCOUNT = "TMLMSuyygN1fL5HpUt1oQp3RjvdEsHZffG";
