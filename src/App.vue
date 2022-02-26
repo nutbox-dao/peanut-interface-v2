@@ -54,6 +54,10 @@
             <p id="airdrop-icon" class="my-icon" />
             <span>{{ $t("airdrop.airdrop") }}</span>
           </b-nav-item>
+          <b-nav-item to="/exchange">
+            <p id="liquid-staking-icon" class="my-icon" />
+            <span>{{ $t("exchange.exchange") }}</span>
+          </b-nav-item>
           <b-nav-item
             to="/admin"
             v-if="$store.state.steemAccount === nutboxMineAccount"

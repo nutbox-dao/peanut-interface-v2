@@ -125,6 +125,16 @@ module.exports = {
       tsptosteemintro: '转换的STEEM将在33-40天内陆续返还'
     }
   },
+  exchange: {
+    exchange: '跨链转换PNUT',
+    swap: '转换',
+    recipient: '接收地址',
+    recipientPlaceholder: '请填写您的BSC接收地址',
+    title: '将PNUT跨链到BSC，您将收到同样多的PNUT在BSC主网上',
+    amount: '数量',
+    amountPlaceholder: '请填写转换的数量',
+    wrongAddress: '错误的BSC地址!'
+  },
   vote: {
     upvote: '点赞',
     vote: '点赞帖子',

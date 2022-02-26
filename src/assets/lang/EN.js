@@ -125,6 +125,16 @@ module.exports = {
       tsptosteemintro: 'The STEEM will be returned to your Steem account in around 33~40 days after TSP is claimed to be redeemed.'
     }
   },
+  exchange: {
+    exchange: 'Swap to BSC',
+    swap: 'Swap',
+    recipient: 'Recipient',
+    recipientPlaceholder: 'Please input the recipient address of BSC Mainnet.',
+    title: 'Swap PNUT to BSC Mainnet, your will receive PNUT on BSC.',
+    amount: 'Amount',
+    amountPlaceholder: 'Please input the swap amount.',
+    wrongAddress: 'Wrong BSC address!'
+  },
   vote: {
     upvote: 'Upvote',
     vote: 'Upvote post',

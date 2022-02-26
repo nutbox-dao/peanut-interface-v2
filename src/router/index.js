@@ -13,6 +13,7 @@ import Vote from '../components/Vote/Vote'
 import Admin from '../components/Admin/Admin'
 import Blog from '../components/Blog/Blog'
 import Airdrop from '../components/Airdrop/Airdrop'
+import Exchange from '../components/Exchange/Exchange'
 
 Vue.use(VueRouter)
 
@@ -78,6 +79,10 @@ const routes = [
   {
     path: '/airdrop',
     component: Airdrop
+  },
+  {
+    path: '/exchange',
+    component: Exchange
   },
   {
     path:'/admin',
