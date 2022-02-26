@@ -218,13 +218,48 @@
       @hideMask="showMessage = false"
     />
     <div class="right">
+      <div @click="showNoticeClick" class="notice">
+        {{ $t('message.notice') }}
+      </div>
       <router-view></router-view>
+    </div>
+
+    <div v-show="showNotice">
+      <transition name="fade">
+        <div class="mask" @click="showNoticeClick">
+          <div class="mask-box">
+            <div class="mask-info">
+              <p class="title">{{ $t('message.notice') }}</p>
+              <p class="mask-info-text">
+                1. {{ $t('message.closeAnnouncement1') }}
+              </p>
+              <p class="mask-info-text">
+                2. {{ $t('message.closeAnnouncement2') }}
+              </p>
+              <p class="mask-info-text">
+                3. {{ $t('message.closeAnnouncement3') }}
+              </p>
+              <p style="margin-top: 1rem">
+                {{ $t('message.timeLeft') }} : {{ leftTime }}
+              </p>
+              <div style="margin-top:1rem;display:flex;">
+                <b-button style="flex:1" variant="primary" @click="gotoSwap">
+                  {{ $t('message.gotoSwap') }}
+                </b-button>
+                <b-button style="flex:1;margin-left:0.8rem" variant="primary" @click="gotoPeanutV2">
+                  {{ $t('message.gotoPeanutV2') }}
+                </b-button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </transition>
     </div>
   </div>
 </template>
 
 <script>
-import { watchWallet, getTronLinkAddr } from "./utils/chain/tron";
+import { watchWallet, getTronLinkAddr, monitorBlock } from "./utils/chain/tron";
 import {
   TRON_LINK_ADDR_NOT_FOUND,
   STEEM_API_URLS,
@@ -246,15 +281,31 @@ export default {
       steemNodeKey: STEEM_CONF_KEY,
       currentSteemNode: window.localStorage.getItem(STEEM_CONF_KEY),
       nutboxMineAccount: STEEM_MINE_ACCOUNT,
+      notice: '',
       lang: "en",
+      leftTime: '',
+      stopBlock: 38849864
     };
   },
   computed: {
-    ...mapState(["tronAddress"]),
+    ...mapState(["tronAddress", 'showNotice', 'currentBlock']),
     ...mapGetters(["tronAddrFromat", "pnutBalance"]),
   },
   components: {
     TipMessage,
+  },
+  watch: {
+    currentBlock(newVal, val) {
+      const current = parseInt(newVal)
+      if (this.stopBlock > current) {
+        const leftSec = (this.stopBlock - current) * 3
+        const day = Math.floor(leftSec / 86400)
+        const hour = Math.floor(leftSec % 86400 / 3600)
+        const min = Math.floor(leftSec % 3600 / 60)
+        const sec = leftSec % 60
+        this.leftTime = `${day > 0 ? day + ' Day' : ''} ${hour > 0 ? hour + ' Hours' : ''} ${min > 0 ? min + ' minutes' : ''} ${sec + ' secdons'}`
+      }
+    }
   },
   methods: {
     setLanguage(lang) {
@@ -267,6 +318,15 @@ export default {
       window.localStorage.setItem(this.steemNodeKey, node);
       this.$router.go(0);
     },
+    showNoticeClick() {
+      this.$store.commit('saveShowNotice', !this.showNotice)
+    },
+    gotoSwap() {
+      this.$router.push('/exchange')
+    },
+    gotoPeanutV2() {
+      window.open('https://walnut.nutbox.app/#/sub-community/home/?id=0xc54C1F0E7A75Fb405038891E316c973D26Bf0125', '_blank')
+    }
   },
   async mounted() {
     var store = this.$store;
@@ -303,6 +363,7 @@ export default {
         store.dispatch("initializeTronAccount", address);
       }
     });
+    monitorBlock();
     storeApy();
   },
 };
@@ -495,6 +556,46 @@ input::-webkit-input-placeholder {
   color: #242629 !important;
 }
 
+.mask-box {
+  position: relative;
+  width: 30rem;
+  background: rgb(255, 255, 255);
+  box-shadow: rgba(0, 0, 0, 0.08) 0px 3px 30px, rgba(0, 0, 0, 0.04) 0px 4px 8px,
+    rgba(0, 0, 0, 0.04) 3px 16px 24px, rgba(0, 0, 0, 0.01) 3px 24px 32px;
+  border-radius: 28px;
+  padding: 24px 36px;
+  display: block;
+  z-index: 100;
+  box-sizing: border-box;
+  margin-top: -50vh;
+}
+
+.mask-info {
+  align-content: center;
+  background-repeat: no-repeat;
+  background-position: top left;
+  // background-image: url('../../static/images/error.svg');
+  p {
+    width: 100%;
+    word-wrap: break-word;
+    margin-bottom: 0;
+  }
+  .title{
+    font-size: 20px;
+    line-height: 24px;
+    color: var(--primary-text);
+    text-align: left;
+  }
+}
+.mask-info-text {
+  text-align: left;
+  color: var(--secondary-text);
+  margin-top: 16px;
+  line-height:20px;
+  font-size:16px;
+  margin-bottom: 8px;
+}
+
 .left .bottom {
   //position: absolute;
   padding: 0 20px;
@@ -552,6 +653,15 @@ input::-webkit-input-placeholder {
   }
 }
 
+.notice {
+  position: absolute;
+  top: 2rem;
+  right:2rem;
+  color: var(--primary);
+  font-size: 1.6rem;
+  font-weight: 700;
+  cursor: pointer;
+} 
 .my-icon {
   width: 24px;
   height: 24px;

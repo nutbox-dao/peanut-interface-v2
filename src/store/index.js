@@ -35,6 +35,8 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+    showNotice: true,
+    currentBlock: 0,
     // steem
     steemAccount: Cookie.get('steemAccount'),
     steemActiveKey: Cookie.get('steemActiveKey'),
@@ -107,6 +109,12 @@ export default new Vuex.Store({
     tsteemApy: ''
   },
   mutations: {
+    saveShowNotice: (state, showNotice) => {
+      state.showNotice = showNotice
+    },
+    saveCurrentBlock: (state, currentBlock) => {
+      state.currentBlock = currentBlock
+    },
     // steem
     saveSteemAccount: function (state, steemAccount) {
       state.steemAccount = steemAccount

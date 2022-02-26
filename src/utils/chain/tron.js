@@ -11,6 +11,7 @@ import {
   retryMethod
 } from '../helper'
 import store from '../../store'
+import axios from 'axios'
 
 function initTron(symbol) {
   const HttpProvider = Tron.providers.HttpProvider
@@ -63,6 +64,19 @@ export const getTronLink = async function () {
     await sleep(0.5)
   }
   return window.tronWeb
+}
+
+export const monitorBlock = async function () {
+  const tronweb = await getTronLink()
+  while (true) {
+    try{
+    const block = await tronweb.trx.getCurrentBlock()
+    store.commit('saveCurrentBlock', block.block_header.raw_data.number)
+    }catch(e) {
+      console.log(66, e);
+    }
+    await sleep(6)
+  }
 }
 
 export const transferPnut = async function (to, amount, memo = "") {
