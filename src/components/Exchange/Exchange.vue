@@ -134,10 +134,12 @@ export default {
     },
     checkAddress() {
       const res = ethers.utils.isAddress(this.recipient)
-      this.recipient = ethers.utils.getAddress(this.recipient)
        if (!res) {
            this.showTip(this.$t("error.error"), this.$t("exchange.wrongAddress"));
+       }else{
+          this.recipient = ethers.utils.getAddress(this.recipient)
        }
+
        return res;
     },
     checkPnutAmount() {
