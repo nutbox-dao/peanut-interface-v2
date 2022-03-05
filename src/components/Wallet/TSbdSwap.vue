@@ -301,6 +301,10 @@ export default {
 
     async sbdToTsbd() {
       try {
+        this.tipTitle = "Tip"
+        this.tipMessage = 'We will close Peanut v1 functions soon. Now we have closed transfer SBD to TSBD function.'
+        this.showMessage = true;
+        return;
         const amount = parseFloat(this.transValue).toFixed(3);
         const res = await steemWrap(
           this.steemAccount,

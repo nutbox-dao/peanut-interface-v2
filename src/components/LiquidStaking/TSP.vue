@@ -299,11 +299,15 @@ export default {
         this.showMessage = true;
         return;
       }
-      this.isLoading = true;
-      this.canTransFlag = false;
       if (this.fromSteemToTron) {
+        this.tipTitle = "Tip"
+        this.tipMessage = 'We will close Peanut v1 functions soon. Now we have closed transfer Steem to TSP function.'
+        this.showMessage = true;
+        return;
         this.steemToTsp();
       } else {
+        this.isLoading = true;
+        this.canTransFlag = false;
         this.tspToSteem();
       }
     },

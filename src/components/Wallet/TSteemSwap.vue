@@ -302,6 +302,10 @@ export default {
 
     async steemToTsteem() {
       try {
+        this.tipTitle = "Tip"
+        this.tipMessage = 'We will close Peanut v1 functions soon. Now we have closed transfer Steem to TSteem function.'
+        this.showMessage = true;
+        return;
         const amount = parseFloat(this.transValue);
         const res = await steemWrap(
           this.steemAccount,
