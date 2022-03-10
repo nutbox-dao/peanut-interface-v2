@@ -3,8 +3,18 @@
     <div class="left">
       <div class="top">
         <div class="logo-container">
-          <img src="./static/images/logo.png" style="width:180px;height:70px" alt="nutbox" class="logo" />
-          <img src="./static/images/logo_small.png" style="width:42px;height:42px;margin-bottom:12px" alt="nutbox" class="logo_small" />
+          <img
+            src="./static/images/logo.png"
+            style="width: 180px; height: 70px"
+            alt="nutbox"
+            class="logo"
+          />
+          <img
+            src="./static/images/logo_small.png"
+            style="width: 42px; height: 42px; margin-bottom: 12px"
+            alt="nutbox"
+            class="logo_small"
+          />
         </div>
         <b-nav pills vertical align="center" class="menu">
           <b-nav-item to="/wallet">
@@ -17,7 +27,10 @@
                     : $t("wallet.wallet")
                 }}
               </p>
-              <p style="font-size: 12px; font-weight: 400; color: var(--disable)"  class="memu-wallet">
+              <p
+                style="font-size: 12px; font-weight: 400; color: var(--disable)"
+                class="memu-wallet"
+              >
                 {{ pnutBalance | amountForm }}
               </p>
             </div>
@@ -35,6 +48,10 @@
             <span>{{ $t("liquidStaking.liquidStaking") }}</span>
           </b-nav-item>
           <b-nav-item to="/get-vote">
+            <p id="upvote-icon" class="my-icon" />
+            <span>{{ $t("vote.upvote") }}</span>
+          </b-nav-item>
+          <b-nav-item to="/get-vote-bsc">
             <p id="upvote-icon" class="my-icon" />
             <span>{{ $t("vote.upvote") }}</span>
           </b-nav-item>
@@ -219,7 +236,7 @@
     />
     <div class="right">
       <div @click="showNoticeClick" class="notice">
-        {{ $t('message.notice') }}
+        {{ $t("message.notice") }}
       </div>
       <router-view></router-view>
     </div>
@@ -229,25 +246,29 @@
         <div class="mask" @click="showNoticeClick">
           <div class="mask-box">
             <div class="mask-info">
-              <p class="title">{{ $t('message.notice') }}</p>
+              <p class="title">{{ $t("message.notice") }}</p>
               <p class="mask-info-text">
-                1. {{ $t('message.closeAnnouncement1') }}
+                1. {{ $t("message.closeAnnouncement1") }}
               </p>
               <p class="mask-info-text">
-                2. {{ $t('message.closeAnnouncement2') }}
+                2. {{ $t("message.closeAnnouncement2") }}
               </p>
               <p class="mask-info-text">
-                3. {{ $t('message.closeAnnouncement3') }}
+                3. {{ $t("message.closeAnnouncement3") }}
               </p>
               <p style="margin-top: 1rem">
-                {{ $t('message.timeLeft') }} : {{ leftTime }}
+                {{ $t("message.timeLeft") }} : {{ leftTime }}
               </p>
-              <div style="margin-top:1rem;display:flex;">
-                <b-button style="flex:1" variant="primary" @click="gotoSwap">
-                  {{ $t('message.gotoSwap') }}
+              <div style="margin-top: 1rem; display: flex">
+                <b-button style="flex: 1" variant="primary" @click="gotoSwap">
+                  {{ $t("message.gotoSwap") }}
                 </b-button>
-                <b-button style="flex:1;margin-left:0.8rem" variant="primary" @click="gotoPeanutV2">
-                  {{ $t('message.gotoPeanutV2') }}
+                <b-button
+                  style="flex: 1; margin-left: 0.8rem"
+                  variant="primary"
+                  @click="gotoPeanutV2"
+                >
+                  {{ $t("message.gotoPeanutV2") }}
                 </b-button>
               </div>
             </div>
@@ -281,14 +302,14 @@ export default {
       steemNodeKey: STEEM_CONF_KEY,
       currentSteemNode: window.localStorage.getItem(STEEM_CONF_KEY),
       nutboxMineAccount: STEEM_MINE_ACCOUNT,
-      notice: '',
+      notice: "",
       lang: "en",
-      leftTime: '',
-      stopBlock: 38849864
+      leftTime: "",
+      stopBlock: 38849864,
     };
   },
   computed: {
-    ...mapState(["tronAddress", 'showNotice', 'currentBlock']),
+    ...mapState(["tronAddress", "showNotice", "currentBlock"]),
     ...mapGetters(["tronAddrFromat", "pnutBalance"]),
   },
   components: {
@@ -296,16 +317,18 @@ export default {
   },
   watch: {
     currentBlock(newVal, val) {
-      const current = parseInt(newVal)
+      const current = parseInt(newVal);
       if (this.stopBlock > current) {
-        const leftSec = (this.stopBlock - current) * 3
-        const day = Math.floor(leftSec / 86400)
-        const hour = Math.floor(leftSec % 86400 / 3600)
-        const min = Math.floor(leftSec % 3600 / 60)
-        const sec = leftSec % 60
-        this.leftTime = `${day > 0 ? day + ' Day' : ''} ${hour > 0 ? hour + ' Hours' : ''} ${min > 0 ? min + ' minutes' : ''} ${sec + ' secdons'}`
+        const leftSec = (this.stopBlock - current) * 3;
+        const day = Math.floor(leftSec / 86400);
+        const hour = Math.floor((leftSec % 86400) / 3600);
+        const min = Math.floor((leftSec % 3600) / 60);
+        const sec = leftSec % 60;
+        this.leftTime = `${day > 0 ? day + " Day" : ""} ${
+          hour > 0 ? hour + " Hours" : ""
+        } ${min > 0 ? min + " minutes" : ""} ${sec + " secdons"}`;
       }
-    }
+    },
   },
   methods: {
     setLanguage(lang) {
@@ -319,14 +342,17 @@ export default {
       this.$router.go(0);
     },
     showNoticeClick() {
-      this.$store.commit('saveShowNotice', !this.showNotice)
+      this.$store.commit("saveShowNotice", !this.showNotice);
     },
     gotoSwap() {
-      this.$router.push('/exchange')
+      this.$router.push("/exchange");
     },
     gotoPeanutV2() {
-      window.open('https://walnut.nutbox.app/#/sub-community/home/?id=0xc54C1F0E7A75Fb405038891E316c973D26Bf0125', '_blank')
-    }
+      window.open(
+        "https://walnut.nutbox.app/#/sub-community/home/?id=0xc54C1F0E7A75Fb405038891E316c973D26Bf0125",
+        "_blank"
+      );
+    },
   },
   async mounted() {
     var store = this.$store;
@@ -473,7 +499,7 @@ input::-webkit-input-placeholder {
   }
 }
 
-.logo-container{
+.logo-container {
   display: flex;
   align-content: center;
   justify-content: center;
@@ -497,8 +523,9 @@ input::-webkit-input-placeholder {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  ::-webkit-scrollbar{display:none;}
-
+  ::-webkit-scrollbar {
+    display: none;
+  }
 }
 .right {
   flex: 1;
@@ -580,7 +607,7 @@ input::-webkit-input-placeholder {
     word-wrap: break-word;
     margin-bottom: 0;
   }
-  .title{
+  .title {
     font-size: 20px;
     line-height: 24px;
     color: var(--primary-text);
@@ -591,8 +618,8 @@ input::-webkit-input-placeholder {
   text-align: left;
   color: var(--secondary-text);
   margin-top: 16px;
-  line-height:20px;
-  font-size:16px;
+  line-height: 20px;
+  font-size: 16px;
   margin-bottom: 8px;
 }
 
@@ -656,12 +683,12 @@ input::-webkit-input-placeholder {
 .notice {
   position: absolute;
   top: 2rem;
-  right:2rem;
+  right: 2rem;
   color: var(--primary);
   font-size: 1.6rem;
   font-weight: 700;
   cursor: pointer;
-} 
+}
 .my-icon {
   width: 24px;
   height: 24px;
@@ -716,8 +743,8 @@ input::-webkit-input-placeholder {
     background-image: url("./static/images/nps-hover.svg");
   }
   #airdrop-icon {
-  background-image: url("./static/images/airdrop-hover.png");
-}
+    background-image: url("./static/images/airdrop-hover.png");
+  }
 }
 
 #justswap-icon {
@@ -751,61 +778,60 @@ input::-webkit-input-placeholder {
 #telegram-icon:hover {
   background-image: url("./static/images/telegram-hover.svg");
 }
-.logo{
+.logo {
   display: block;
 }
-  .logo_small{
-    display: none;
-  }
-@media only screen and (max-width: 991px){
-  .logo_small{
-    display: block;
-  }
-   .logo{
-    display: none;
-  }
-.nav-item span  {
-   display: none;
-}
-.left{
-width: 75px;
-min-width: 75px;
-}
-.nav-link{
-  display: inherit;
-
-}
-.left .nav-item{
-  height: 40px;
-}
-.left .nav-link {
-     padding-left: 0px;
-}
-.left .bottom {
-  width: 100%;
-}
-.left .bottom .links {
-    display: block;
-}
-.left .bottom .links a {
-  margin-bottom: 6px;
-    display: block;
-}
-.menu .nav-link{
-  flex-wrap:inherit;
-}
-.memu-wallet{
+.logo_small {
   display: none;
 }
-.left .bottom .settings{
-  background: transparent;
-}
-.left .bottom .settings .btn-secondary{
-   color: transparent !important;
-}
-.left .bottom .settings{
-  padding: 0;
-  display: block;
-}
+@media only screen and (max-width: 991px) {
+  .logo_small {
+    display: block;
+  }
+  .logo {
+    display: none;
+  }
+  .nav-item span {
+    display: none;
+  }
+  .left {
+    width: 75px;
+    min-width: 75px;
+  }
+  .nav-link {
+    display: inherit;
+  }
+  .left .nav-item {
+    height: 40px;
+  }
+  .left .nav-link {
+    padding-left: 0px;
+  }
+  .left .bottom {
+    width: 100%;
+  }
+  .left .bottom .links {
+    display: block;
+  }
+  .left .bottom .links a {
+    margin-bottom: 6px;
+    display: block;
+  }
+  .menu .nav-link {
+    flex-wrap: inherit;
+  }
+  .memu-wallet {
+    display: none;
+  }
+  .left .bottom .settings {
+    background: transparent;
+  }
+  .left .bottom .settings .btn-secondary {
+    color: transparent !important;
+  }
+  .left .bottom .settings {
+    padding: 0;
+    display: block;
+  }
 }
 </style>
