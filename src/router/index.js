@@ -10,6 +10,7 @@ import LiquidStaking from '../components/LiquidStaking/LiquidStaking'
 import TSP from '../components/LiquidStaking/TSP'
 import Nps from '../components/Nps/Nps'
 import Vote from '../components/Vote/Vote'
+import BscVote from '../components/Vote/BscVote'
 import Admin from '../components/Admin/Admin'
 import Blog from '../components/Blog/Blog'
 import Airdrop from '../components/Airdrop/Airdrop'
@@ -17,8 +18,7 @@ import Exchange from '../components/Exchange/Exchange'
 
 Vue.use(VueRouter)
 
-const routes = [
-  {
+const routes = [{
     path: '/',
     name: 'index',
     redirect: '/stake'
@@ -27,8 +27,7 @@ const routes = [
     path: '/wallet',
     name: 'wallet',
     component: Wallet,
-    children: [
-      {
+    children: [{
         path: '',
         name: 'steem',
         component: SteemWallet
@@ -57,12 +56,10 @@ const routes = [
     path: '/liquid-staking',
     component: LiquidStaking,
     redirect: '/liquid-staking/tsp',
-    children: [
-      {
-        path: 'tsp',
-        component: TSP
-      }
-    ]
+    children: [{
+      path: 'tsp',
+      component: TSP
+    }]
   },
   {
     path: '/blog',
@@ -70,7 +67,11 @@ const routes = [
   },
   {
     path: '/get-vote',
-    component:Vote,
+    component: Vote,
+  },
+  {
+    path: '/get-vote-bsc',
+    component: BscVote,
   },
   {
     path: '/nps',
@@ -85,7 +86,7 @@ const routes = [
     component: Exchange
   },
   {
-    path:'/admin',
+    path: '/admin',
     component: Admin,
   }
 ]
