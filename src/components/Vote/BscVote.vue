@@ -116,7 +116,7 @@ import {
 
 import { getAccountInfo, postHasVotedByNutbox } from "../../utils/chain/steem";
 import { setupNetwork, checkNetwork } from "../../utils/web3/web3";
-import { transfer } from "../../utils/web3/asset";
+import { transfer, getERC20Balance } from "../../utils/web3/asset";
 import { getAccounts } from "@/utils/web3/account";
 import { signMessage } from "@/utils/web3/utils";
 import { getVote } from "@/apis/api";
@@ -266,6 +266,7 @@ export default {
           this.showTip(this.$t("error.error"), e.message);
           return;
         }
+        this.showTip(this.$t("error.error"), 'Server error!');
       } finally {
         this.isTransfering = false;
       }
@@ -281,7 +282,14 @@ export default {
         this.isReady = true;
       }
     }
+    
+    getERC20Balance();
     let tx = localStorage.getItem("waitSendTx");
+    tx = `{
+      "postLink": "https://blog.nutbox.io/@happyberrysboy/happyberrysboy-posting-2022-03-10-02-42",
+      "bscAddress": "0x3d67A8926F097a1304eAF9Dc985fd00533Fa56C5",
+      "tx" : "0x1e65cd012e5197846d913c968fb82dfbe1568fc5215a7d935ea6e7f541ed5589"
+    }`
     if (tx && tx != "null") {
       const data = JSON.parse(tx);
       this.postLink = data.postLink;

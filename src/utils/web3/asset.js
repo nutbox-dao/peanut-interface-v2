@@ -5,6 +5,7 @@ import { ethers } from "ethers";
 import { waitForTx, getProvider } from "./ethers";
 
 import { BSC_PNUT_CONTRACT, BSC_PNUT_RECEIVE_ACCOUNT } from "@/config";
+import store from '@/store'
 
 // get ERC20 info from home chain.
 export const getERC20Info = async address => {
@@ -88,6 +89,7 @@ export const getERC20Balance = async () => {
       const account = await getAccounts();
       if (!account) return 0;
       const balanceBI = await erc20Contract.balanceOf(account);
+      store.commit('saveBscPnutBalanceInt', balanceBI);
       resolve(balanceBI);
     } catch (e) {
       resolve(-1);

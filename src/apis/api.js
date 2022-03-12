@@ -21,6 +21,6 @@ export const getAirdropInfo = async params =>
   get(API_URL + "/airdrop/find", params);
 
 /******bsc buy vote backapi */
-const BSC_API_URL = "http://192.168.1.90:3000";
+const BSC_API_URL = "http://localhost:3000";
 export const getVote = async params =>
   post(BSC_API_URL + "/voters/getVote", params);
