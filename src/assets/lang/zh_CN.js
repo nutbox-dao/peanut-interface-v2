@@ -13,7 +13,7 @@ module.exports = {
     confirm: '确认',
     notice: '公告',
     closeAnnouncement1: `Peanut委员会已经在Walnut上创建了Peanut V2。`,
-    closeAnnouncement2: `我们将在区块：38849864 关闭Tron上Peanut的代理挖矿功能。
+    closeAnnouncement2: `我们已经在区块：38849864 关闭Tron上Peanut的代理挖矿功能。
     并且在Peanut V2同步开启代理挖矿功能。`,
     closeAnnouncement3: `您可以在转换界面将您的PNUT转移到Peanut V2中。`,
     timeLeft: '停止代理挖矿还剩',

@@ -40,10 +40,10 @@
             <b-button
               class="minus-btn op-btn"
               @click="minusDelegate"
-              :disabled="isLoading"
+              :disabled="true"
               >-</b-button
             >
-            <b-button class="op-btn" @click="addDelegate" :disabled="isLoading"
+            <b-button class="op-btn" @click="addDelegate" :disabled="true"
               >+</b-button
             >
           </div>

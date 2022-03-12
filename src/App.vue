@@ -239,9 +239,9 @@
               <p class="mask-info-text">
                 3. {{ $t('message.closeAnnouncement3') }}
               </p>
-              <p style="margin-top: 1rem">
+              <!-- <p style="margin-top: 1rem">
                 {{ $t('message.timeLeft') }} : {{ leftTime }}
-              </p>
+              </p> -->
               <div style="margin-top:1rem;display:flex;">
                 <b-button style="flex:1" variant="primary" @click="gotoSwap">
                   {{ $t('message.gotoSwap') }}

@@ -16,7 +16,7 @@ module.exports = {
     Before that, you can swap PNUT to BSC Main from Swap page. 
     And if you dont transfer before the end block, your can never transfer your PNUT to BSC.`,
     closeAnnouncement1: `Peanut committee has created Peanut Community on Walnut of BSC Mainnet.`,
-    closeAnnouncement2: `We will stop delegation function on Tron at block: 38849864. At the same time, enable the delegation function on Peanut V2.`,
+    closeAnnouncement2: `We have stop delegation function on Tron at block: 38849864. At the same time, enable the delegation function on Peanut V2.`,
     closeAnnouncement3: `You can swap your PNUT to BSC Mainnet right now.`,
     timeLeft: 'Delegation stop in',
     gotoSwap: 'Goto Swap',
