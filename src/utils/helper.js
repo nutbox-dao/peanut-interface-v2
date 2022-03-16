@@ -85,10 +85,10 @@ export const storeApy = async function () {
   const tspTotalLiquidity = data.totalLiquidity
   const tspLpExchengePoolApy = parseFloat(tspVolume24) * 365 * 0.3 / parseFloat(tspTotalLiquidity)
   // save to cache
-  store.commit('saveApy', parseFloat(apys.spApy).toFixed(1) + '%')
-  store.commit('saveTspLpApy', parseFloat(apys.spApy).toFixed(1) + '% + ' + tspLpExchengePoolApy.toFixed(1) + '%')
-  store.commit('savePnutLpApy', parseFloat(apys.pnutLpApy).toFixed(1) + '% + ' + pnutLpExchangePoolApy.toFixed(1) + '%')
-  store.commit('saveTsteemApy', parseFloat(apys.tsteemApy).toFixed(1) + '%')
+  store.commit('saveApy', '0.0%')
+  store.commit('saveTspLpApy', '0.0% + ' + tspLpExchengePoolApy.toFixed(1) + '%')
+  store.commit('savePnutLpApy', '0.0% + ' + pnutLpExchangePoolApy.toFixed(1) + '%')
+  store.commit('saveTsteemApy', '0.0%')
 }
 
 export function encrpty (string) {
