@@ -103,7 +103,12 @@ export default new Vuex.Store({
     apy: "",
     tspLpApy: "",
     pnutLpApy: "",
-    tsteemApy: ""
+    tsteemApy: "",
+
+    // bsc
+    bscAddress: '',
+    approvementBiz: false,
+    loadingApprovementBiz: true,
   },
   mutations: {
     saveShowNotice: (state, showNotice) => {
@@ -289,6 +294,17 @@ export default new Vuex.Store({
     },
     saveBscPnutBalanceInt: function(state, bscPnutBalanceInt) {
       state.bscPnutBalanceInt = bscPnutBalanceInt;
+    },
+
+    // bsc
+    saveApprovementBiz: (state, approvementBiz) => {
+      state.approvementBiz = approvementBiz
+    },
+    saveLoadingApprovementBiz(state, loadingApprovementBiz) {
+      state.loadingApprovementBiz = loadingApprovementBiz
+    },
+    saveBscAddress(state, bscAddress) {
+      state.bscAddress = bscAddress
     }
   },
   getters: {
@@ -370,7 +386,7 @@ export default new Vuex.Store({
       return intToAmount(state.totalDepositedPnutLpInt) || 0;
     },
     bscPnutBalance: state => {
-      return intToAmount(state.bscPnutBalanceInt) || 0;
+      return state.bscPnutBalanceInt.toString() / 1e18 || 0;
     }
   },
   actions: {

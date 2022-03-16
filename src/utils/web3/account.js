@@ -39,6 +39,7 @@ export const getAccounts = async (update = false) => {
   //store.commit("web3/saveAccount", account);
   //store.commit("web3/saveAllAccounts", accounts);
   console.log(accounts[0]);
+  store.commit('saveBscAddress', accounts[0])
   return accounts[0];
 };
 

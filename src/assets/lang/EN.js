@@ -30,6 +30,7 @@ module.exports = {
     withdrawn: "Harvested",
     balance: "Balance",
     approveContract: "Approve Contract",
+    approve: "Approve",
     max: "Max",
     confirmconvert: "Confirm Conversion",
     servicecharge: "Transaction Fee",
@@ -47,6 +48,7 @@ module.exports = {
     pnutbalance: "PNUT Balance",
     input: "Input",
     tips: "Tips",
+    account: "BSC account",
 
     setting: "Setting",
     admin: "Admin",
@@ -158,9 +160,13 @@ module.exports = {
     linkPlaceholder: "Input post link",
     pnutPlaceholder: "Input PNUT amount",
     transfer: "Transfer",
+    buy: "Buy",
     voteRate: "PNUT - 10% upvote",
     sendVoteTx: "Send Vote Tx",
-    sendTransfer: "Send"
+    sendTransfer: "Send",
+    success: 'Success',
+    isPending: "Your post is pending, please not buy again.",
+    userCancel: 'User cancel transaction.'
   },
   nps: {
     nps: "Governance",

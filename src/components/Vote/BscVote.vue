@@ -7,6 +7,9 @@
       {{ $t("vote.title") }}
     </h5>
     <div class="nav"></div>
+    <div style="text-align: right">
+      {{$t('message.account')}}: {{ account }}
+    </div>
     <div class="vote-container">
       <div class="vote-box">
         <p class="title">
@@ -24,7 +27,7 @@
             v-bind:readonly="isTransferSuccess"
           />
         </div>
-        <div class="pnut-input" v-if="!isTransferSuccess">
+        <div class="pnut-input">
           <p>{{ $t("vote.payPnut") }}</p>
           <div class="input-area" v-if="metamaskConnected">
             <div>
@@ -38,7 +41,17 @@
                 </span>
               </p>
             </div>
+            <b-button v-if="loadingApprovementBiz || !approvementBiz"
+            class="transfer-btn" variant="primary" @click="approve" :disabled="isApproving || loadingApprovementBiz || !isReady">
+               <b-spinner
+                small
+                type="grow"
+                v-show="isApproving || !isReady || loadingApprovementBiz"
+              ></b-spinner>
+              {{ $t('message.approve') }}
+            </b-button>
             <b-button
+              v-else
               class="transfer-btn"
               variant="primary"
               @click="transferPnut"
@@ -49,7 +62,7 @@
                 type="grow"
                 v-show="isTransfering || !isReady"
               ></b-spinner>
-              {{ $t("vote.transfer") }}
+              {{ $t("vote.buy") }}
             </b-button>
           </div>
           <b-button
@@ -61,31 +74,6 @@
             <b-spinner small type="grow" v-show="isLoging"></b-spinner>
             {{ $t("wallet.connectMetaMask") }}
           </b-button>
-        </div>
-        <div class="pnut-input" v-if="isTransferSuccess">
-          <p>{{ $t("vote.sendVoteTx") }}</p>
-          <div class="input-area">
-            <div>
-              <input
-                type="text"
-                v-model="tx"
-                v-bind:readonly="isTransferSuccess"
-              />
-            </div>
-            <b-button
-              class="transfer-btn"
-              variant="primary"
-              @click="sendTransfer"
-              :disabled="isTransfering || !isReady"
-            >
-              <b-spinner
-                small
-                type="grow"
-                v-show="isTransfering || !isReady"
-              ></b-spinner>
-              {{ $t("vote.sendTransfer") }}
-            </b-button>
-          </div>
         </div>
       </div>
     </div>
@@ -120,12 +108,18 @@ import { transfer, getERC20Balance } from "../../utils/web3/asset";
 import { getAccounts } from "@/utils/web3/account";
 import { signMessage } from "@/utils/web3/utils";
 import { getVote } from "@/apis/api";
+import { getApproveBiz, approveBiz, payUpvote } from '@/utils/web3/biz'
 
 export default {
   name: "Vote",
   computed: {
-    ...mapState(["metamaskConnected"]),
-    ...mapGetters(["bscPnutBalance"])
+    ...mapState(["metamaskConnected", 'bscAddress', 'loadingApprovementBiz', 'approvementBiz']),
+    ...mapGetters(["bscPnutBalance"]),
+    account() {
+      if (this.bscAddress) {
+        return this.bscAddress.slice(0,6) + '...' + this.bscAddress.slice(this.bscAddress.length - 6, this.bscAddress.length)
+      }
+    }
   },
   data() {
     return {
@@ -138,10 +132,10 @@ export default {
       pnutAmount: "",
       isLoging: false,
       isTransfering: false,
+      isApproving: false,
       isReady: false,
       showInstallTronLink: false,
       isTransferSuccess: false,
-      bscAddress: "",
       tx: ""
     };
   },
@@ -167,6 +161,17 @@ export default {
       }
       return match;
     },
+    async approve() {
+      try{
+        this.isApproving = true;
+        await approveBiz() 
+        await getApproveBiz()
+      } catch (e) {
+       this.showTip(this.$t("error.error"), this.$t("error.approveFail")) 
+      } finally {
+        this.isApproving = false
+      }
+    },
     checkPnutAmount() {
       const reg = /^\d+(\.\d+)?$/;
       const res = reg.test(this.pnutAmount);
@@ -175,6 +180,7 @@ export default {
         return res;
       }
       const amount = parseFloat(this.pnutAmount);
+      console.log(this.bscPnutBalance, amount);
       if (parseFloat(this.bscPnutBalance) < amount) {
         this.showTip(this.$t("error.error"), this.$t("error.insufficentPnut"));
         return false;
@@ -205,23 +211,18 @@ export default {
           this.showTip(this.$t("error.error"), this.$t("error.hasVoted"));
           return;
         }
-        const res = await transfer(this.pnutAmount);
-
-        if (res && res != -1) {
-          this.tx = res;
-          this.isTransferSuccess = true;
-          this.bscAddress = await getAccounts();
-
-          let Tx = {
-            postLink: this.postLink,
-            tx: this.tx,
-            bscAddress: this.bscAddress
-          };
-          localStorage.setItem("waitSendTx", JSON.stringify(Tx));
-        } else {
-          this.showTip(this.$t("error.error"), this.$t("error.transferFail"));
-        }
+        const res = await payUpvote(author, permlink, this.pnutAmount)
+        this.postLink = '';
+        this.pnutAmount = ''
       } catch (e) {
+        if (e.message.indexOf('Post is pending') !== -1){
+          this.showTip(this.$t("error.error"), this.$t('vote.isPending'))
+          return;
+        }
+        if (e.code === 4001) {
+          this.showTip(this.$t("error.error"), this.$t('vote.userCancel'))
+          return;
+        }
         this.showTip(this.$t("error.error"), e.message);
       } finally {
         this.isTransfering = false;
@@ -233,44 +234,6 @@ export default {
       this.tipType = "error";
       this.showMessage = true;
     },
-    async sendTransfer() {
-      if (!this.tx) {
-        this.showTip(this.$t("error.error"), this.$t("error.inputTx"));
-        return;
-      }
-
-      this.isTransfering = true;
-
-      try {
-        let Tx = {
-          postLink: this.postLink,
-          tx: this.tx,
-          bscAddress: this.bscAddress
-        };
-        const message = JSON.stringify(Tx);
-        const signature = await signMessage(message);
-        const params = {
-          infoStr: message,
-          signature
-        };
-
-        let res = await getVote(params);
-        localStorage.setItem("waitSendTx", null);
-        this.postLink = "";
-        this.pnutAmount = "";
-        this.tx = "";
-        this.bscAddress = "";
-        this.isTransferSuccess = false;
-      } catch (e) {
-        if (e.code === 4001) {
-          this.showTip(this.$t("error.error"), e.message);
-          return;
-        }
-        this.showTip(this.$t("error.error"), 'Server error!');
-      } finally {
-        this.isTransfering = false;
-      }
-    }
   },
   async mounted() {
     let { posting_json_metadata } = await getAccountInfo(STEEM_MINE_ACCOUNT);
@@ -282,21 +245,8 @@ export default {
         this.isReady = true;
       }
     }
-    
+    getApproveBiz();
     getERC20Balance();
-    let tx = localStorage.getItem("waitSendTx");
-    tx = `{
-      "postLink": "https://blog.nutbox.io/@happyberrysboy/happyberrysboy-posting-2022-03-10-02-42",
-      "bscAddress": "0x3d67A8926F097a1304eAF9Dc985fd00533Fa56C5",
-      "tx" : "0x1e65cd012e5197846d913c968fb82dfbe1568fc5215a7d935ea6e7f541ed5589"
-    }`
-    if (tx && tx != "null") {
-      const data = JSON.parse(tx);
-      this.postLink = data.postLink;
-      this.tx = data.tx;
-      this.bscAddress = data.bscAddress;
-      this.isTransferSuccess = true;
-    }
   }
 };
 </script>

@@ -28,6 +28,7 @@ module.exports = {
     withdrawn: "已收获",
     balance: "余额",
     approveContract: "授权合约",
+    approve: "授权",
     max: "最大",
     confirmconvert: "确认兑换",
     servicecharge: "手续费",
@@ -45,6 +46,7 @@ module.exports = {
     pnutbalance: "PNUT余额",
     input: "输入",
     tips: "帮助信息",
+    account: "BSC账号",
 
     setting: "设置",
     admin: "管理员",
@@ -154,9 +156,12 @@ module.exports = {
     linkPlaceholder: "请填写需要点赞的帖子链接",
     pnutPlaceholder: "请填写支付金额",
     transfer: "转账",
+    buy: "购买",
     voteRate: "PNUT - 10% 点赞",
     sendVoteTx: "发送投票交易",
-    sendTransfer: "发送"
+    sendTransfer: "发送",
+    isPending: "您的帖子正在等待点赞，请不要重复提交",
+    userCancel: "用户取消了签名"
   },
   airdrop: {
     airdrop: "空投",

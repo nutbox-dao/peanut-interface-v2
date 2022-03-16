@@ -85,13 +85,15 @@ export const getBalance = async () => {
 export const getERC20Balance = async () => {
   return new Promise(async resolve => {
     try {
-      const erc20Contract = await getContract("ERC20", BSC_PNUT_CONTRACT);
+      const erc20Contract = await getContract("Pnut");
       const account = await getAccounts();
       if (!account) return 0;
       const balanceBI = await erc20Contract.balanceOf(account);
+
       store.commit('saveBscPnutBalanceInt', balanceBI);
       resolve(balanceBI);
     } catch (e) {
+      console.log(e);
       resolve(-1);
     }
   });

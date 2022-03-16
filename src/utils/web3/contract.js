@@ -4,16 +4,7 @@ import { setupNetwork, isUnlocked, connectMetamask } from "./web3";
 import { getProvider, getReadonlyProvider } from "./ethers";
 import { ethers } from "ethers";
 import { getAccounts } from "./account";
-import { errCode } from "../../config";
-
-/* export const contractAddress = {
-  "Committee": "0xd10e4C1e301A13A9B874bd1757c135Eda075769D",
-  "MintableERC20Factory": "0xa183D96a7e84BF77Fb7825026fA8b9BF6894cfa8",
-  "CommunityFactory": "0x1A4EeE210Bc54a75D25989546F648474EdF1C0A3",
-  "LinearCalculator": "0x6ab448C1C6e1870602d3FB867F167029bbFb3181",
-  "SPStakingFactory": "0xF7Fa41BF814eDC767691DDB1864a334D83f4acf7",
-  "ERC20StakingFactory": "0xf870724476912057C807056b29c1161f5Fe0199a"
-} */
+import { errCode, BSC_PNUT_ADDRESS, BSC_PNUT_BIZ_ADDRESS } from "../../config";
 
 export const contractAddress = {
   Committee: "0xb833d8Dd406dB0e826A9b7682306d64440d3e2a3",
@@ -24,7 +15,9 @@ export const contractAddress = {
   SPStakingFactory: "0x3AaD4712f9E97678534fE804B825A38aA6378160",
   ERC20StakingFactory: "0x05fBf334590a5eDc4f1B06f6aC120CEA5FA76E1f",
   CosmosStakingFactory: "0x458984BA39b694b21F006E1892c432Cd14f483b1",
-  Gauge: "0xb6EC9647338Cb094A6dB172E21058F7642d8E743"
+  Gauge: "0xb6EC9647338Cb094A6dB172E21058F7642d8E743",
+  Pnut: BSC_PNUT_ADDRESS,
+  Biz: BSC_PNUT_BIZ_ADDRESS
 };
 
 export const getPoolFactory = type => {
@@ -59,7 +52,9 @@ const CONTRACT_ABI_FILE_NAME_LIST = {
   SPStaking: "SPStaking.json",
   ERC20: "ERC20.json",
   CosmosStaking: "CosmosStaking.json",
-  CosmosStakingFactory: "CosmosStakingFactory.json"
+  CosmosStakingFactory: "CosmosStakingFactory.json",
+  Pnut: "ERC20.json",
+  Biz: "PeanutBiz.json"
 };
 
 // Get contract Abi

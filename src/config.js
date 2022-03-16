@@ -64,8 +64,8 @@ export const TSTEEM_TOKEN_ADDRESS = "TBUZYrDh7gzjd1PLnkMHWoAo55ctRzZzGN";
 export const TSTEEM_POOL_ADDRESS = "TTyQs6taRKf2cr3dQq5jQMzoms9JGP3XYS";
 
 // BSC contract
-export const BSC_PNUT_CONTRACT = "0x871AD5aAA75C297EB22A6349871ce4588E3c0306";
-export const BSC_PNUT_RECEIVE_ACCOUNT = "0x375F413690b9Bb1CAB13084332D72B46B7De8881";
+// export const BSC_PNUT_CONTRACT = "0x871AD5aAA75C297EB22A6349871ce4588E3c0306";
+// export const BSC_PNUT_RECEIVE_ACCOUNT = "0x375F413690b9Bb1CAB13084332D72B46B7De8881";
 
 // approvement
 export const APPROVE_TOKEN_CONTRACT_PAIR = {
@@ -79,15 +79,19 @@ export const TRON_LINK_ADDR_NOT_FOUND = {
   walletLocked: "walletLocked",
   noTronLink: "noTronLink"
 };
-// chapel
-export const RPC_NODE = "https://data-seed-prebsc-1-s1.binance.org:8545";
-export const BSC_CHAIN_ID = 97;
-export const BLOCK_CHAIN_BROWER = "https://testnet.bscscan.com//";
-export const CHAIN_NAME = "BSC-Test";
+
+// bsc
+export const BSC_PNUT_ADDRESS = "0x705931A83C9b22fB29985f28Aee3337Aa10EFE11"
+export const BSC_PNUT_BIZ_ADDRESS = "0x9185BdceB084B217D72d8B5FE6a89a26644B4bFC"
+
+// bsc
+export const RPC_NODE = "https://bsc-dataseed.binance.org";
+export const BSC_CHAIN_ID = 56;
+export const CHAIN_NAME = "BSC-Mainnet";
 export const BSC_CHAIN_NAME = CHAIN_NAME;
 export const NATIVE_CURRENCY = {
-  name: "BNB",
-  symbol: "BNB",
+  name: "ETH",
+  symbol: "ETH",
   decimals: 18
 };
 

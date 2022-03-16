@@ -291,6 +291,7 @@ import {
 import TipMessage from "./components/ToolsComponents/TipMessage";
 import { mapState, mapGetters } from "vuex";
 import { storeApy } from "./utils/helper";
+import { accountChanged } from '@/utils/web3/account'
 
 export default {
   data() {
@@ -391,6 +392,11 @@ export default {
     });
     monitorBlock();
     storeApy();
+
+    // bsc
+    accountChanged(() => {
+      this.$router.go(0)
+    })
   },
 };
 </script>
