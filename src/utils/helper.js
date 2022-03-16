@@ -87,7 +87,7 @@ export const storeApy = async function () {
   // save to cache
   store.commit('saveApy', '0.0%')
   store.commit('saveTspLpApy', '0.0% + ' + tspLpExchengePoolApy.toFixed(1) + '%')
-  store.commit('savePnutLpApy', '0.0% + ' + pnutLpExchangePoolApy.toFixed(1) + '%')
+  store.commit('savePnutLpApy', parseFloat(apys.pnutLpApy).toFixed(1) + '% + ' + pnutLpExchangePoolApy.toFixed(1) + '%')
   store.commit('saveTsteemApy', '0.0%')
 }
 
