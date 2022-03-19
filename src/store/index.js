@@ -1,27 +1,21 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
-import Cookie from 'vue-cookies'
+import Vue from "vue";
+import Vuex from "vuex";
+import Cookie from "vue-cookies";
 import {
   intToAmount,
   getTronLink,
   getBalanceOfToken,
   getTron as Tron
-} from '../utils/chain/tron'
-import {
-  getContract
-} from '../utils/chain/contract'
-import {
-  retryMethod,
-  encrpty,
-  decrypt
-} from '../utils/helper'
+} from "../utils/chain/tron";
+import { getContract } from "../utils/chain/contract";
+import { retryMethod, encrpty, decrypt } from "../utils/helper";
 import {
   vestsToSteem,
   getAccountInfo,
   getSteemBalance,
   getSbdBalance,
   getVestingShares
-} from '../utils/chain/steem'
+} from "../utils/chain/steem";
 import {
   TSP_POOL_ADDRESS,
   TSTEEM_POOL_ADDRESS,
@@ -29,24 +23,24 @@ import {
   PNUT_LP_TOKEN_ADDRESS,
   TSP_LP_POOL_ADDRESS,
   PNUT_LP_POOL_ADDRESS
-} from '../config'
-
-Vue.use(Vuex)
+} from "../config";
+import { getERC20Balance } from "@/utils/web3/asset";
+Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
     showNotice: true,
     currentBlock: 0,
     // steem
-    steemAccount: Cookie.get('steemAccount'),
-    steemActiveKey: Cookie.get('steemActiveKey'),
-    steemLoginType: Cookie.get('steemLoginType'),
+    steemAccount: Cookie.get("steemAccount"),
+    steemActiveKey: Cookie.get("steemActiveKey"),
+    steemLoginType: Cookie.get("steemLoginType"),
     steemBalance: 0,
     vestsBalance: 0,
     sbdBalance: 0,
     vestsToSteem: 0,
     // tron
-    tronAddress: Cookie.get('tronAddress'),
+    tronAddress: Cookie.get("tronAddress"),
     tronweb: null,
     tronBalanceInt: 0,
     pnutBalanceInt: 0,
@@ -77,7 +71,10 @@ export default new Vuex.Store({
     approvedTspLp: false,
     approvedPnutLp: false,
     approvedTsteem: false,
-
+    //bsc
+    metamaskConnected: false,
+    chainId: 0,
+    bscPnutBalanceInt: 0,
     // contract
     contracts: {
       PNUT: {},
@@ -103,712 +100,791 @@ export default new Vuex.Store({
     },
 
     // apy
-    apy: '',
-    tspLpApy: '',
-    pnutLpApy: '',
-    tsteemApy: ''
+    apy: "",
+    tspLpApy: "",
+    pnutLpApy: "",
+    tsteemApy: "",
+
+    // bsc
+    bscAddress: '',
+    approvementBiz: false,
+    loadingApprovementBiz: true,
   },
   mutations: {
     saveShowNotice: (state, showNotice) => {
-      state.showNotice = showNotice
+      state.showNotice = showNotice;
     },
     saveCurrentBlock: (state, currentBlock) => {
-      state.currentBlock = currentBlock
+      state.currentBlock = currentBlock;
     },
     // steem
-    saveSteemAccount: function (state, steemAccount) {
-      state.steemAccount = steemAccount
-      Cookie.set('steemAccount', steemAccount, '30d')
+    saveSteemAccount: function(state, steemAccount) {
+      state.steemAccount = steemAccount;
+      Cookie.set("steemAccount", steemAccount, "30d");
     },
-    saveSteemActiveKey: function (state, activeKey) {
-      state.steemActiveKey = encrpty(activeKey)
-      Cookie.set('steemActiveKey', state.steemActiveKey, '30d')
+    saveSteemActiveKey: function(state, activeKey) {
+      state.steemActiveKey = encrpty(activeKey);
+      Cookie.set("steemActiveKey", state.steemActiveKey, "30d");
     },
-    saveSteemLoginType: function (state, steemLoginType) {
-      state.steemLoginType = steemLoginType
-      Cookie.set('steemLoginType', steemLoginType, '30d')
+    saveSteemLoginType: function(state, steemLoginType) {
+      state.steemLoginType = steemLoginType;
+      Cookie.set("steemLoginType", steemLoginType, "30d");
     },
-    saveSteemBalance: function (state, steemBalance) {
-      state.steemBalance = steemBalance
+    saveSteemBalance: function(state, steemBalance) {
+      state.steemBalance = steemBalance;
     },
-    saveVestsBalance: function (state, vestsBalance) {
-      state.vestsBalance = vestsBalance
+    saveVestsBalance: function(state, vestsBalance) {
+      state.vestsBalance = vestsBalance;
     },
-    saveSbdBalance: function (state, sbdBalance) {
-      state.sbdBalance = sbdBalance
+    saveSbdBalance: function(state, sbdBalance) {
+      state.sbdBalance = sbdBalance;
     },
-    saveVestsToSteem: function (state, vestsToSteem) {
-      state.vestsToSteem = vestsToSteem
+    saveVestsToSteem: function(state, vestsToSteem) {
+      state.vestsToSteem = vestsToSteem;
     },
-    clearSteemAccount (state) {
-      state.steemAccount = null
-      Cookie.remove('steemAccount')
+    clearSteemAccount(state) {
+      state.steemAccount = null;
+      Cookie.remove("steemAccount");
     },
     // tron
-    saveTronAddress: function (state, tronAddress) {
-      state.tronAddress = tronAddress
-      Cookie.set('tronAddress', tronAddress, '30d')
+    saveTronAddress: function(state, tronAddress) {
+      state.tronAddress = tronAddress;
+      Cookie.set("tronAddress", tronAddress, "30d");
     },
-    saveTronweb: function (state, tronweb) {
-      state.tronweb = tronweb
+    saveTronweb: function(state, tronweb) {
+      state.tronweb = tronweb;
     },
-    savePnutBalanceInt: function (state, pnutBalanceInt) {
-      state.pnutBalanceInt = pnutBalanceInt
+    savePnutBalanceInt: function(state, pnutBalanceInt) {
+      state.pnutBalanceInt = pnutBalanceInt;
     },
-    saveTronBalanceInt: function (state, tronBalanceInt) {
-      state.tronBalanceInt = tronBalanceInt
+    saveTronBalanceInt: function(state, tronBalanceInt) {
+      state.tronBalanceInt = tronBalanceInt;
     },
-    saveTsteemBalanceInt: function (state, tsteemBalanceInt) {
-      state.tsteemBalanceInt = tsteemBalanceInt
+    saveTsteemBalanceInt: function(state, tsteemBalanceInt) {
+      state.tsteemBalanceInt = tsteemBalanceInt;
     },
-    saveTspBalanceInt: function (state, tspBalanceInt) {
-      state.tspBalanceInt = tspBalanceInt
+    saveTspBalanceInt: function(state, tspBalanceInt) {
+      state.tspBalanceInt = tspBalanceInt;
     },
-    saveTspLpBalanceInt: function (state, tspLpBalanceInt) {
-      state.tspLpBalanceInt = tspLpBalanceInt
+    saveTspLpBalanceInt: function(state, tspLpBalanceInt) {
+      state.tspLpBalanceInt = tspLpBalanceInt;
     },
-    saveTsbdBalanceInt: function (state, tsbdBalanceInt) {
-      state.tsbdBalanceInt = tsbdBalanceInt
+    saveTsbdBalanceInt: function(state, tsbdBalanceInt) {
+      state.tsbdBalanceInt = tsbdBalanceInt;
     },
-    savePnutLpBalanceInt: function (state, pnutLpBalanceInt) {
-      state.pnutLpBalanceInt = pnutLpBalanceInt
+    savePnutLpBalanceInt: function(state, pnutLpBalanceInt) {
+      state.pnutLpBalanceInt = pnutLpBalanceInt;
     },
     // pool info
-    saveDelegatedVestsInt: function (state, delegatedVestsInt) {
-      state.delegatedVestsInt = delegatedVestsInt
+    saveDelegatedVestsInt: function(state, delegatedVestsInt) {
+      state.delegatedVestsInt = delegatedVestsInt;
     },
-    saveDepositedTspInt: function (state, depositedTspInt) {
-      state.depositedTspInt = depositedTspInt
+    saveDepositedTspInt: function(state, depositedTspInt) {
+      state.depositedTspInt = depositedTspInt;
     },
-    saveDepositedTspLpInt: function (state, depositedTspLpInt) {
-      state.depositedTspLpInt = depositedTspLpInt
+    saveDepositedTspLpInt: function(state, depositedTspLpInt) {
+      state.depositedTspLpInt = depositedTspLpInt;
     },
-    saveDepositedTsteemInt: function (state, depositedTsteemInt) {
-      state.depositedTsteemInt = depositedTsteemInt
+    saveDepositedTsteemInt: function(state, depositedTsteemInt) {
+      state.depositedTsteemInt = depositedTsteemInt;
     },
-    saveDepositedPnutLpInt: function (state, depositedPnutLpInt) {
-      state.depositedPnutLpInt = depositedPnutLpInt
+    saveDepositedPnutLpInt: function(state, depositedPnutLpInt) {
+      state.depositedPnutLpInt = depositedPnutLpInt;
     },
-    saveTotalDelegatedVestsInt: function (state, totalDelegatedVestsInt) {
-      state.totalDelegatedVestsInt = totalDelegatedVestsInt
+    saveTotalDelegatedVestsInt: function(state, totalDelegatedVestsInt) {
+      state.totalDelegatedVestsInt = totalDelegatedVestsInt;
     },
-    saveTotalDepositedTspInt: function (state, totalDepositedTspInt) {
-      state.totalDepositedTspInt = totalDepositedTspInt
+    saveTotalDepositedTspInt: function(state, totalDepositedTspInt) {
+      state.totalDepositedTspInt = totalDepositedTspInt;
     },
-    saveTotalDepositedTspLpInt: function (state, totalDepositedTspLpInt) {
-      state.totalDepositedTspLpInt = totalDepositedTspLpInt
+    saveTotalDepositedTspLpInt: function(state, totalDepositedTspLpInt) {
+      state.totalDepositedTspLpInt = totalDepositedTspLpInt;
     },
-    saveTotalDepositedPnutLpInt: function (state, totalDepositedPnutLpInt) {
-      state.totalDepositedPnutLpInt = totalDepositedPnutLpInt
+    saveTotalDepositedPnutLpInt: function(state, totalDepositedPnutLpInt) {
+      state.totalDepositedPnutLpInt = totalDepositedPnutLpInt;
     },
-    saveTotalDepositedTsteemInt: function (state, totalDepositedTsteemInt) {
-      state.totalDepositedTsteemInt = totalDepositedTsteemInt
+    saveTotalDepositedTsteemInt: function(state, totalDepositedTsteemInt) {
+      state.totalDepositedTsteemInt = totalDepositedTsteemInt;
     },
     // data whether ok
-    saveDelegatedVestsOk: function (state, delegatedVestsOk) {
-      state.delegatedVestsOk = delegatedVestsOk
+    saveDelegatedVestsOk: function(state, delegatedVestsOk) {
+      state.delegatedVestsOk = delegatedVestsOk;
     },
-    saveDepositedTspOk: function (state, depositedTspOk) {
-      state.depositedTspOk = depositedTspOk
+    saveDepositedTspOk: function(state, depositedTspOk) {
+      state.depositedTspOk = depositedTspOk;
     },
-    saveDepositedTsteemOk: function (state, depositedTsteemOk) {
-      state.depositedTsteemOk = depositedTsteemOk
+    saveDepositedTsteemOk: function(state, depositedTsteemOk) {
+      state.depositedTsteemOk = depositedTsteemOk;
     },
-    saveDepositedTspLpOk: function (state, depositedTspLpOk) {
-      state.depositedTspLpOk = depositedTspLpOk
+    saveDepositedTspLpOk: function(state, depositedTspLpOk) {
+      state.depositedTspLpOk = depositedTspLpOk;
     },
-    saveDepositedPnutLpOk: function (state, depositedPnutLpOk) {
-      state.depositedPnutLpOk = depositedPnutLpOk
+    saveDepositedPnutLpOk: function(state, depositedPnutLpOk) {
+      state.depositedPnutLpOk = depositedPnutLpOk;
     },
     // approve ment
-    saveApprovedTSP: function (state, approvedTsp) {
-      state.approvedTsp = approvedTsp
+    saveApprovedTSP: function(state, approvedTsp) {
+      state.approvedTsp = approvedTsp;
     },
-    saveApprovedTSTEEM: function (state, approvedTsteem) {
-      state.approvedTsteem = approvedTsteem
+    saveApprovedTSTEEM: function(state, approvedTsteem) {
+      state.approvedTsteem = approvedTsteem;
     },
-    saveApprovedTSPLP: function (state, approvedTspLp) {
-      state.approvedTspLp = approvedTspLp
+    saveApprovedTSPLP: function(state, approvedTspLp) {
+      state.approvedTspLp = approvedTspLp;
     },
-    saveApprovedPNUTLP: function (state, approvedPnutLp) {
-      state.approvedPnutLp = approvedPnutLp
+    saveApprovedPNUTLP: function(state, approvedPnutLp) {
+      state.approvedPnutLp = approvedPnutLp;
     },
     // contract
-    savePNUTContract: function (state, { contract, contract_tronweb }) {
-      state.contracts.PNUT = contract
-      state.contracts_tronweb.PNUT = contract_tronweb
+    savePNUTContract: function(state, { contract, contract_tronweb }) {
+      state.contracts.PNUT = contract;
+      state.contracts_tronweb.PNUT = contract_tronweb;
     },
-    saveTSBDContract: function (state, { contract, contract_tronweb }) {
-      state.contracts.TSBD = contract
-      state.contracts_tronweb.TSBD = contract_tronweb
+    saveTSBDContract: function(state, { contract, contract_tronweb }) {
+      state.contracts.TSBD = contract;
+      state.contracts_tronweb.TSBD = contract_tronweb;
     },
-    saveTSTEEMContract: function (state, { contract, contract_tronweb }) {
-      state.contracts.TSTEEM = contract
-      state.contracts_tronweb.TSTEEM = contract_tronweb
+    saveTSTEEMContract: function(state, { contract, contract_tronweb }) {
+      state.contracts.TSTEEM = contract;
+      state.contracts_tronweb.TSTEEM = contract_tronweb;
     },
-    saveTSPContract: function (state, { contract, contract_tronweb }) {
-      state.contracts.TSP = contract
-      state.contracts_tronweb.TSP = contract_tronweb
+    saveTSPContract: function(state, { contract, contract_tronweb }) {
+      state.contracts.TSP = contract;
+      state.contracts_tronweb.TSP = contract_tronweb;
     },
-    savePNUT_POOLContract: function (state, { contract, contract_tronweb }) {
-      state.contracts.PNUT_POOL = contract
-      state.contracts_tronweb.PNUT_POOL = contract_tronweb
+    savePNUT_POOLContract: function(state, { contract, contract_tronweb }) {
+      state.contracts.PNUT_POOL = contract;
+      state.contracts_tronweb.PNUT_POOL = contract_tronweb;
     },
-    saveTSP_LP_POOLContract: function (state, { contract, contract_tronweb }) {
-      state.contracts.TSP_LP_POOL = contract
-      state.contracts_tronweb.TSP_LP_POOL = contract_tronweb
+    saveTSP_LP_POOLContract: function(state, { contract, contract_tronweb }) {
+      state.contracts.TSP_LP_POOL = contract;
+      state.contracts_tronweb.TSP_LP_POOL = contract_tronweb;
     },
-    savePNUT_LP_POOLContract: function (state, { contract, contract_tronweb }) {
-      state.contracts.PNUT_LP_POOL = contract
-      state.contracts_tronweb.PNUT_LP_POOL = contract_tronweb
+    savePNUT_LP_POOLContract: function(state, { contract, contract_tronweb }) {
+      state.contracts.PNUT_LP_POOL = contract;
+      state.contracts_tronweb.PNUT_LP_POOL = contract_tronweb;
     },
-    saveTSP_POOLContract: function (state, { contract, contract_tronweb }) {
-      state.contracts.TSP_POOL = contract
-      state.contracts_tronweb.TSP_POOL = contract_tronweb
+    saveTSP_POOLContract: function(state, { contract, contract_tronweb }) {
+      state.contracts.TSP_POOL = contract;
+      state.contracts_tronweb.TSP_POOL = contract_tronweb;
     },
-    saveTSTEEM_POOLContract: function (state, { contract, contract_tronweb }) {
-      state.contracts.TSTEEM_POOL = contract
-      state.contracts_tronweb.TSTEEM_POOL = contract_tronweb
+    saveTSTEEM_POOLContract: function(state, { contract, contract_tronweb }) {
+      state.contracts.TSTEEM_POOL = contract;
+      state.contracts_tronweb.TSTEEM_POOL = contract_tronweb;
     },
 
     // apys
-    saveApy: function (state, apy) {
-      state.apy = apy
+    saveApy: function(state, apy) {
+      state.apy = apy;
     },
-    saveTspLpApy: function (state, tspLpApy) {
-      state.tspLpApy = tspLpApy
+    saveTspLpApy: function(state, tspLpApy) {
+      state.tspLpApy = tspLpApy;
     },
-    savePnutLpApy: function (state, pnutLpApy) {
-      state.pnutLpApy = pnutLpApy
+    savePnutLpApy: function(state, pnutLpApy) {
+      state.pnutLpApy = pnutLpApy;
     },
-    saveTsteemApy: function (state, tsteemApy) {
-      state.tsteemApy = tsteemApy
+    saveTsteemApy: function(state, tsteemApy) {
+      state.tsteemApy = tsteemApy;
+    },
+    saveMetamaskConnected: (state, metamaskConnected) => {
+      state.metamaskConnected = metamaskConnected;
+    },
+    saveChainId: (state, chainId) => {
+      state.chainId = chainId;
+    },
+    saveBscPnutBalanceInt: function(state, bscPnutBalanceInt) {
+      state.bscPnutBalanceInt = bscPnutBalanceInt;
+    },
+
+    // bsc
+    saveApprovementBiz: (state, approvementBiz) => {
+      state.approvementBiz = approvementBiz
+    },
+    saveLoadingApprovementBiz(state, loadingApprovementBiz) {
+      state.loadingApprovementBiz = loadingApprovementBiz
+    },
+    saveBscAddress(state, bscAddress) {
+      state.bscAddress = bscAddress
     }
   },
   getters: {
     // steem
     spBalance: state => {
-      return state.vestsBalance * state.vestsToSteem || 0
+      return state.vestsBalance * state.vestsToSteem || 0;
     },
     delegatedVests: state => {
-      return intToAmount(state.delegatedVestsInt) || 0
+      return intToAmount(state.delegatedVestsInt) || 0;
     },
     steemActiveKey: state => {
       if (!state.steemActiveKey) return;
-      return decrypt(state.steemActiveKey)
+      return decrypt(state.steemActiveKey);
     },
     // tron
     tronAddrFromat: state => {
       if (!state.tronAddress) {
-        return ''
+        return "";
       }
-      return state.tronAddress.substring(0, 6) + '...' + state.tronAddress.substring(30)
+      return (
+        state.tronAddress.substring(0, 6) +
+        "..." +
+        state.tronAddress.substring(30)
+      );
     },
     tronBalance: state => {
-      return intToAmount(state.tronBalanceInt) || 0
+      return intToAmount(state.tronBalanceInt) || 0;
     },
     tsteemBalance: state => {
-      return intToAmount(state.tsteemBalanceInt) || 0
+      return intToAmount(state.tsteemBalanceInt) || 0;
     },
     tspBalance: state => {
-      return intToAmount(state.tspBalanceInt) || 0
+      return intToAmount(state.tspBalanceInt) || 0;
     },
     tsbdBalance: state => {
-      return intToAmount(state.tsbdBalanceInt) || 0
+      return intToAmount(state.tsbdBalanceInt) || 0;
     },
     tspLpBalance: state => {
-      return intToAmount(state.tspLpBalanceInt) || 0
+      return intToAmount(state.tspLpBalanceInt) || 0;
     },
     pnutLpBalance: state => {
-      return intToAmount(state.pnutLpBalanceInt) || 0
+      return intToAmount(state.pnutLpBalanceInt) || 0;
     },
     pnutBalance: state => {
-      return intToAmount(state.pnutBalanceInt) || 0
+      return intToAmount(state.pnutBalanceInt) || 0;
     },
     // pool info
     delegatedSp: state => {
-      const delegatedVest = intToAmount(state.delegatedVestsInt)
-      return delegatedVest * state.vestsToSteem
+      const delegatedVest = intToAmount(state.delegatedVestsInt);
+      return delegatedVest * state.vestsToSteem;
     },
     depositedTsp: state => {
-      return intToAmount(state.depositedTspInt) || 0
+      return intToAmount(state.depositedTspInt) || 0;
     },
     depositedTsteem: state => {
-      return intToAmount(state.depositedTsteemInt) || 0
+      return intToAmount(state.depositedTsteemInt) || 0;
     },
     depositedTspLp: state => {
-      return intToAmount(state.depositedTspLpInt) || 0
+      return intToAmount(state.depositedTspLpInt) || 0;
     },
     depositedPnutLp: state => {
-      return intToAmount(state.depositedPnutLpInt) || 0
+      return intToAmount(state.depositedPnutLpInt) || 0;
     },
 
     totalDelegatedSp: state => {
-      const totalDelegatedVest = intToAmount(state.totalDelegatedVestsInt)
-      return totalDelegatedVest * state.vestsToSteem
+      const totalDelegatedVest = intToAmount(state.totalDelegatedVestsInt);
+      return totalDelegatedVest * state.vestsToSteem;
     },
     totalDepositedTsp: state => {
-      return intToAmount(state.totalDepositedTspInt) || 0
+      return intToAmount(state.totalDepositedTspInt) || 0;
     },
     totalDepositedTsteem: state => {
-      return intToAmount(state.totalDepositedTsteemInt) || 0
+      return intToAmount(state.totalDepositedTsteemInt) || 0;
     },
     totalDepositedTspLp: state => {
-      return intToAmount(state.totalDepositedTspLpInt) || 0
+      return intToAmount(state.totalDepositedTspLpInt) || 0;
     },
     totalDepositedPnutLp: state => {
-      return intToAmount(state.totalDepositedPnutLpInt) || 0
+      return intToAmount(state.totalDepositedPnutLpInt) || 0;
+    },
+    bscPnutBalance: state => {
+      return state.bscPnutBalanceInt.toString() / 1e18 || 0;
     }
   },
   actions: {
     // steem
-    setVestsToSteem ({
-      commit
-    }) {
-      vestsToSteem(1).then((res) => {
-        commit('saveVestsToSteem', res)
-      })
+    setVestsToSteem({ commit }) {
+      vestsToSteem(1).then(res => {
+        commit("saveVestsToSteem", res);
+      });
     },
 
-    getSteem ({
-      commit,
-      state
-    }) {
-      getSteemBalance(state.steemAccount).then((steem) => {
-        commit('saveSteemBalance', steem)
-      })
+    getSteem({ commit, state }) {
+      getSteemBalance(state.steemAccount).then(steem => {
+        commit("saveSteemBalance", steem);
+      });
     },
 
-    getSbd ({
-      commit,
-      state
-    }) {
-      getSbdBalance(state.steemAccount).then((sbd) => {
-        commit('saveSbdBalance', sbd)
-      })
+    getSbd({ commit, state }) {
+      getSbdBalance(state.steemAccount).then(sbd => {
+        commit("saveSbdBalance", sbd);
+      });
     },
 
-    getVests ({
-      commit,
-      state
-    }) {
-      getVestingShares(state.steemAccount).then((vests) => {
-        commit('saveVestsBalance', vests)
-      })
+    getVests({ commit, state }) {
+      getVestingShares(state.steemAccount).then(vests => {
+        commit("saveVestsBalance", vests);
+      });
     },
 
-    async initializeSteemAccount ({
-      commit
-    }, { steemAccount, activeKey, steemLoginType }) {
+    async initializeSteemAccount(
+      { commit },
+      { steemAccount, activeKey, steemLoginType }
+    ) {
       try {
-        const account = await getAccountInfo(steemAccount)
-        const steem = parseFloat(account.balance)
-        const sbd = parseFloat(account.sbd_balance)
-        const vests = parseFloat(account.vesting_shares) - parseFloat(account.delegated_vesting_shares)
-        commit('saveSteemBalance', steem)
-        commit('saveSbdBalance', sbd)
-        commit('saveVestsBalance', vests)
-        commit('saveSteemAccount', steemAccount)
-        if(activeKey){
-          commit('saveSteemActiveKey', activeKey)
+        const account = await getAccountInfo(steemAccount);
+        const steem = parseFloat(account.balance);
+        const sbd = parseFloat(account.sbd_balance);
+        const vests =
+          parseFloat(account.vesting_shares) -
+          parseFloat(account.delegated_vesting_shares);
+        commit("saveSteemBalance", steem);
+        commit("saveSbdBalance", sbd);
+        commit("saveVestsBalance", vests);
+        commit("saveSteemAccount", steemAccount);
+        if (activeKey) {
+          commit("saveSteemActiveKey", activeKey);
         }
-        commit('saveSteemLoginType', steemLoginType)
-        return true
+        commit("saveSteemLoginType", steemLoginType);
+        return true;
       } catch (err) {
-        console.error('initializeSteemAccount Fail:', err.message)
-        return false
+        console.error("initializeSteemAccount Fail:", err.message);
+        return false;
       }
     },
 
     // tron
-    async getTron (context) {
+    async getTron(context) {
       const func = async () => {
         try {
-          const tronweb = Tron()
-          const tron = await tronweb.trx.getBalance(context.state.tronAddress)
-          context.commit('saveTronBalanceInt', tron)
+          const tronweb = Tron();
+          const tron = await tronweb.trx.getBalance(context.state.tronAddress);
+          context.commit("saveTronBalanceInt", tron);
         } catch (e) {
           // console.error('Get Tron Fail:', e.message)
-          throw e
+          throw e;
         }
-      }
-      retryMethod(func)
+      };
+      retryMethod(func);
     },
 
-    async getTsteem (context) {
+    async getTsteem(context) {
       retryMethod(async () => {
         try {
-          const contract = await getContract('TSTEEM', true)
-          const tsteem = await contract.balanceOf(context.state.tronAddress).call()
-          context.commit('saveTsteemBalanceInt', tsteem)
+          const contract = await getContract("TSTEEM", true);
+          const tsteem = await contract
+            .balanceOf(context.state.tronAddress)
+            .call();
+          context.commit("saveTsteemBalanceInt", tsteem);
         } catch (e) {
           // console.error('Get Tsteem Fail:', e.message)
-          throw e
+          throw e;
         }
-      }).catch((e) => {
-        console.error('Get Tsteem Fail:', e.message)
-      })
+      }).catch(e => {
+        console.error("Get Tsteem Fail:", e.message);
+      });
     },
 
-    async getTsp (context) {
+    async getTsp(context) {
       retryMethod(async () => {
         try {
-          const contract = await getContract('TSP', true)
-          const tsp = await contract.balanceOf(context.state.tronAddress).call()
-          context.commit('saveTspBalanceInt', tsp || 0)
+          const contract = await getContract("TSP", true);
+          const tsp = await contract
+            .balanceOf(context.state.tronAddress)
+            .call();
+          context.commit("saveTspBalanceInt", tsp || 0);
         } catch (e) {
           // console.error('Get Tsp Fail:', e.message)
-          throw e
+          throw e;
         }
-      }).catch((e) => {
-        console.error('Get Tsp Fail:', e.message)
-      })
+      }).catch(e => {
+        console.error("Get Tsp Fail:", e.message);
+      });
     },
 
-    async getTsbd (context) {
+    async getTsbd(context) {
       retryMethod(async () => {
         try {
-          const contract = await getContract('TSBD', true)
-          const tsbd = await contract.balanceOf(context.state.tronAddress).call()
-          context.commit('saveTsbdBalanceInt', tsbd || 0)
+          const contract = await getContract("TSBD", true);
+          const tsbd = await contract
+            .balanceOf(context.state.tronAddress)
+            .call();
+          context.commit("saveTsbdBalanceInt", tsbd || 0);
         } catch (e) {
           // console.error('Get Tsbd Fail:', e.message)
-          throw e
+          throw e;
         }
-      }).catch((e) => {
-        console.error('Get Tsbd Fail:', e.message)
-      })
+      }).catch(e => {
+        console.error("Get Tsbd Fail:", e.message);
+      });
     },
 
-    async getPnut (context) {
+    async getPnut(context) {
       retryMethod(async () => {
         try {
-          const contract = await getContract('PNUT', true)
-          const pnut = await contract.balanceOf(context.state.tronAddress).call()
-          context.commit('savePnutBalanceInt', pnut || 0)
+          const contract = await getContract("PNUT", true);
+          const pnut = await contract
+            .balanceOf(context.state.tronAddress)
+            .call();
+          context.commit("savePnutBalanceInt", pnut || 0);
         } catch (e) {
           // console.error('Get Pnut Fail:', e.message)
-          throw e
+          throw e;
         }
-      }).catch((e) => {
-        console.error('Get Pnut Fail:', e.message)
-      })
+      }).catch(e => {
+        console.error("Get Pnut Fail:", e.message);
+      });
     },
 
-    async getTspLp (context) {
+    async getTspLp(context) {
       retryMethod(async () => {
         try {
-          const tspAddr = TSP_LP_TOKEN_ADDRESS
-          const tsplpBalance = await getBalanceOfToken(tspAddr, context.state.tronAddress)
-          context.commit('saveTspLpBalanceInt', tsplpBalance || 0)
+          const tspAddr = TSP_LP_TOKEN_ADDRESS;
+          const tsplpBalance = await getBalanceOfToken(
+            tspAddr,
+            context.state.tronAddress
+          );
+          context.commit("saveTspLpBalanceInt", tsplpBalance || 0);
         } catch (e) {
           // console.error('Get Tsp_Lp Fail:', e.message)
-          throw e
+          throw e;
         }
-      }).catch((e) => {
-        console.error('Get Tsp_Lp Fail:', e.message)
-      })
+      }).catch(e => {
+        console.error("Get Tsp_Lp Fail:", e.message);
+      });
     },
 
-    async getPnutLp (context) {
+    async getPnutLp(context) {
       retryMethod(async () => {
         try {
-          const pnutLpAddr = PNUT_LP_TOKEN_ADDRESS
-          const pnutLpBalance = await getBalanceOfToken(pnutLpAddr, context.state.tronAddress)
-          context.commit('savePnutLpBalanceInt', pnutLpBalance || 0)
+          const pnutLpAddr = PNUT_LP_TOKEN_ADDRESS;
+          const pnutLpBalance = await getBalanceOfToken(
+            pnutLpAddr,
+            context.state.tronAddress
+          );
+          context.commit("savePnutLpBalanceInt", pnutLpBalance || 0);
         } catch (e) {
           // console.error('Get Pnut_Lp Fail:', e)
-          throw e
+          throw e;
         }
-      }).catch((e) => {
-        console.error('Get Pnut_Lp Fail:', e.message)
-      })
+      }).catch(e => {
+        console.error("Get Pnut_Lp Fail:", e.message);
+      });
     },
     // tron contract
-    async getDelegatedSp (context) {
+    async getDelegatedSp(context) {
       retryMethod(async () => {
         try {
-          const contranct = await getContract('PNUT_POOL', true)
-          let amount = await contranct.delegators(context.state.tronAddress).call() // balanceOfDelegate
-          amount = amount.amount
-          context.commit('saveDelegatedVestsInt', amount || 0)
-          context.commit('saveDelegatedVestsOk', true)
+          const contranct = await getContract("PNUT_POOL", true);
+          let amount = await contranct
+            .delegators(context.state.tronAddress)
+            .call(); // balanceOfDelegate
+          amount = amount.amount;
+          context.commit("saveDelegatedVestsInt", amount || 0);
+          context.commit("saveDelegatedVestsOk", true);
         } catch (e) {
           // console.error('Get Delegated SP Fail:', e.message)
-          throw e
+          throw e;
         }
-      }).catch((e) => {
-        console.error('Get Delegated SP Fail:', e.message)
-      })
+      }).catch(e => {
+        console.error("Get Delegated SP Fail:", e.message);
+      });
     },
 
-    async getDepositedTsp (context) {
+    async getDepositedTsp(context) {
       retryMethod(async () => {
         try {
-          const contract = await getContract('TSP_POOL', true)
-          let amount = await contract.delegators(context.state.tronAddress).call()
-          amount = amount.tspAmount
-          context.commit('saveDepositedTspInt', amount || 0)
-          context.commit('saveDepositedTspOk', true)
+          const contract = await getContract("TSP_POOL", true);
+          let amount = await contract
+            .delegators(context.state.tronAddress)
+            .call();
+          amount = amount.tspAmount;
+          context.commit("saveDepositedTspInt", amount || 0);
+          context.commit("saveDepositedTspOk", true);
         } catch (e) {
           // console.error('Get Deposited TSP Fail:', e.message)
-          throw e
+          throw e;
         }
-      }).catch((e) => {
-        console.error('Get Deposited TSP Fail:', e.message)
-      })
+      }).catch(e => {
+        console.error("Get Deposited TSP Fail:", e.message);
+      });
     },
 
-    async getDepositedTsteem (context) {
+    async getDepositedTsteem(context) {
       retryMethod(async () => {
         try {
-          const contract = await getContract('TSTEEM_POOL')
-          let amount = await contract.delegators(context.state.tronAddress).call()
-          amount = amount.tsteemAmount
-          context.commit('saveDepositedTsteemInt', amount || 0)
-          context.commit('saveDepositedTsteemOk', true)
+          const contract = await getContract("TSTEEM_POOL");
+          let amount = await contract
+            .delegators(context.state.tronAddress)
+            .call();
+          amount = amount.tsteemAmount;
+          context.commit("saveDepositedTsteemInt", amount || 0);
+          context.commit("saveDepositedTsteemOk", true);
         } catch (e) {
           // console.error('Get Deposited TSP Fail:', e.message)
-          throw e
+          throw e;
         }
-      }).catch((e) => {
-        console.error('Get Deposited TSTEEM Fail:', e.message)
-      })
+      }).catch(e => {
+        console.error("Get Deposited TSTEEM Fail:", e.message);
+      });
     },
 
-    async getDepositedTspLp (context) {
+    async getDepositedTspLp(context) {
       retryMethod(async () => {
         try {
-          const contract = await getContract('TSP_LP_POOL', true)
-          let amount = await contract.delegators(context.state.tronAddress).call()
-          amount = amount.tspLPAmount
-          context.commit('saveDepositedTspLpInt', amount || 0)
-          context.commit('saveDepositedTspLpOk', true)
+          const contract = await getContract("TSP_LP_POOL", true);
+          let amount = await contract
+            .delegators(context.state.tronAddress)
+            .call();
+          amount = amount.tspLPAmount;
+          context.commit("saveDepositedTspLpInt", amount || 0);
+          context.commit("saveDepositedTspLpOk", true);
         } catch (e) {
           // console.error('Get Deposited TSP_LP Fail:', e.message)
-          throw e
+          throw e;
         }
-      }).catch((e) => {
-        console.error('Get Deposited TSP_LP Fail:', e.message)
-      })
+      }).catch(e => {
+        console.error("Get Deposited TSP_LP Fail:", e.message);
+      });
     },
 
-    async getDepositedPnutLp (context) {
+    async getDepositedPnutLp(context) {
       retryMethod(async () => {
         try {
-          const contract = await getContract('PNUT_LP_POOL', true)
-          let amount = await contract.delegators(context.state.tronAddress).call()
-          amount = amount.pnutLpAmount
-          context.commit('saveDepositedPnutLpInt', amount || 0)
-          context.commit('saveDepositedPnutLpOk', true)
+          const contract = await getContract("PNUT_LP_POOL", true);
+          let amount = await contract
+            .delegators(context.state.tronAddress)
+            .call();
+          amount = amount.pnutLpAmount;
+          context.commit("saveDepositedPnutLpInt", amount || 0);
+          context.commit("saveDepositedPnutLpOk", true);
         } catch (e) {
           // console.error('Get Deposited PNUT_LP Fail:', e.message)
-          throw e
+          throw e;
         }
-      }).catch((e) => {
-        console.error('Get Deposited PNUT_LP Fail:', e.message)
-      })
+      }).catch(e => {
+        console.error("Get Deposited PNUT_LP Fail:", e.message);
+      });
     },
 
-    async getTotalDelegatedSP (context) {
+    async getTotalDelegatedSP(context) {
       retryMethod(async () => {
         try {
-          const contract = await getContract('PNUT_POOL', true)
-          const amount = await contract.totalDepositedSP().call()
-          context.commit('saveTotalDelegatedVestsInt', amount || 0)
+          const contract = await getContract("PNUT_POOL", true);
+          const amount = await contract.totalDepositedSP().call();
+          context.commit("saveTotalDelegatedVestsInt", amount || 0);
         } catch (e) {
           // console.error('Get Total Deposited SP Fail:', e.message)
-          throw e
+          throw e;
         }
-      }).catch((e) => {
-        console.error('Get Total Deposited SP Fail:', e.message)
-      })
+      }).catch(e => {
+        console.error("Get Total Deposited SP Fail:", e.message);
+      });
     },
 
-    async getTotalDepositedTsp (context) {
+    async getTotalDepositedTsp(context) {
       retryMethod(async () => {
         try {
-          const contract = await getContract('TSP_POOL', true)
-          const amount = await contract.totalDepositedTSP().call()
-          context.commit('saveTotalDepositedTspInt', amount || 0)
+          const contract = await getContract("TSP_POOL", true);
+          const amount = await contract.totalDepositedTSP().call();
+          context.commit("saveTotalDepositedTspInt", amount || 0);
         } catch (e) {
           // console.error('Get Total Deposited TSP Fail:', e.message)
-          throw e
+          throw e;
         }
-      }).catch((e) => {
-        console.error('Get Total Deposited TSP Fail:', e.message)
-      })
+      }).catch(e => {
+        console.error("Get Total Deposited TSP Fail:", e.message);
+      });
     },
 
-    async getTotalDepositedTsteem (context) {
+    async getTotalDepositedTsteem(context) {
       retryMethod(async () => {
         try {
-          const contract = await getContract('TSTEEM_POOL')
-          const amount = await contract.totalDepositedTSTEEM().call()
-          context.commit('saveTotalDepositedTsteemInt', amount || 0)
+          const contract = await getContract("TSTEEM_POOL");
+          const amount = await contract.totalDepositedTSTEEM().call();
+          context.commit("saveTotalDepositedTsteemInt", amount || 0);
         } catch (e) {
           // console.error('Get Total Deposited TSP Fail:', e.message)
-          throw e
+          throw e;
         }
-      }).catch((e) => {
-        console.error('Get Total Deposited TSteem Fail:', e.message)
-      })
+      }).catch(e => {
+        console.error("Get Total Deposited TSteem Fail:", e.message);
+      });
     },
 
-    async getTotalDepositedTspLp (context) {
+    async getTotalDepositedTspLp(context) {
       retryMethod(async () => {
         try {
-          const contract = await getContract('TSP_LP_POOL', true)
-          const amount = await contract.totalDepositedTSPLP().call()
-          context.commit('saveTotalDepositedTspLpInt', amount || 0)
+          const contract = await getContract("TSP_LP_POOL", true);
+          const amount = await contract.totalDepositedTSPLP().call();
+          context.commit("saveTotalDepositedTspLpInt", amount || 0);
         } catch (e) {
           // console.error('Get Total Deposited TSP LP Fail:', e.message)
-          throw e
+          throw e;
         }
-      }).catch((e) => {
-        console.error('Get Total Deposited TSP LP Fail:', e.message)
-      })
+      }).catch(e => {
+        console.error("Get Total Deposited TSP LP Fail:", e.message);
+      });
     },
 
-    async getTotalDepositedPnutLp (context) {
+    async getTotalDepositedPnutLp(context) {
       retryMethod(async () => {
         try {
-          const contract = await getContract('PNUT_LP_POOL', true)
-          const amount = await contract.totalDepositedPnutLp().call()
-          context.commit('saveTotalDepositedPnutLpInt', amount || 0)
+          const contract = await getContract("PNUT_LP_POOL", true);
+          const amount = await contract.totalDepositedPnutLp().call();
+          context.commit("saveTotalDepositedPnutLpInt", amount || 0);
         } catch (e) {
           // console.error('Get Total Deposited PNUT LP Fail:', e.message)
-          throw e
+          throw e;
         }
-      }).catch((e) => {
-        console.error('Get Total Deposited PNUT LP Fail:', e.message)
-      })
+      }).catch(e => {
+        console.error("Get Total Deposited PNUT LP Fail:", e.message);
+      });
     },
 
-    async getApprovedTSP (context) {
+    async getApprovedTSP(context) {
       retryMethod(async () => {
         try {
-          const contract = await getContract('TSP', true)
-          const amount = await contract.allowance(context.state.tronAddress, TSP_POOL_ADDRESS).call()
-          context.commit('saveApprovedTSP', intToAmount(amount) > 1e6)
+          const contract = await getContract("TSP", true);
+          const amount = await contract
+            .allowance(context.state.tronAddress, TSP_POOL_ADDRESS)
+            .call();
+          context.commit("saveApprovedTSP", intToAmount(amount) > 1e6);
         } catch (e) {
           // console.error('Get ApprovedTSP Fail:', e.message)
-          throw e
+          throw e;
         }
-      }).catch((e) => {
-        console.error('Get Approve TSP fail', e.message)
-      })
+      }).catch(e => {
+        console.error("Get Approve TSP fail", e.message);
+      });
     },
 
-    async getApprovedTSTEEM (context) {
+    async getApprovedTSTEEM(context) {
       retryMethod(async () => {
         try {
-          const contract = await getContract('TSTEEM')
-          const amount = await contract.allowance(context.state.tronAddress, TSTEEM_POOL_ADDRESS).call()
-          context.commit('saveApprovedTSTEEM', intToAmount(amount) > 1e6)
+          const contract = await getContract("TSTEEM");
+          const amount = await contract
+            .allowance(context.state.tronAddress, TSTEEM_POOL_ADDRESS)
+            .call();
+          context.commit("saveApprovedTSTEEM", intToAmount(amount) > 1e6);
         } catch (e) {
           // console.error('Get ApprovedTSP Fail:', e.message)
-          throw e
+          throw e;
         }
-      }).catch((e) => {
-        console.error('Get Approve TSTEEM fail', e.message)
-      })
+      }).catch(e => {
+        console.error("Get Approve TSTEEM fail", e.message);
+      });
     },
 
-    async getApprovedTSPLP (context) {
+    async getApprovedTSPLP(context) {
       retryMethod(async () => {
         try {
-          const tronWeb = await getTronLink()
-          const tron = Tron()
-          const params = [{
-            type: 'address',
-            value: context.state.tronAddress
-          },
-          {
-            type: 'address',
-            value: TSP_LP_POOL_ADDRESS
-          }
-          ]
-          const tx = await tronWeb.transactionBuilder
-            .triggerConstantContract(TSP_LP_TOKEN_ADDRESS,
-              'allowance(address,address)', {},
-              params,
-              context.state.tronAddress)
-          const amount = tx && tx.constant_result && tx.constant_result[0] && tron.toDecimal('0x' + tx.constant_result[0])
-          context.commit('saveApprovedTSPLP', intToAmount(amount) > 1e6)
+          const tronWeb = await getTronLink();
+          const tron = Tron();
+          const params = [
+            {
+              type: "address",
+              value: context.state.tronAddress
+            },
+            {
+              type: "address",
+              value: TSP_LP_POOL_ADDRESS
+            }
+          ];
+          const tx = await tronWeb.transactionBuilder.triggerConstantContract(
+            TSP_LP_TOKEN_ADDRESS,
+            "allowance(address,address)",
+            {},
+            params,
+            context.state.tronAddress
+          );
+          const amount =
+            tx &&
+            tx.constant_result &&
+            tx.constant_result[0] &&
+            tron.toDecimal("0x" + tx.constant_result[0]);
+          context.commit("saveApprovedTSPLP", intToAmount(amount) > 1e6);
         } catch (e) {
           // console.error('Get ApprovedTSPLP Fail:', e.message)
-          throw e
+          throw e;
         }
-      }).catch((e) => {
-        console.error('Get Approve TSPLP fail', e)
-      })
+      }).catch(e => {
+        console.error("Get Approve TSPLP fail", e);
+      });
     },
 
-    async getApprovedPNUTLP (context) {
+    async getApprovedPNUTLP(context) {
       retryMethod(async () => {
         try {
-          const tron = Tron()
-          const params = [{
-            type: 'address',
-            value: context.state.tronAddress
-          },
-          {
-            type: 'address',
-            value: PNUT_LP_POOL_ADDRESS
-          }
-          ]
-          const tx = await tron.transactionBuilder
-            .triggerConstantContract(PNUT_LP_TOKEN_ADDRESS,
-              'allowance(address,address)', {},
-              params,
-              context.state.tronAddress)
-          const amount = tx && tx.constant_result && tx.constant_result[0] && tron.toDecimal('0x' + tx.constant_result[0])
-          context.commit('saveApprovedPNUTLP', intToAmount(amount) > 1e6)
+          const tron = Tron();
+          const params = [
+            {
+              type: "address",
+              value: context.state.tronAddress
+            },
+            {
+              type: "address",
+              value: PNUT_LP_POOL_ADDRESS
+            }
+          ];
+          const tx = await tron.transactionBuilder.triggerConstantContract(
+            PNUT_LP_TOKEN_ADDRESS,
+            "allowance(address,address)",
+            {},
+            params,
+            context.state.tronAddress
+          );
+          const amount =
+            tx &&
+            tx.constant_result &&
+            tx.constant_result[0] &&
+            tron.toDecimal("0x" + tx.constant_result[0]);
+          context.commit("saveApprovedPNUTLP", intToAmount(amount) > 1e6);
         } catch (e) {
           // console.error('Get ApprovedPNUTLP Fail:', e.message)
-          throw e
+          throw e;
         }
-      }).catch((e) => {
-        console.error('Get ApprovedPNUTLP Fail:', e)
-      })
+      }).catch(e => {
+        console.error("Get ApprovedPNUTLP Fail:", e);
+      });
     },
 
-    async initializeTronAccount ({
-      commit,
-      dispatch
-    }, tronAddress) {
-      commit('saveTronAddress', tronAddress)
-      commit('saveDelegatedVestsOk', false)
-      commit('saveDepositedTspOk', false)
-      commit('saveDepositedTsteemOk', false)
-      commit('saveDepositedTspLpOk', false)
-      commit('saveDepositedPnutLpOk', false)
-      commit('saveApprovedTSP', false)
-      commit('saveApprovedTSPLP', false)
-      commit('saveApprovedTSTEEM', false)
-      commit('saveApprovedPNUTLP', false)
-      dispatch('getTron')
-      dispatch('getTsteem')
-      dispatch('getTsp')
-      dispatch('getTsbd')
-      dispatch('getPnut')
-      dispatch('getTspLp')
-      dispatch('getPnutLp')
-      dispatch('getDelegatedSp')
-      dispatch('getDepositedTsp')
-      dispatch('getDepositedTsteem')
-      dispatch('getDepositedTspLp')
-      dispatch('getDepositedPnutLp')
+    async getBscPnut(context) {
+      retryMethod(async () => {
+        try {
+          const balance = await getERC20Balance();
+
+          context.commit("saveBscPnutBalanceInt", balance);
+        } catch (e) {
+          // console.error('Get Pnut Fail:', e.message)
+          throw e;
+        }
+      }).catch(e => {
+        console.error("Get Pnut Fail:", e.message);
+      });
+    },
+
+    async initializeTronAccount({ commit, dispatch }, tronAddress) {
+      commit("saveTronAddress", tronAddress);
+      commit("saveDelegatedVestsOk", false);
+      commit("saveDepositedTspOk", false);
+      commit("saveDepositedTsteemOk", false);
+      commit("saveDepositedTspLpOk", false);
+      commit("saveDepositedPnutLpOk", false);
+      commit("saveApprovedTSP", false);
+      commit("saveApprovedTSPLP", false);
+      commit("saveApprovedTSTEEM", false);
+      commit("saveApprovedPNUTLP", false);
+      dispatch("getTron");
+      dispatch("getTsteem");
+      dispatch("getTsp");
+      dispatch("getTsbd");
+      dispatch("getPnut");
+      dispatch("getTspLp");
+      dispatch("getPnutLp");
+      dispatch("getDelegatedSp");
+      dispatch("getDepositedTsp");
+      dispatch("getDepositedTsteem");
+      dispatch("getDepositedTspLp");
+      dispatch("getDepositedPnutLp");
       // dispatch('getTotalDelegatedSP')
       // dispatch('getTotalDepositedTsp')
       // dispatch('getTotalDepositedTspLp')
       // dispatch('getTotalDepositedPnutLp')
-      dispatch('getApprovedTSP')
-      dispatch('getApprovedTSTEEM')
-      dispatch('getApprovedTSPLP')
-      dispatch('getApprovedPNUTLP')
+      dispatch("getApprovedTSP");
+      dispatch("getApprovedTSTEEM");
+      dispatch("getApprovedTSPLP");
+      dispatch("getApprovedPNUTLP");
+      dispatch("getBscPnut");
     }
   },
   modules: {}
-})
+});
