@@ -43,7 +43,7 @@
               :disabled="true"
               >-</b-button
             >
-            <b-button class="op-btn" @click="addDelegate" :disabled="true"
+            <b-button class="op-btn" @click="addDelegate" disabled
               >+</b-button
             >
           </div>
@@ -53,7 +53,7 @@
           <b-button
             variant="primary"
             @click="delegate"
-            :disabled="!delegatedVestsOk"
+            disabled
           >
             <b-spinner small type="grow" v-show="!delegatedVestsOk"></b-spinner>
             {{ $t("stake.creaseDelegation") }}
