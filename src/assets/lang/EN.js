@@ -154,7 +154,7 @@ module.exports = {
   vote: {
     upvote: "Upvote",
     vote: "Upvote post",
-    title: "Pay PNUT,and get nutbox.mine's upvote",
+    title: "Pay PNUT(BSC), and get nutbox.mine's upvote",
     link: "Post link",
     payPnut: "Pay PNUT",
     linkPlaceholder: "Input post link",

@@ -150,7 +150,7 @@ module.exports = {
   vote: {
     upvote: "点赞",
     vote: "点赞帖子",
-    title: "支付PNUT,获得nutbox.mine点赞",
+    title: "支付PNUT(BSC),获得nutbox.mine点赞",
     link: "帖子链接",
     payPnut: "支付PNUT",
     linkPlaceholder: "请填写需要点赞的帖子链接",
