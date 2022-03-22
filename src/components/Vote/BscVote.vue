@@ -212,6 +212,7 @@ export default {
           return;
         }
         const res = await payUpvote(author, permlink, this.pnutAmount)
+        this.showTip(this.$t('vote.success'), this.$t('vote.success'))
         this.postLink = '';
         this.pnutAmount = ''
       } catch (e) {
