@@ -47,10 +47,10 @@
             <p id="liquid-staking-icon" class="my-icon" />
             <span>{{ $t("liquidStaking.liquidStaking") }}</span>
           </b-nav-item>
-          <b-nav-item to="/get-vote">
+          <!-- <b-nav-item to="/get-vote">
             <p id="upvote-icon" class="my-icon" />
             <span>{{ $t("vote.upvote") }}</span>
-          </b-nav-item>
+          </b-nav-item> -->
           <b-nav-item to="/get-vote-bsc">
             <p id="upvote-icon" class="my-icon" />
             <span>{{ $t("vote.upvote") }}</span>
