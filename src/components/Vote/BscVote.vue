@@ -162,6 +162,8 @@ export default {
       return match;
     },
     async approve() {
+        this.showTip(this.$t('vote.success'), this.$t('vote.buySuccess'), 'success')
+        return;
       try{
         this.isApproving = true;
         await approveBiz() 
@@ -212,7 +214,7 @@ export default {
           return;
         }
         const res = await payUpvote(author, permlink, this.pnutAmount)
-        this.showTip(this.$t('vote.success'), this.$t('vote.success'))
+        this.showTip(this.$t('vote.success'), this.$t('vote.success'), 'tip')
         this.postLink = '';
         this.pnutAmount = ''
       } catch (e) {
@@ -229,10 +231,10 @@ export default {
         this.isTransfering = false;
       }
     },
-    showTip(titel, message) {
+    showTip(titel, message, tipType = 'error') {
       this.tipTitle = titel;
       this.tipMessage = message;
-      this.tipType = "error";
+      this.tipType = tipType;
       this.showMessage = true;
     },
   },

@@ -160,6 +160,8 @@ module.exports = {
     voteRate: "PNUT - 10% 点赞",
     sendVoteTx: "发送投票交易",
     sendTransfer: "发送",
+    success: '成功',
+    buySuccess: '购买成功，请稍后确认您的帖子是否收到点赞',
     isPending: "您的帖子正在等待点赞，请不要重复提交",
     userCancel: "用户取消了签名"
   },

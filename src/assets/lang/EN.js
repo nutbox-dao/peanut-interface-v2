@@ -165,6 +165,7 @@ module.exports = {
     sendVoteTx: "Send Vote Tx",
     sendTransfer: "Send",
     success: 'Success',
+    buySuccess: 'Pay upvote success, please check your post later.',
     isPending: "Your post is pending, please not buy again.",
     userCancel: 'User cancel transaction.'
   },
