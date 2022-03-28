@@ -162,8 +162,6 @@ export default {
       return match;
     },
     async approve() {
-        this.showTip(this.$t('vote.success'), this.$t('vote.buySuccess'), 'success')
-        return;
       try{
         this.isApproving = true;
         await approveBiz() 
@@ -214,7 +212,7 @@ export default {
           return;
         }
         const res = await payUpvote(author, permlink, this.pnutAmount)
-        this.showTip(this.$t('vote.success'), this.$t('vote.success'), 'tip')
+        this.showTip(this.$t('vote.success'), this.$t('vote.buySuccess'), 'success')
         this.postLink = '';
         this.pnutAmount = ''
       } catch (e) {
